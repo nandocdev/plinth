@@ -1,10 +1,10 @@
-<?php
+declare(strict_types=1);
 
-namespace App\Actions\Fortify;
+namespace App\Central\AuthenticationModule\Actions;
 
-use App\Concerns\PasswordValidationRules;
-use App\Concerns\ProfileValidationRules;
-use App\Models\User;
+use App\Central\AuthenticationModule\Models\User;
+use App\Shared\Support\PasswordValidationRules;
+use App\Shared\Support\ProfileValidationRules;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
@@ -30,4 +30,10 @@ class CreateNewUser implements CreatesNewUsers
             'password' => $input['password'],
         ]);
     }
+
+    /**
+     * [RIESGOS]
+     * - Registro de usuario central sin vinculación a Tenant en este paso.
+     * - El password se guarda plano en el array (Eloquent se encarga del hash según el modelo).
+     */
 }

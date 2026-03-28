@@ -1,9 +1,9 @@
-<?php
+declare(strict_types=1);
 
-namespace App\Actions\Fortify;
+namespace App\Central\AuthenticationModule\Actions;
 
-use App\Concerns\PasswordValidationRules;
-use App\Models\User;
+use App\Central\AuthenticationModule\Models\User;
+use App\Shared\Support\PasswordValidationRules;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\ResetsUserPasswords;
 
@@ -26,4 +26,9 @@ class ResetUserPassword implements ResetsUserPasswords
             'password' => $input['password'],
         ])->save();
     }
+
+    /**
+     * [RIESGOS]
+     * - Cambio de contraseña que puede invalidar sesiones existentes si no se maneja logout de otros dispositivos.
+     */
 }

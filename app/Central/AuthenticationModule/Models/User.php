@@ -1,6 +1,6 @@
-<?php
+declare(strict_types=1);
 
-namespace App\Models;
+namespace App\Central\AuthenticationModule\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
@@ -43,4 +43,10 @@ class User extends Authenticatable
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
+
+    /**
+     * [RIESGOS]
+     * - No hay campos de Tenant ID todavía en este modelo inicial.
+     * - Falta implementación de roles si se planea usar Spatie Permission.
+     */
 }

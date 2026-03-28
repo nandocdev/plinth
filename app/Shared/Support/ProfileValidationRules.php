@@ -1,8 +1,8 @@
-<?php
+declare(strict_types=1);
 
-namespace App\Concerns;
+namespace App\Shared\Support;
 
-use App\Models\User;
+use App\Central\AuthenticationModule\Models\User;
 use Illuminate\Validation\Rule;
 
 trait ProfileValidationRules
