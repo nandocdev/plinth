@@ -45,6 +45,9 @@ Route::middleware([
 
         Route::get('/impersonation/leave', LeaveTenantImpersonationController::class)
             ->name('tenant.impersonation.leave');
+
+        // Portal de facturación self-service (sin EnforcePlanUsageLimits para acceso garantizado)
+        require app_path('Tenant/SelfServiceBillingModule/Routes/tenant.php');
     });
 
 Route::middleware([

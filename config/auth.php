@@ -47,6 +47,11 @@ return [
             'driver' => 'session',
             'provider' => 'system_admins',
         ],
+
+        'tenant' => [
+            'driver' => 'session',
+            'provider' => 'tenant_users',
+        ],
     ],
 
     /*
@@ -72,10 +77,10 @@ return [
             'model' => env('AUTH_MODEL', User::class),
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'tenant_users' => [
+            'driver' => 'eloquent',
+            'model' => App\Tenant\SelfServiceBillingModule\Models\User::class,
+        ],
     ],
 
     /*
