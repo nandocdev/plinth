@@ -12,6 +12,7 @@ Route::middleware([
    'verified',
    'can:accessCentralPanel,' . User::class,
    EnsureSystemAdminHasTwoFactorEnabled::class,
+   'central.audit',
 ])
    ->prefix('central')
    ->name('central.')

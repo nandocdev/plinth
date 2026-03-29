@@ -8,7 +8,7 @@ use App\Central\TenantProvisioningModule\Livewire\TenantCrud;
 use App\Central\TenantProvisioningModule\Livewire\TenantOnboardingWizard;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth:central', 'verified', 'can:accessCentralPanel,' . User::class, EnsureSystemAdminHasTwoFactorEnabled::class])
+Route::middleware(['auth:central', 'verified', 'can:accessCentralPanel,' . User::class, EnsureSystemAdminHasTwoFactorEnabled::class, 'central.audit'])
    ->prefix('central')
    ->name('central.')
    ->group(function (): void {

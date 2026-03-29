@@ -8,6 +8,7 @@ use App\Central\AuthenticationModule\Models\User;
 
 final class ActivityLogEntryPolicy {
    public function viewAny(User $user): bool {
-      return $user->email_verified_at !== null;
+      return $user->email_verified_at !== null
+         && $user->can('logs.view');
    }
 }

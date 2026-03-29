@@ -4,5 +4,7 @@ declare(strict_types=1);
 
 namespace App\Central\ActivityLogModule\Models;
 
-final class ActivityLogEntry {
+use Spatie\Activitylog\Models\Activity;
+
+final class ActivityLogEntry extends Activity {
 }
