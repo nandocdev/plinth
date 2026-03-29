@@ -24,6 +24,10 @@
                 :current="request()->routeIs('central.billing.*')" wire:navigate>
                 {{ __('Billing') }}
             </flux:navbar.item>
+            <flux:navbar.item icon="megaphone" :href="route('central.affiliates.index')"
+                :current="request()->routeIs('central.affiliates.*')" wire:navigate>
+                {{ __('Affiliates') }}
+            </flux:navbar.item>
         </flux:navbar>
 
         <flux:spacer />
@@ -69,6 +73,10 @@
                 <flux:sidebar.item icon="credit-card" :href="route('central.billing.index')"
                     :current="request()->routeIs('central.billing.*')" wire:navigate>
                     {{ __('Billing') }}
+                </flux:sidebar.item>
+                <flux:sidebar.item icon="megaphone" :href="route('central.affiliates.index')"
+                    :current="request()->routeIs('central.affiliates.*')" wire:navigate>
+                    {{ __('Affiliates') }}
                 </flux:sidebar.item>
             </flux:sidebar.group>
         </flux:sidebar.nav>
