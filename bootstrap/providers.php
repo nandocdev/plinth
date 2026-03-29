@@ -18,4 +18,5 @@ return [
     App\Tenant\AuthenticationModule\Providers\AuthenticationModuleServiceProvider::class,
     App\Tenant\FeatureFlagsModule\Providers\FeatureFlagsModuleServiceProvider::class,
     App\Tenant\SelfServiceBillingModule\Providers\SelfServiceBillingModuleServiceProvider::class,
+    App\Tenant\WorkspaceModule\Providers\WorkspaceModuleServiceProvider::class,
 ];

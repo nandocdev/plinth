@@ -7,15 +7,27 @@
 
 <body class="min-h-screen bg-white dark:bg-zinc-800">
     <div class="min-h-screen flex flex-col">
-        {{-- Navbar tenant simple --}}
         <header class="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 px-4 py-3">
             <div class="max-w-5xl mx-auto flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <flux:icon name="building-storefront" class="size-6 text-zinc-600 dark:text-zinc-400" />
-                    <span class="font-semibold text-zinc-800 dark:text-zinc-100 text-sm">
-                        {{ tenant()?->brandName() ?? config('app.name') }}
-                    </span>
-                    <flux:badge color="zinc" size="sm">Portal de Facturación</flux:badge>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-3">
+                        <flux:icon name="building-storefront" class="size-6 text-zinc-600 dark:text-zinc-400" />
+                        <span class="font-semibold text-zinc-800 dark:text-zinc-100 text-sm">
+                            {{ tenant()?->brandName() ?? config('app.name') }}
+                        </span>
+                        <flux:badge color="zinc" size="sm">Workspace Tenant</flux:badge>
+                    </div>
+
+                    @auth('tenant')
+                        <nav class="hidden items-center gap-2 md:flex">
+                            <a href="/dashboard" wire:navigate>
+                                <flux:button variant="ghost" size="sm" icon="home">Dashboard</flux:button>
+                            </a>
+                            <a href="/billing" wire:navigate>
+                                <flux:button variant="ghost" size="sm" icon="credit-card">Facturación</flux:button>
+                            </a>
+                        </nav>
+                    @endauth
                 </div>
 
                 @auth('tenant')
@@ -26,7 +38,6 @@
             </div>
         </header>
 
-        {{-- Contenido principal --}}
         <main class="flex-1 py-8 px-4">
             <div class="max-w-5xl mx-auto">
                 {{ $slot }}
@@ -35,7 +46,7 @@
 
         <footer
             class="border-t border-zinc-200 dark:border-zinc-700 py-4 px-4 text-center text-xs text-zinc-500 dark:text-zinc-400">
-            {{ config('app.name') }} &mdash; Portal de facturación seguro
+            {{ config('app.name') }} &mdash; Workspace tenant aislado
         </footer>
     </div>
 

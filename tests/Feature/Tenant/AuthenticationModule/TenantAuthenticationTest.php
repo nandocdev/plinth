@@ -48,7 +48,7 @@ test('tenant register crea usuario aislado y autentica con guard tenant', functi
          ->set('form.passwordConfirmation', 'password123')
          ->call('register')
          ->assertHasNoErrors()
-         ->assertRedirect('/billing');
+         ->assertRedirect('/dashboard');
 
       $createdUser = TenantUser::query()->where('email', 'register@tenant-auth.test')->first();
 
@@ -79,7 +79,7 @@ test('tenant login autentica usuario existente con guard tenant', function (): v
          ->set('form.remember', true)
          ->call('login')
          ->assertHasNoErrors()
-         ->assertRedirect('/billing');
+         ->assertRedirect('/dashboard');
 
       $this->assertAuthenticated('tenant');
    } finally {

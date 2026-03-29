@@ -20,7 +20,7 @@ final class TenantLogin extends Component {
 
    public function mount(): void {
       if (Auth::guard('tenant')->check()) {
-         $this->redirect('/billing', navigate: true);
+         $this->redirect('/dashboard', navigate: true);
       }
    }
 
@@ -38,7 +38,7 @@ final class TenantLogin extends Component {
          request()->session()->regenerate();
       }
 
-      $this->redirect('/billing', navigate: true);
+      $this->redirect('/dashboard', navigate: true);
    }
 
    public function render(): View {
