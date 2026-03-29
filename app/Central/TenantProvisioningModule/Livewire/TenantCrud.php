@@ -9,9 +9,13 @@ use App\Central\TenantProvisioningModule\Actions\CreateDomainAction;
 use App\Central\TenantProvisioningModule\Actions\DeleteTenantAction;
 use App\Central\TenantProvisioningModule\Actions\DeleteDomainAction;
 use App\Central\TenantProvisioningModule\Actions\ListTenantsAction;
+use App\Central\TenantProvisioningModule\Actions\QueueTenantBackupAction;
+use App\Central\TenantProvisioningModule\Actions\QueueTenantRestoreAction;
 use App\Central\TenantProvisioningModule\Actions\StartTenantImpersonationAction;
 use App\Central\TenantProvisioningModule\Actions\SuspendTenantAction;
 use App\Central\TenantProvisioningModule\Actions\VerifyDomainAction;
+use App\Central\TenantProvisioningModule\DTOs\QueueTenantBackupData;
+use App\Central\TenantProvisioningModule\DTOs\QueueTenantRestoreData;
 use App\Central\TenantProvisioningModule\DTOs\CreateDomainData;
 use App\Central\TenantProvisioningModule\DTOs\CreateTenantData;
 use App\Central\TenantProvisioningModule\DTOs\DeleteDomainData;
@@ -141,6 +145,40 @@ final class TenantCrud extends Component {
       $redirectUrl = $action->execute($tenant, $impersonator);
 
       $this->redirect($redirectUrl, navigate: true);
+   }
+
+   public function queueBackup(string $tenantId, QueueTenantBackupAction $action): void {
+      /** @var Tenant $tenant */
+      $tenant = Tenant::query()->findOrFail($tenantId);
+
+      $this->authorize('backup', $tenant);
+
+      $user = auth('central')->user();
+
+      if (! $user instanceof \App\Central\AuthenticationModule\Models\User) {
+         abort(403);
+      }
+
+      $action->execute(QueueTenantBackupData::fromValues($tenant->id, $user->id));
+
+      session()->flash('status', 'Backup de tenant encolado.');
+   }
+
+   public function restoreTenant(string $tenantId, int $sourceSnapshotId, QueueTenantRestoreAction $action): void {
+      /** @var Tenant $tenant */
+      $tenant = Tenant::query()->findOrFail($tenantId);
+
+      $this->authorize('restore', $tenant);
+
+      $user = auth('central')->user();
+
+      if (! $user instanceof \App\Central\AuthenticationModule\Models\User) {
+         abort(403);
+      }
+
+      $action->execute(QueueTenantRestoreData::fromValues($tenant->id, $sourceSnapshotId, $user->id));
+
+      session()->flash('status', 'Restore de tenant encolado.');
    }
 
    public function render(ListTenantsAction $action): View {
