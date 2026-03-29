@@ -27,4 +27,12 @@ final class TenantPolicy {
    public function impersonate(User $user, Tenant $tenant): bool {
       return $user->email_verified_at !== null && $tenant->status() !== 'suspended';
    }
+
+   public function backup(User $user, Tenant $tenant): bool {
+      return $user->email_verified_at !== null;
+   }
+
+   public function restore(User $user, Tenant $tenant): bool {
+      return $user->email_verified_at !== null;
+   }
 }
