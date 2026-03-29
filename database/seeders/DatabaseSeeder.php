@@ -3,8 +3,10 @@
 namespace Database\Seeders;
 
 use App\Central\AuthenticationModule\Models\User;
+use Database\Seeders\Central\InitialPlansSeeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +15,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $this->call(InitialPlansSeeder::class);
 
-        User::factory()->create([
-            'name' => 'Test User',
+        User::query()->firstOrCreate([
             'email' => 'test@example.com',
+        ], [
+            'name' => 'Test User',
+            'password' => Hash::make('password'),
+            'email_verified_at' => now(),
         ]);
     }
 }
