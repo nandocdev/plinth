@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Central\BillingModule\Livewire\Forms;
 
+use App\Central\BillingModule\Models\TenantSubscription;
 use Illuminate\Validation\Rule;
 use Livewire\Form;
 
@@ -28,7 +29,7 @@ final class SubscriptionForm extends Form {
          'tenantId' => ['required', 'string', 'exists:tenants,id', Rule::unique('tenant_subscriptions', 'tenant_id')->ignore($subscriptionId)],
          'planId' => ['required', 'integer', 'exists:plans,id'],
          'billingPeriod' => ['required', 'string', Rule::in(['monthly', 'yearly'])],
-         'status' => ['required', 'string', Rule::in(['trialing', 'active', 'past_due', 'canceled'])],
+         'status' => ['required', 'string', Rule::in(TenantSubscription::statuses())],
          'trialEndsAt' => ['nullable', 'date'],
          'endsAt' => ['nullable', 'date'],
       ]);
