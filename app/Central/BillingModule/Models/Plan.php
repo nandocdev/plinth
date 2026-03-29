@@ -20,6 +20,10 @@ final class Plan extends Model {
       'price_yearly_cents',
       'trial_days',
       'features',
+      'max_users_soft',
+      'max_users_hard',
+      'max_storage_mb_soft',
+      'max_storage_mb_hard',
       'is_active',
       'sort_order',
    ];
@@ -34,6 +38,10 @@ final class Plan extends Model {
          'price_monthly_cents' => 'integer',
          'price_yearly_cents' => 'integer',
          'trial_days' => 'integer',
+         'max_users_soft' => 'integer',
+         'max_users_hard' => 'integer',
+         'max_storage_mb_soft' => 'integer',
+         'max_storage_mb_hard' => 'integer',
          'sort_order' => 'integer',
       ];
    }

@@ -75,6 +75,10 @@ final class BillingCrud extends Component {
          $payload['priceYearlyCents'],
          $payload['trialDays'],
          $payload['features'],
+         $payload['maxUsersSoft'],
+         $payload['maxUsersHard'],
+         $payload['maxStorageMbSoft'],
+         $payload['maxStorageMbHard'],
          $payload['isActive'],
          $payload['sortOrder'],
       ));
@@ -110,6 +114,10 @@ final class BillingCrud extends Component {
          $payload['priceYearlyCents'],
          $payload['trialDays'],
          $payload['features'],
+         $payload['maxUsersSoft'],
+         $payload['maxUsersHard'],
+         $payload['maxStorageMbSoft'],
+         $payload['maxStorageMbHard'],
          $payload['isActive'],
          $payload['sortOrder'],
       ));

@@ -22,6 +22,10 @@ final class UpdatePlanAction {
             'price_yearly_cents' => $data->priceYearlyCents,
             'trial_days' => $data->trialDays,
             'features' => $data->features,
+            'max_users_soft' => $data->maxUsersSoft,
+            'max_users_hard' => $data->maxUsersHard,
+            'max_storage_mb_soft' => $data->maxStorageMbSoft,
+            'max_storage_mb_hard' => $data->maxStorageMbHard,
             'is_active' => $data->isActive,
             'sort_order' => $data->sortOrder,
          ]);

@@ -35,6 +35,15 @@
             <flux:input wire:model="planForm.sortOrder" type="number" :label="__('Orden')" min="0"
                 max="999" required />
 
+            <flux:input wire:model="planForm.maxUsersSoft" type="number" :label="__('Limite soft usuarios')"
+                min="1" />
+            <flux:input wire:model="planForm.maxUsersHard" type="number" :label="__('Limite hard usuarios')"
+                min="1" />
+            <flux:input wire:model="planForm.maxStorageMbSoft" type="number" :label="__('Limite soft storage (MB)')"
+                min="1" />
+            <flux:input wire:model="planForm.maxStorageMbHard" type="number" :label="__('Limite hard storage (MB)')"
+                min="1" />
+
             <flux:input wire:model="planForm.features" :label="__('Features (coma separada)')"
                 :placeholder="__('api_access, priority_support')" class="md:col-span-2" />
 
@@ -75,6 +84,7 @@
                         <th class="py-3 pr-3">{{ __('Slug') }}</th>
                         <th class="py-3 pr-3">{{ __('Precios') }}</th>
                         <th class="py-3 pr-3">{{ __('Trial') }}</th>
+                        <th class="py-3 pr-3">{{ __('Limites') }}</th>
                         <th class="py-3 pr-3">{{ __('Estado') }}</th>
                         <th class="py-3 pr-3">{{ __('Suscripciones') }}</th>
                         <th class="py-3 text-right">{{ __('Acciones') }}</th>
@@ -92,6 +102,14 @@
                                 </div>
                             </td>
                             <td class="py-3 pr-3">{{ $plan->trial_days }} {{ __('dias') }}</td>
+                            <td class="py-3 pr-3">
+                                <div class="text-xs text-zinc-500 dark:text-zinc-400">
+                                    {{ __('Users: :soft / :hard', ['soft' => $plan->max_users_soft ?? '-', 'hard' => $plan->max_users_hard ?? '-']) }}
+                                </div>
+                                <div class="text-xs text-zinc-500 dark:text-zinc-400">
+                                    {{ __('Storage MB: :soft / :hard', ['soft' => $plan->max_storage_mb_soft ?? '-', 'hard' => $plan->max_storage_mb_hard ?? '-']) }}
+                                </div>
+                            </td>
                             <td class="py-3 pr-3">
                                 <span
                                     class="rounded-full px-2 py-1 text-xs {{ $plan->is_active ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300' }}">
@@ -115,7 +133,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="py-6 text-center text-zinc-500">
+                            <td colspan="8" class="py-6 text-center text-zinc-500">
                                 {{ __('Sin planes registrados.') }}
                             </td>
                         </tr>
