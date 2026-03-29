@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Tenant\ImpersonationModule\Http\Controllers\AcceptTenantImpersonationController;
+use App\Tenant\ImpersonationModule\Http\Controllers\LeaveTenantImpersonationController;
 use App\Tenant\FeatureFlagsModule\Http\Middleware\EnforcePlanUsageLimits;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
@@ -28,6 +30,22 @@ $centralPattern = implode('|', $centralDomains);
 $tenantDomainPattern = $centralPattern !== ''
     ? '^(?!(' . $centralPattern . ')$).+'
     : '^.+';
+
+Route::middleware([
+    'web',
+    InitializeTenancyByDomain::class,
+    PreventAccessFromCentralDomains::class,
+])
+    ->domain('{tenantDomain}')
+    ->where(['tenantDomain' => $tenantDomainPattern])
+    ->group(function () {
+        Route::get('/impersonation/accept', AcceptTenantImpersonationController::class)
+            ->middleware('signed')
+            ->name('tenant.impersonation.accept');
+
+        Route::get('/impersonation/leave', LeaveTenantImpersonationController::class)
+            ->name('tenant.impersonation.leave');
+    });
 
 Route::middleware([
     'web',
