@@ -7,9 +7,9 @@ namespace App\Central\TenantProvisioningModule\Models;
 use Stancl\Tenancy\Database\Models\Domain as BaseDomain;
 
 final class Domain extends BaseDomain {
-	protected $guarded = [];
+   protected $guarded = [];
 
-	protected $casts = [
-		'verified_at' => 'datetime',
-	];
+   protected $casts = [
+      'verified_at' => 'datetime',
+   ];
 }
