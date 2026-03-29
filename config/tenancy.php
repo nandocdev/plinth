@@ -77,6 +77,20 @@ return [
         ],
     ],
 
+    'multi_region' => [
+        'default_region' => env('TENANCY_DEFAULT_REGION', 'us-east-1'),
+        'regions' => [
+            'us-east-1' => [
+                'label' => 'US East (N. Virginia)',
+                'db_connection' => env('TENANCY_US_EAST_1_CONNECTION', 'tenant_template_us_east_1'),
+            ],
+            'eu-west-1' => [
+                'label' => 'EU West (Ireland)',
+                'db_connection' => env('TENANCY_EU_WEST_1_CONNECTION', 'tenant_template_eu_west_1'),
+            ],
+        ],
+    ],
+
     /**
      * Cache tenancy config. Used by CacheTenancyBootstrapper.
      *
