@@ -136,6 +136,11 @@
                             </td>
                             <td class="py-3 text-right">
                                 <div class="flex justify-end gap-2">
+                                    <flux:button wire:click="impersonateTenant('{{ $tenant->id }}')" variant="ghost"
+                                        size="sm">
+                                        {{ __('Impersonate') }}
+                                    </flux:button>
+
                                     <flux:button wire:click="suspendTenant('{{ $tenant->id }}')" variant="filled"
                                         size="sm">
                                         {{ $tenant->status() === 'suspended' ? __('Unsuspend') : __('Suspend') }}
