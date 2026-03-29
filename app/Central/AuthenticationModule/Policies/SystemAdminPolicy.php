@@ -7,7 +7,7 @@ namespace App\Central\AuthenticationModule\Policies;
 use App\Central\AuthenticationModule\Models\User;
 
 final class SystemAdminPolicy {
-   public function accessCentralPanel(User $user): bool {
+   public function accessCentralPanel(User $user, mixed $subject = null): bool {
       return $user->email_verified_at !== null;
    }
 }
