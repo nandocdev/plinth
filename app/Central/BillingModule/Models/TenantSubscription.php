@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace App\Central\BillingModule\Models;
 
 use App\Central\TenantProvisioningModule\Models\Tenant;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use RuntimeException;
 
 final class TenantSubscription extends Model {
+   use HasFactory;
+
    public const STATUS_TRIALING = 'trialing';
 
    public const STATUS_ACTIVE = 'active';

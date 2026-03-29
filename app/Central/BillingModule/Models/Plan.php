@@ -6,8 +6,11 @@ namespace App\Central\BillingModule\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 final class Plan extends Model {
+   use HasFactory;
+
    protected $table = 'plans';
 
    protected $fillable = [
