@@ -8,13 +8,16 @@ use App\Central\TenantProvisioningModule\Actions\CreateTenantAction;
 use App\Central\TenantProvisioningModule\Actions\CreateDomainAction;
 use App\Central\TenantProvisioningModule\Actions\DeleteTenantAction;
 use App\Central\TenantProvisioningModule\Actions\DeleteDomainAction;
+use App\Central\TenantProvisioningModule\Actions\ListTenantBrandingOptionsAction;
 use App\Central\TenantProvisioningModule\Actions\ListTenantsAction;
 use App\Central\TenantProvisioningModule\Actions\ListTenantProvisioningRegionsAction;
 use App\Central\TenantProvisioningModule\Actions\QueueTenantBackupAction;
 use App\Central\TenantProvisioningModule\Actions\QueueTenantRestoreAction;
 use App\Central\TenantProvisioningModule\Actions\StartTenantImpersonationAction;
 use App\Central\TenantProvisioningModule\Actions\SuspendTenantAction;
+use App\Central\TenantProvisioningModule\Actions\UpdateTenantBrandingAction;
 use App\Central\TenantProvisioningModule\Actions\VerifyDomainAction;
+use App\Central\TenantProvisioningModule\DTOs\TenantBrandingData;
 use App\Central\TenantProvisioningModule\DTOs\QueueTenantBackupData;
 use App\Central\TenantProvisioningModule\DTOs\QueueTenantRestoreData;
 use App\Central\TenantProvisioningModule\DTOs\CreateDomainData;
@@ -23,6 +26,7 @@ use App\Central\TenantProvisioningModule\DTOs\DeleteDomainData;
 use App\Central\TenantProvisioningModule\DTOs\SuspendTenantData;
 use App\Central\TenantProvisioningModule\DTOs\VerifyDomainData;
 use App\Central\TenantProvisioningModule\Livewire\Forms\CreateDomainForm;
+use App\Central\TenantProvisioningModule\Livewire\Forms\TenantBrandingForm;
 use App\Central\TenantProvisioningModule\Livewire\Forms\CreateTenantForm;
 use App\Central\TenantProvisioningModule\Models\Domain;
 use App\Central\TenantProvisioningModule\Models\Tenant;
@@ -43,6 +47,8 @@ final class TenantCrud extends Component {
 
    public CreateDomainForm $domainForm;
 
+   public TenantBrandingForm $brandingForm;
+
    public string $search = '';
 
    public int $perPage = 15;
@@ -60,7 +66,15 @@ final class TenantCrud extends Component {
       $this->authorize('create', Tenant::class);
 
       $payload = $this->form->payload();
-      $dto = CreateTenantData::fromValues($payload['name'], $payload['primaryDomain'], $payload['region']);
+      $dto = CreateTenantData::fromValues(
+         $payload['name'],
+         $payload['primaryDomain'],
+         $payload['region'],
+         $payload['brandName'],
+         $payload['logoUrl'],
+         $payload['primaryColor'],
+         $payload['secondaryColor'],
+      );
 
       $action->execute($dto);
 
@@ -132,6 +146,38 @@ final class TenantCrud extends Component {
       session()->flash('status', 'Dominio eliminado correctamente.');
    }
 
+   public function loadBranding(): void {
+      if ($this->brandingForm->tenantId === '') {
+         return;
+      }
+
+      /** @var Tenant $tenant */
+      $tenant = Tenant::query()->findOrFail($this->brandingForm->tenantId);
+
+      $this->authorize('update', $tenant);
+      $this->brandingForm->fillFromTenant($tenant);
+   }
+
+   public function updateBranding(UpdateTenantBrandingAction $action): void {
+      $payload = $this->brandingForm->payload();
+
+      /** @var Tenant $tenant */
+      $tenant = Tenant::query()->findOrFail($payload['tenantId']);
+
+      $this->authorize('update', $tenant);
+
+      $updated = $action->execute(new TenantBrandingData(
+         tenantId: $payload['tenantId'],
+         brandName: $payload['brandName'],
+         logoUrl: $payload['logoUrl'],
+         primaryColor: $payload['primaryColor'],
+         secondaryColor: $payload['secondaryColor'],
+      ));
+
+      $this->brandingForm->fillFromTenant($updated);
+      session()->flash('status', 'Branding actualizado correctamente.');
+   }
+
    public function impersonateTenant(string $tenantId, StartTenantImpersonationAction $action): void {
       /** @var Tenant $tenant */
       $tenant = Tenant::query()->with('domains')->findOrFail($tenantId);
@@ -183,10 +229,15 @@ final class TenantCrud extends Component {
       session()->flash('status', 'Restore de tenant encolado.');
    }
 
-   public function render(ListTenantsAction $action, ListTenantProvisioningRegionsAction $regions): View {
+   public function render(
+      ListTenantsAction $action,
+      ListTenantProvisioningRegionsAction $regions,
+      ListTenantBrandingOptionsAction $brandingOptions,
+   ): View {
       return view('tenant-provisioning::livewire.tenant-crud', [
          'tenants' => $action->execute($this->search, $this->perPage),
          'regionOptions' => $regions->execute(),
+         'tenantBrandingOptions' => $brandingOptions->execute(),
       ]);
    }
 }

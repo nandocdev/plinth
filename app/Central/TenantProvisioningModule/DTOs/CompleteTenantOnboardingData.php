@@ -11,6 +11,10 @@ final readonly class CompleteTenantOnboardingData {
       public int $planId,
       public string $billingPeriod,
       public ?string $region = null,
+      public ?string $brandName = null,
+      public ?string $logoUrl = null,
+      public ?string $primaryColor = null,
+      public ?string $secondaryColor = null,
    ) {
    }
 }

@@ -24,10 +24,14 @@ final class CreateTenantAction {
          /** @var Tenant $created */
          $created = Tenant::query()->create([
             'id' => $data->tenantId,
-            'data' => [
-               'name' => $data->name,
-               'status' => 'active',
-               'region' => $region->code,
+            'name' => $data->name,
+            'status' => 'active',
+            'region' => $region->code,
+            'branding' => [
+               'brand_name' => $data->brandName,
+               'logo_url' => $data->logoUrl,
+               'primary_color' => $data->primaryColor,
+               'secondary_color' => $data->secondaryColor,
             ],
             'tenancy_db_connection' => $region->dbConnection,
             'tenancy_db_name' => $this->databaseNameForRegion($data->tenantId, $region->code),
