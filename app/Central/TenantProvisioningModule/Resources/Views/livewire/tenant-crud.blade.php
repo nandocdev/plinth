@@ -65,6 +65,7 @@
                         <tr class="border-b border-zinc-200 dark:border-zinc-700">
                             <th class="py-3 pr-3">{{ __('Name') }}</th>
                             <th class="py-3 pr-3">{{ __('Tenant ID') }}</th>
+                            <th class="py-3 pr-3">{{ __('Usage') }}</th>
                             <th class="py-3 pr-3">{{ __('Domains') }}</th>
                             <th class="py-3 pr-3">{{ __('Status') }}</th>
                             <th class="py-3 text-right">{{ __('Actions') }}</th>
@@ -76,6 +77,19 @@
                                 class="border-b border-zinc-100 dark:border-zinc-800">
                                 <td class="py-3 pr-3">{{ $tenant->displayName() }}</td>
                                 <td class="py-3 pr-3 font-mono text-xs">{{ $tenant->id }}</td>
+                                <td class="py-3 pr-3">
+                                    <div class="space-y-1 text-xs">
+                                        <div class="text-zinc-700 dark:text-zinc-300">
+                                            {{ __('Plan: :plan', ['plan' => $tenant->subscription?->plan?->name ?? 'N/A']) }}
+                                        </div>
+                                        <div class="text-zinc-700 dark:text-zinc-300">
+                                            {{ __('Subscription: :status', ['status' => $tenant->subscription?->status ?? 'none']) }}
+                                        </div>
+                                        <div class="text-zinc-700 dark:text-zinc-300">
+                                            {{ __('Domains: :count', ['count' => $tenant->domains_count]) }}
+                                        </div>
+                                    </div>
+                                </td>
                                 <td class="py-3 pr-3">
                                     <div class="space-y-2">
                                         @forelse ($tenant->domains as $domain)
@@ -134,7 +148,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="py-6 text-center text-zinc-500">{{ __('No tenants found.') }}
+                                <td colspan="6" class="py-6 text-center text-zinc-500">{{ __('No tenants found.') }}
                                 </td>
                             </tr>
                         @endforelse

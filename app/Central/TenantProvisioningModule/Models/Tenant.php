@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Central\TenantProvisioningModule\Models;
 
+use App\Central\BillingModule\Models\TenantSubscription;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Stancl\Tenancy\Database\Models\Tenant as BaseTenant;
 
 final class Tenant extends BaseTenant {
@@ -26,5 +28,9 @@ final class Tenant extends BaseTenant {
       $name = $this->metadata()['name'] ?? $this->id;
 
       return is_string($name) ? $name : (string) $this->id;
+   }
+
+   public function subscription(): HasOne {
+      return $this->hasOne(TenantSubscription::class, 'tenant_id', 'id');
    }
 }
