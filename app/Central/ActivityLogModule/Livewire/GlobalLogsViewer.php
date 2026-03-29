@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Central\ActivityLogModule\Livewire;
 
+use App\Central\ActivityLogModule\Actions\ListAdminLogFilterOptionsAction;
 use App\Central\ActivityLogModule\Actions\ListGlobalLogsAction;
 use App\Central\ActivityLogModule\Actions\ListTenantLogFilterOptionsAction;
 use App\Central\ActivityLogModule\DTOs\ListGlobalLogsFilterData;
@@ -17,7 +18,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 
 #[Layout('layouts.app')]
-#[Title('Global Logs Viewer')]
+#[Title('Central Audit Log')]
 final class GlobalLogsViewer extends Component {
    use AuthorizesRequests;
    use WithPagination;
@@ -43,18 +44,21 @@ final class GlobalLogsViewer extends Component {
    public function render(
       ListGlobalLogsAction $listLogs,
       ListTenantLogFilterOptionsAction $listTenantOptions,
+      ListAdminLogFilterOptionsAction $listAdminOptions,
    ): View {
       $payload = $this->filterForm->payload();
 
       return view('activity-log::livewire.global-logs-viewer', [
          'logs' => $listLogs->execute(new ListGlobalLogsFilterData(
             tenantId: $payload['tenantId'],
-            level: $payload['level'],
+            event: $payload['event'],
+            causerId: $payload['causerId'],
             search: $payload['search'],
             perPage: $payload['perPage'],
             page: $this->getPage(),
          )),
          'tenantOptions' => $listTenantOptions->execute(),
+         'adminOptions' => $listAdminOptions->execute(),
       ]);
    }
 }

@@ -10,26 +10,30 @@ use Livewire\Form;
 final class GlobalLogsFilterForm extends Form {
    public ?string $tenantId = null;
 
-   public ?string $level = null;
+   public ?string $event = null;
+
+   public ?int $causerId = null;
 
    public string $search = '';
 
    public int $perPage = 25;
 
    /**
-    * @return array{tenantId: ?string, level: ?string, search: string, perPage: int}
+    * @return array{tenantId: ?string, event: ?string, causerId: ?int, search: string, perPage: int}
     */
    public function payload(): array {
       $this->validate([
          'tenantId' => ['nullable', 'string', 'exists:tenants,id'],
-         'level' => ['nullable', 'string', Rule::in(['debug', 'info', 'notice', 'warning', 'error', 'critical', 'alert', 'emergency'])],
+         'event' => ['nullable', 'string', Rule::in(['get.request', 'post.request', 'put.request', 'patch.request', 'delete.request', 'livewire.action'])],
+         'causerId' => ['nullable', 'integer', 'exists:users,id'],
          'search' => ['nullable', 'string', 'max:250'],
          'perPage' => ['required', 'integer', 'min:10', 'max:100'],
       ]);
 
       return [
          'tenantId' => $this->tenantId !== '' ? $this->tenantId : null,
-         'level' => $this->level !== '' ? $this->level : null,
+         'event' => $this->event !== '' ? $this->event : null,
+         'causerId' => $this->causerId,
          'search' => trim($this->search),
          'perPage' => $this->perPage,
       ];
