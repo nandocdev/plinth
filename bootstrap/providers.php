@@ -1,11 +1,9 @@
 <?php
 
-use App\Shared\Infrastructure\Providers\AppServiceProvider;
-use App\Central\AuthenticationModule\Providers\FortifyServiceProvider;
-use App\Central\AuthenticationModule\Providers\AuthenticationModuleServiceProvider;
-
 return [
-    AppServiceProvider::class,
-    FortifyServiceProvider::class,
-    AuthenticationModuleServiceProvider::class,
+    App\Central\AuthenticationModule\Providers\AuthenticationModuleServiceProvider::class,
+    App\Central\AuthenticationModule\Providers\FortifyServiceProvider::class,
+    App\Providers\HorizonServiceProvider::class,
+    App\Providers\TenancyServiceProvider::class,
+    App\Shared\Infrastructure\Providers\AppServiceProvider::class,
 ];
