@@ -33,6 +33,7 @@ final class CreateTenantAction {
                'primary_color' => $data->primaryColor,
                'secondary_color' => $data->secondaryColor,
             ],
+            'referral_code' => $data->referralCode,
             'tenancy_db_connection' => $region->dbConnection,
             'tenancy_db_name' => $this->databaseNameForRegion($data->tenantId, $region->code),
          ]);

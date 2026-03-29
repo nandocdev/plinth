@@ -35,6 +35,7 @@ final class CompleteTenantOnboardingAction {
                $data->logoUrl,
                $data->primaryColor,
                $data->secondaryColor,
+               $data->referralCode,
             ),
          );
 

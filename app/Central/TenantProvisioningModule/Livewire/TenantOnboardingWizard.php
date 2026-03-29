@@ -42,6 +42,7 @@ final class TenantOnboardingWizard extends Component {
          $payload['logoUrl'],
          $payload['primaryColor'],
          $payload['secondaryColor'],
+         $payload['referralCode'],
       ));
 
       $this->form->clear();

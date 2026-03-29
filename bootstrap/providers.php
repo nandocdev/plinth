@@ -1,6 +1,7 @@
 <?php
 
 return [
+    App\Central\AffiliateModule\Providers\AffiliateModuleServiceProvider::class,
     App\Central\ActivityLogModule\Providers\ActivityLogModuleServiceProvider::class,
     App\Central\AuthenticationModule\Providers\AuthenticationModuleServiceProvider::class,
     App\Central\AuthenticationModule\Providers\FortifyServiceProvider::class,
