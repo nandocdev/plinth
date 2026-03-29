@@ -45,41 +45,41 @@ Estado base usado para este documento:
 ### 2. TENANT Context
 
 #### MVP (Minimo viable - lo que el cliente ve dia 1)
-- [Pendiente] Registro / login de usuarios tenant (guard tenant separado)
-- [Pendiente] Dashboard basico con welcome + tenant info
-- [Pendiente] Profile & password update
-- [Pendiente] Rutas en routes/tenant.php con InitializeTenancyByDomain + PreventAccessFromCentralDomains
-- [Pendiente] Modelos tenant sin $connection definido
-- [Pendiente] Storage disk tenant configurado (storage/app/tenants/{uuid}/)
-- [Pendiente] Cache con prefijo/tag tenant-aware via bootstrapper
-- [Pendiente] Jobs tenant-aware (middleware o restore context)
+- [Pendiente] (Tenant context) Registro / login de usuarios tenant (guard tenant separado)
+- [Pendiente] (Tenant context) Dashboard basico con welcome + tenant info
+- [Pendiente] (Tenant context) Profile & password update
+- [Pendiente] (Tenant context) Rutas en routes/tenant.php con InitializeTenancyByDomain + PreventAccessFromCentralDomains
+- [Pendiente] (Tenant context) Modelos tenant sin $connection definido
+- [Pendiente] (Tenant context) Storage disk tenant configurado (storage/app/tenants/{uuid}/)
+- [Pendiente] (Tenant context) Cache con prefijo/tag tenant-aware via bootstrapper
+- [Pendiente] (Tenant context) Jobs tenant-aware (middleware o restore context)
 
 #### Produccion (Media - lo que necesita para ser usable en prod)
-- [Pendiente] User management (CRUD users, roles, permissions - base RBAC)
-- [Pendiente] Settings tenant (company info, branding, preferences) con cache tenant-aware
-- [Pendiente] Activity log tenant (con tenant_id)
-- [Pendiente] File uploads seguros usando tenant disk
-- [Pendiente] Notifications tenant (mail + database)
-- [Pendiente] API basica con Sanctum (tenant-aware)
-- [Pendiente] Queue system con tenant context restore
-- [Pendiente] Feature flags por plan (ej: max_users, max_storage)
-- [Pendiente] Dark mode + basic Tailwind/Flux UI con layout.tenant separado
-- [Pendiente] Error pages y maintenance mode tenant-isolated
-- [Pendiente] Export/Import basicos (CSV) con jobs tenant-aware
+- [Pendiente] (Tenant context) User management (CRUD users, roles, permissions - base RBAC)
+- [Pendiente] (Tenant context) Settings tenant (company info, branding, preferences) con cache tenant-aware
+- [Pendiente] (Tenant context) Activity log tenant (con tenant_id)
+- [Pendiente] (Tenant context) File uploads seguros usando tenant disk
+- [Pendiente] (Tenant context) Notifications tenant (mail + database)
+- [Pendiente] (Tenant context) API basica con Sanctum (tenant-aware)
+- [Pendiente] (Tenant context) Queue system con tenant context restore
+- [Pendiente] (Tenant context) Feature flags por plan (ej: max_users, max_storage)
+- [Pendiente] (Tenant context) Dark mode + basic Tailwind/Flux UI con layout.tenant separado
+- [Pendiente] (Tenant context) Error pages y maintenance mode tenant-isolated
+- [Pendiente] (Tenant context) Export/Import basicos (CSV) con jobs tenant-aware
 
 #### Avanzadas (Actualizaciones futuras - diferenciacion & scaling)
-- [Pendiente] Modular features (plugins/addons instalables por tenant)
-- [Pendiente] Advanced reporting & analytics (tenant-specific)
-- [Pendiente] Webhooks entrantes y salientes tenant
-- [Pendiente] Custom domain full management + SSL auto (Let's Encrypt)
-- [Pendiente] Multi-language + currency per tenant
-- [Pendiente] Team / workspace dentro del tenant (sub-tenancy light)
-- [Pendiente] Audit log avanzado + export
-- [Pendiente] SSO (SAML/OIDC) support
-- [Pendiente] AI features o integrations marketplace
-- [Pendiente] Tenant-specific middleware chain (ej: enforce plan limits)
-- [Pendiente] Real-time (Laravel Echo + tenant-aware channels)
-- [Pendiente] Automated backups por tenant + retention policies
+- [Pendiente] (Tenant context) Modular features (plugins/addons instalables por tenant)
+- [Pendiente] (Tenant context) Advanced reporting & analytics (tenant-specific)
+- [Pendiente] (Tenant context) Webhooks entrantes y salientes tenant
+- [Pendiente] (Tenant context) Custom domain full management + SSL auto (Let's Encrypt)
+- [Pendiente] (Tenant context) Multi-language + currency per tenant
+- [Pendiente] (Tenant context) Team / workspace dentro del tenant (sub-tenancy light)
+- [Pendiente] (Tenant context) Audit log avanzado + export
+- [Pendiente] (Tenant context) SSO (SAML/OIDC) support
+- [Pendiente] (Tenant context) AI features o integrations marketplace
+- [Pendiente] (Tenant context) Tenant-specific middleware chain (ej: enforce plan limits)
+- [Pendiente] (Tenant context) Real-time (Laravel Echo + tenant-aware channels)
+- [Pendiente] (Tenant context) Automated backups por tenant + retention policies
 
 ### Reglas Duras del Boilerplate (no negociables)
 
