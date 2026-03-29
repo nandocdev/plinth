@@ -27,7 +27,7 @@ final class CompleteTenantOnboardingAction {
          $plan = Plan::query()->findOrFail($data->planId);
 
          $tenant = $this->createTenant->execute(
-            CreateTenantData::fromValues($data->name, $data->primaryDomain),
+            CreateTenantData::fromValues($data->name, $data->primaryDomain, $data->region),
          );
 
          $trialEndsAt = $plan->trial_days > 0

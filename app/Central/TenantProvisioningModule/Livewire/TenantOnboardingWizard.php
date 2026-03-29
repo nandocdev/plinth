@@ -7,6 +7,7 @@ namespace App\Central\TenantProvisioningModule\Livewire;
 use App\Central\BillingModule\Actions\ListActivePlansAction;
 use App\Central\BillingModule\Models\TenantSubscription;
 use App\Central\TenantProvisioningModule\Actions\CompleteTenantOnboardingAction;
+use App\Central\TenantProvisioningModule\Actions\ListTenantProvisioningRegionsAction;
 use App\Central\TenantProvisioningModule\DTOs\CompleteTenantOnboardingData;
 use App\Central\TenantProvisioningModule\Livewire\Forms\CompleteTenantOnboardingForm;
 use App\Central\TenantProvisioningModule\Models\Tenant;
@@ -22,6 +23,7 @@ final class TenantOnboardingWizard extends Component {
    public function mount(): void {
       $this->authorize('create', Tenant::class);
       $this->authorize('create', TenantSubscription::class);
+      $this->form->region = $this->form->defaultRegion();
    }
 
    public function onboardTenant(CompleteTenantOnboardingAction $action): void {
@@ -35,6 +37,7 @@ final class TenantOnboardingWizard extends Component {
          $payload['primaryDomain'],
          $payload['planId'],
          $payload['billingPeriod'],
+         $payload['region'],
       ));
 
       $this->form->clear();
@@ -43,9 +46,10 @@ final class TenantOnboardingWizard extends Component {
       $this->redirectRoute('central.tenants.index', navigate: true);
    }
 
-   public function render(ListActivePlansAction $listPlans): View {
+   public function render(ListActivePlansAction $listPlans, ListTenantProvisioningRegionsAction $regions): View {
       return view('tenant-provisioning::livewire.tenant-onboarding-wizard', [
          'planOptions' => $listPlans->execute(),
+         'regionOptions' => $regions->execute(),
       ]);
    }
 }

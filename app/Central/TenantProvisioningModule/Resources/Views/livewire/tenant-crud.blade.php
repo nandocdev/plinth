@@ -14,11 +14,27 @@
             <flux:text class="mt-4 text-green-600 dark:text-green-400">{{ session('status') }}</flux:text>
         @endif
 
-        <form wire:submit="createTenant" class="mt-6 grid gap-4 md:grid-cols-3">
+        <form wire:submit="createTenant" class="mt-6 grid gap-4 md:grid-cols-4">
             <flux:input wire:model="form.name" :label="__('Tenant name')" :placeholder="__('Acme Inc')" required />
 
             <flux:input wire:model="form.primaryDomain" :label="__('Primary domain')" :placeholder="__('acme.localhost')"
                 required />
+
+            <div>
+                <label for="tenant-region" class="mb-1 block text-sm text-zinc-700 dark:text-zinc-300">
+                    {{ __('Region') }}
+                </label>
+                <select id="tenant-region" wire:model="form.region"
+                    class="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                    required>
+                    @foreach ($regionOptions as $region)
+                        <option value="{{ $region->code }}">{{ $region->label }} ({{ $region->code }})</option>
+                    @endforeach
+                </select>
+                @error('form.region')
+                    <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                @enderror
+            </div>
 
             <div class="flex items-end">
                 <flux:button type="submit" variant="primary" class="w-full md:w-auto">
@@ -92,6 +108,9 @@
                                     </div>
                                     <div class="text-zinc-700 dark:text-zinc-300">
                                         {{ __('Domains: :count', ['count' => $tenant->domains_count]) }}
+                                    </div>
+                                    <div class="text-zinc-700 dark:text-zinc-300">
+                                        {{ __('Region: :region', ['region' => $tenant->region()]) }}
                                     </div>
                                     <div class="text-zinc-700 dark:text-zinc-300">
                                         {{ __('Backups: :count', ['count' => $tenant->completed_backups_count ?? 0]) }}

@@ -16,8 +16,10 @@ final class CompleteTenantOnboardingForm extends Form {
 
    public string $billingPeriod = 'monthly';
 
+   public string $region = '';
+
    /**
-    * @return array{name: string, primaryDomain: string, planId: int, billingPeriod: string}
+    * @return array{name: string, primaryDomain: string, planId: int, billingPeriod: string, region: string}
     */
    public function payload(): array {
       $this->validate([
@@ -25,6 +27,7 @@ final class CompleteTenantOnboardingForm extends Form {
          'primaryDomain' => ['required', 'string', 'max:255', 'unique:domains,domain', 'regex:/^[a-z0-9][a-z0-9\-.]+[a-z0-9]$/'],
          'planId' => ['required', 'integer', 'exists:plans,id'],
          'billingPeriod' => ['required', 'string', Rule::in(['monthly', 'yearly'])],
+         'region' => ['required', 'string', Rule::in($this->availableRegions())],
       ]);
 
       return [
@@ -32,11 +35,30 @@ final class CompleteTenantOnboardingForm extends Form {
          'primaryDomain' => trim(strtolower($this->primaryDomain)),
          'planId' => $this->planId,
          'billingPeriod' => $this->billingPeriod,
+         'region' => $this->region,
       ];
    }
 
    public function clear(): void {
       $this->reset();
       $this->billingPeriod = 'monthly';
+      $this->region = $this->defaultRegion();
+   }
+
+   public function defaultRegion(): string {
+      return (string) config('tenancy.multi_region.default_region', 'us-east-1');
+   }
+
+   /**
+    * @return list<string>
+    */
+   private function availableRegions(): array {
+      $regions = config('tenancy.multi_region.regions', []);
+
+      if (! is_array($regions) || $regions === []) {
+         return [$this->defaultRegion()];
+      }
+
+      return array_values(array_filter(array_keys($regions), static fn(mixed $key): bool => is_string($key) && $key !== ''));
    }
 }

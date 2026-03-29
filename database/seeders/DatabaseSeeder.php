@@ -14,18 +14,18 @@ class DatabaseSeeder extends Seeder {
      * Seed the application's database.
      */
     public function run(): void {
-        if (tenancy()->initialized()) {
-            $this->call(TenantOwnerUsersSeeder::class);
+        // if (tenancy()->initialized()) {
+        //     $this->call(TenantOwnerUsersSeeder::class);
 
-            return;
-        }
+        //     return;
+        // }
 
         $this->call(InitialPlansSeeder::class);
 
         User::query()->firstOrCreate([
-            'email' => 'test@example.com',
+            'email' => 'admin@tenant.local',
         ], [
-            'name' => 'Test User',
+            'name' => 'Admin User',
             'password' => Hash::make('password'),
             'email_verified_at' => now(),
         ]);
