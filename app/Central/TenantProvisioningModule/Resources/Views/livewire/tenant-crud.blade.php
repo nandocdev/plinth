@@ -1,7 +1,13 @@
 <x-layouts::app :title="__('Tenant Management')">
     <div class="space-y-6">
         <div class="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-900">
-            <flux:heading size="xl">{{ __('Tenants') }}</flux:heading>
+            <div class="flex items-center justify-between gap-3">
+                <flux:heading size="xl">{{ __('Tenants') }}</flux:heading>
+
+                <flux:button :href="route('central.tenants.onboarding')" wire:navigate variant="primary">
+                    {{ __('Open onboarding wizard') }}
+                </flux:button>
+            </div>
             <flux:subheading>{{ __('Create, suspend and remove tenant workspaces from central context.') }}
             </flux:subheading>
 
