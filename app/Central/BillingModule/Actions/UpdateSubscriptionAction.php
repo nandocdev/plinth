@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Central\BillingModule\Actions;
 
 use App\Central\BillingModule\DTOs\UpdateSubscriptionData;
+use App\Central\BillingModule\Events\SubscriptionUpdated;
 use App\Central\BillingModule\Models\Plan;
 use App\Central\BillingModule\Models\TenantSubscription;
 use App\Central\TenantProvisioningModule\Models\Tenant;
@@ -19,6 +20,7 @@ final class UpdateSubscriptionAction {
       $subscription = DB::connection('central')->transaction(function () use ($data): TenantSubscription {
          /** @var TenantSubscription $subscription */
          $subscription = TenantSubscription::query()->findOrFail($data->subscriptionId);
+         $previousStatus = $subscription->status;
 
          $tenant = Tenant::query()->find($data->tenantId);
 
@@ -65,8 +67,13 @@ final class UpdateSubscriptionAction {
 
          $subscription->save();
 
+         $subscription->setAttribute('previous_status', $previousStatus);
+
          return $subscription;
       });
+
+      $previousStatus = (string) ($subscription->getAttribute('previous_status') ?? $subscription->status);
+      event(new SubscriptionUpdated($subscription, $previousStatus));
 
       return $subscription;
    }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Central\BillingModule\Actions;
 
 use App\Central\BillingModule\DTOs\CreateSubscriptionData;
+use App\Central\BillingModule\Events\SubscriptionCreated;
 use App\Central\BillingModule\Models\Plan;
 use App\Central\BillingModule\Models\TenantSubscription;
 use App\Central\TenantProvisioningModule\Models\Tenant;
@@ -70,6 +71,8 @@ final class CreateSubscriptionAction {
 
          return $created;
       });
+
+      event(new SubscriptionCreated($subscription));
 
       return $subscription;
    }
