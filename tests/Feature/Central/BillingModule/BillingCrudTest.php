@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Livewire;
 
 test('usuarios autenticados pueden ver billing central', function () {
-   $user = User::factory()->create();
+   $user = User::factory()->withTwoFactor()->create();
    $this->actingAs($user, 'central');
 
    $this->get(route('central.billing.index'))
@@ -22,7 +22,7 @@ test('usuarios autenticados pueden ver billing central', function () {
 });
 
 test('billing crud crea un plan desde livewire', function () {
-   $user = User::factory()->create();
+   $user = User::factory()->withTwoFactor()->create();
    $this->actingAs($user, 'central');
 
    Livewire::test(BillingCrud::class)
@@ -47,7 +47,7 @@ test('billing crud crea un plan desde livewire', function () {
 });
 
 test('sincronizacion de lifecycle mueve trial vencido a active', function () {
-   $user = User::factory()->create();
+   $user = User::factory()->withTwoFactor()->create();
    $this->actingAs($user, 'central');
 
    /** @var Tenant $tenant */

@@ -11,7 +11,7 @@ test('logs viewer central requiere autenticacion', function () {
 });
 
 test('logs viewer central lista logs y filtra por tenant', function () {
-   $user = User::factory()->create();
+   $user = User::factory()->withTwoFactor()->create();
    $this->actingAs($user, 'central');
 
    /** @var Tenant $tenantA */

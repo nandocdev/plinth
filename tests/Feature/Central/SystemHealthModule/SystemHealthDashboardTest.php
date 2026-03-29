@@ -10,7 +10,7 @@ test('system health dashboard requiere autenticacion central', function () {
 });
 
 test('system health dashboard renderiza metricas y filtros', function () {
-   $user = User::factory()->create();
+   $user = User::factory()->withTwoFactor()->create();
    $this->actingAs($user, 'central');
 
    $this->get(route('central.health.index'))
