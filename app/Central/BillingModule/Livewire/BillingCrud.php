@@ -27,9 +27,13 @@ use App\Central\BillingModule\Models\Plan;
 use App\Central\BillingModule\Models\TenantSubscription;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 
+#[Layout('layouts.app')]
+#[Title('Billing Management')]
 final class BillingCrud extends Component {
    use AuthorizesRequests;
    use WithPagination;
