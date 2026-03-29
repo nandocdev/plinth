@@ -61,6 +61,8 @@ Route::middleware([
     ->domain('{tenantDomain}')
     ->where(['tenantDomain' => $tenantDomainPattern])
     ->group(function () {
+        require app_path('Tenant/WorkspaceModule/Routes/tenant.php');
+
         Route::get('/', function () {
             return view('tenant.home');
         });
