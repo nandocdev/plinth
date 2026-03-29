@@ -34,7 +34,7 @@ Estado base usado para este documento:
 - [Implementado] Multi-region / multi-DB support (tenant DB provisioning automatico)
 - [Implementado] White-labeling para tenants (branding central configurable)
 - [Implementado] Affiliate / referral system
-- [Implementado] Advanced analytics agregados (MRR, churn, LTV, tenant growth)
+- [Parcial] Advanced analytics agregados (MRR, churn, LTV, tenant growth)
 - [Implementado] Role & permission system global para system admins (Spatie)
 - [Implementado] Audit log completo de acciones central
 - [Implementado] Webhooks salientes para partners (nuevo tenant, etc.)
