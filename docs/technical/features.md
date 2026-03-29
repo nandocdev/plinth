@@ -40,7 +40,7 @@ Estado base usado para este documento:
 - [Implementado] Webhooks salientes para partners (nuevo tenant, etc.)
 	- [Implementado] Tenant self-service portal limitado (upgrade plan, view invoices)
 - [Pendiente] Automated tenant provisioning con Terraform/Ansible hooks
-- [Pendiente] Data export central (GDPR compliance)
+- [Implementado] Data export central (GDPR compliance)
 
 ### 2. TENANT Context
 

@@ -28,7 +28,8 @@
             </flux:select>
 
             <div class="flex items-end">
-                <flux:checkbox wire:model="form.includeActivityLog" :label="__('Incluir activity log central del tenant')" />
+                <flux:checkbox wire:model="form.includeActivityLog"
+                    :label="__('Incluir activity log central del tenant')" />
             </div>
 
             <div class="md:col-span-2">
@@ -59,21 +60,26 @@
                 <tbody>
                     @forelse ($exports as $export)
                         <tr class="border-b border-zinc-100 dark:border-zinc-800">
-                            <td class="py-3 pr-3 font-mono text-xs">{{ $export->created_at?->format('Y-m-d H:i:s') }}</td>
+                            <td class="py-3 pr-3 font-mono text-xs">{{ $export->created_at?->format('Y-m-d H:i:s') }}
+                            </td>
                             <td class="py-3 pr-3">{{ $export->tenant?->displayName() ?? $export->tenant_id }}</td>
                             <td class="py-3 pr-3">{{ $export->requestedBy?->email ?? '-' }}</td>
                             <td class="py-3 pr-3">
                                 <flux:badge size="sm" color="zinc">{{ $export->status }}</flux:badge>
                             </td>
                             <td class="py-3 pr-3">{{ $export->include_activity_log ? __('Si') : __('No') }}</td>
-                            <td class="py-3 pr-3">{{ $export->size_bytes !== null ? number_format((int) $export->size_bytes) . ' B' : '-' }}</td>
+                            <td class="py-3 pr-3">
+                                {{ $export->size_bytes !== null ? number_format((int) $export->size_bytes) . ' B' : '-' }}
+                            </td>
                             <td class="py-3 text-right">
                                 @if ($export->status === \App\Central\DataExportModule\Models\CentralDataExport::STATUS_COMPLETED)
-                                    <flux:button size="sm" variant="filled" :href="route('central.exports.download', $export)">
+                                    <flux:button size="sm" variant="filled"
+                                        :href="route('central.exports.download', $export)">
                                         {{ __('Descargar ZIP') }}
                                     </flux:button>
                                 @elseif ($export->status === \App\Central\DataExportModule\Models\CentralDataExport::STATUS_FAILED)
-                                    <flux:text class="text-red-600 dark:text-red-400">{{ $export->error_message }}</flux:text>
+                                    <flux:text class="text-red-600 dark:text-red-400">{{ $export->error_message }}
+                                    </flux:text>
                                 @else
                                     <flux:text>{{ __('En progreso') }}</flux:text>
                                 @endif

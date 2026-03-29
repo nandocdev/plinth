@@ -51,7 +51,7 @@ test('queue action evita exportaciones duplicadas activas por tenant', function 
 
    $action->execute(new RequestCentralDataExportData($tenant->id, $user->id, true));
 
-   expect(fn () => $action->execute(new RequestCentralDataExportData($tenant->id, $user->id, false)))
+   expect(fn() => $action->execute(new RequestCentralDataExportData($tenant->id, $user->id, false)))
       ->toThrow(RuntimeException::class);
 });
 
@@ -158,18 +158,18 @@ test('job marca exportacion failed si no puede preparar el directorio del zip', 
    }
    touch($directoryPath);
 
-   expect(fn () => GenerateCentralDataExportJob::dispatchSync($export->id))
+   expect(fn() => GenerateCentralDataExportJob::dispatchSync($export->id))
       ->toThrow(ErrorException::class);
 
    $export->refresh();
 
    expect($export->status)->toBe(CentralDataExport::STATUS_FAILED)
-   ->and($export->error_message)->not->toBeNull();
+      ->and($export->error_message)->not->toBeNull();
 });
 
 function createCentralExportTenant(string $tenantId): Tenant {
    /** @var Tenant $tenant */
-   $tenant = Tenant::withoutEvents(fn () => Tenant::query()->create([
+   $tenant = Tenant::withoutEvents(fn() => Tenant::query()->create([
       'id' => $tenantId,
       'name' => 'Tenant ' . $tenantId,
       'status' => 'active',

@@ -22,7 +22,7 @@ final class BuildCentralDataExportPayloadAction {
          ->where('tenant_id', $tenant->id)
          ->orderBy('created_at')
          ->get()
-         ->map(fn (TenantInvoice $invoice): array => [
+         ->map(fn(TenantInvoice $invoice): array => [
             'id' => $invoice->id,
             'invoice_number' => $invoice->invoice_number,
             'status' => $invoice->status,
@@ -67,7 +67,7 @@ final class BuildCentralDataExportPayloadAction {
          ->where('tenant_id', $tenant->id)
          ->orderByDesc('id')
          ->get()
-         ->map(fn (TenantRecoverySnapshot $snapshot): array => [
+         ->map(fn(TenantRecoverySnapshot $snapshot): array => [
             'id' => $snapshot->id,
             'operation' => $snapshot->operation,
             'status' => $snapshot->status,
@@ -95,7 +95,7 @@ final class BuildCentralDataExportPayloadAction {
             'created_at' => $tenant->created_at?->toIso8601String(),
             'updated_at' => $tenant->updated_at?->toIso8601String(),
          ],
-         domains: $tenant->domains->map(fn ($domain): array => [
+         domains: $tenant->domains->map(fn($domain): array => [
             'id' => $domain->id,
             'domain' => $domain->domain,
             'verified_at' => $domain->verified_at?->toIso8601String(),
