@@ -10,6 +10,7 @@ final readonly class CompleteTenantOnboardingData {
       public string $primaryDomain,
       public int $planId,
       public string $billingPeriod,
+      public ?string $region = null,
    ) {
    }
 }

@@ -31,6 +31,14 @@ final class Tenant extends BaseTenant {
       return is_string($name) ? $name : (string) $this->id;
    }
 
+   public function region(): string {
+      $region = $this->metadata()['region'] ?? config('tenancy.multi_region.default_region', 'us-east-1');
+
+      return is_string($region) && $region !== ''
+         ? $region
+         : (string) config('tenancy.multi_region.default_region', 'us-east-1');
+   }
+
    public function subscription(): HasOne {
       return $this->hasOne(TenantSubscription::class, 'tenant_id', 'id');
    }
