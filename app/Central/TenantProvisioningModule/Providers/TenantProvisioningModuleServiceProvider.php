@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Central\TenantProvisioningModule\Providers;
 
+use App\Central\TenantProvisioningModule\Models\Domain;
 use App\Central\TenantProvisioningModule\Models\Tenant;
+use App\Central\TenantProvisioningModule\Policies\DomainPolicy;
 use App\Central\TenantProvisioningModule\Policies\TenantPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +18,7 @@ final class TenantProvisioningModuleServiceProvider extends ServiceProvider {
    }
 
    public function boot(): void {
+      Gate::policy(Domain::class, DomainPolicy::class);
       Gate::policy(Tenant::class, TenantPolicy::class);
 
       $this->loadRoutes();

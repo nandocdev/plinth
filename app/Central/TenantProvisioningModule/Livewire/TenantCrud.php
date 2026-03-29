@@ -5,12 +5,20 @@ declare(strict_types=1);
 namespace App\Central\TenantProvisioningModule\Livewire;
 
 use App\Central\TenantProvisioningModule\Actions\CreateTenantAction;
+use App\Central\TenantProvisioningModule\Actions\CreateDomainAction;
 use App\Central\TenantProvisioningModule\Actions\DeleteTenantAction;
+use App\Central\TenantProvisioningModule\Actions\DeleteDomainAction;
 use App\Central\TenantProvisioningModule\Actions\ListTenantsAction;
 use App\Central\TenantProvisioningModule\Actions\SuspendTenantAction;
+use App\Central\TenantProvisioningModule\Actions\VerifyDomainAction;
+use App\Central\TenantProvisioningModule\DTOs\CreateDomainData;
 use App\Central\TenantProvisioningModule\DTOs\CreateTenantData;
+use App\Central\TenantProvisioningModule\DTOs\DeleteDomainData;
 use App\Central\TenantProvisioningModule\DTOs\SuspendTenantData;
+use App\Central\TenantProvisioningModule\DTOs\VerifyDomainData;
+use App\Central\TenantProvisioningModule\Livewire\Forms\CreateDomainForm;
 use App\Central\TenantProvisioningModule\Livewire\Forms\CreateTenantForm;
+use App\Central\TenantProvisioningModule\Models\Domain;
 use App\Central\TenantProvisioningModule\Models\Tenant;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -22,6 +30,8 @@ final class TenantCrud extends Component {
    use WithPagination;
 
    public CreateTenantForm $form;
+
+   public CreateDomainForm $domainForm;
 
    public string $search = '';
 
@@ -48,6 +58,18 @@ final class TenantCrud extends Component {
       $this->resetPage();
    }
 
+   public function createDomain(CreateDomainAction $action): void {
+      $this->authorize('create', Domain::class);
+
+      $payload = $this->domainForm->payload();
+
+      $action->execute(CreateDomainData::fromValues($payload['tenantId'], $payload['domain']));
+
+      $this->domainForm->clear();
+      session()->flash('status', 'Dominio agregado correctamente.');
+      $this->resetPage();
+   }
+
    public function suspendTenant(string $tenantId, SuspendTenantAction $action): void {
       /** @var Tenant $tenant */
       $tenant = Tenant::query()->findOrFail($tenantId);
@@ -69,6 +91,34 @@ final class TenantCrud extends Component {
 
       session()->flash('status', 'Tenant eliminado correctamente.');
       $this->resetPage();
+   }
+
+   public function verifyDomain(string $tenantId, int $domainId, VerifyDomainAction $action): void {
+      /** @var Domain $domain */
+      $domain = Domain::query()
+         ->where('id', $domainId)
+         ->where('tenant_id', $tenantId)
+         ->firstOrFail();
+
+      $this->authorize('update', $domain);
+
+      $shouldVerify = $domain->verified_at === null;
+      $action->execute(new VerifyDomainData($tenantId, $domainId, $shouldVerify));
+
+      session()->flash('status', $shouldVerify ? 'Dominio verificado.' : 'Verificacion removida.');
+   }
+
+   public function deleteDomain(string $tenantId, int $domainId, DeleteDomainAction $action): void {
+      /** @var Domain $domain */
+      $domain = Domain::query()
+         ->where('id', $domainId)
+         ->where('tenant_id', $tenantId)
+         ->firstOrFail();
+
+      $this->authorize('delete', $domain);
+      $action->execute(new DeleteDomainData($tenantId, $domainId));
+
+      session()->flash('status', 'Dominio eliminado correctamente.');
    }
 
    public function render(ListTenantsAction $action): View {
