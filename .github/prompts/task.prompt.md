@@ -171,6 +171,10 @@ git branch -d feat/<milestone>/<modulo>-<descripcion-kebab>
 
 ---
 
+## Actualizacion de documentación
+
+Actualizar el estado de la tarea en el archivo `docs/technical/features.md` bajo el apartado correspondiente al módulo y milestone, marcando la tarea como "Implementado" o "Parcial" según corresponda.
+
 ## 📦 Output obligatorio (código listo para producción)
 
 Generar SOLO lo necesario, separado por archivos reales:
