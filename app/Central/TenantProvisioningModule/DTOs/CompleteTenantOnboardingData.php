@@ -15,6 +15,7 @@ final readonly class CompleteTenantOnboardingData {
       public ?string $logoUrl = null,
       public ?string $primaryColor = null,
       public ?string $secondaryColor = null,
+      public ?string $referralCode = null,
    ) {
    }
 }

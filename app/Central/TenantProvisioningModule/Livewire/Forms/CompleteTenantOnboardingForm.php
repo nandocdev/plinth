@@ -26,8 +26,10 @@ final class CompleteTenantOnboardingForm extends Form {
 
    public string $secondaryColor = '#ff4433';
 
+   public string $referralCode = '';
+
    /**
-    * @return array{name: string, primaryDomain: string, planId: int, billingPeriod: string, region: string, brandName: ?string, logoUrl: ?string, primaryColor: ?string, secondaryColor: ?string}
+    * @return array{name: string, primaryDomain: string, planId: int, billingPeriod: string, region: string, brandName: ?string, logoUrl: ?string, primaryColor: ?string, secondaryColor: ?string, referralCode: ?string}
     */
    public function payload(): array {
       $this->validate([
@@ -40,6 +42,7 @@ final class CompleteTenantOnboardingForm extends Form {
          'logoUrl' => ['nullable', 'url', 'max:2048'],
          'primaryColor' => ['nullable', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
          'secondaryColor' => ['nullable', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
+         'referralCode' => ['nullable', 'string', 'max:40', 'regex:/^[A-Za-z0-9_-]+$/'],
       ]);
 
       return [
@@ -52,6 +55,7 @@ final class CompleteTenantOnboardingForm extends Form {
          'logoUrl' => $this->logoUrl !== '' ? trim($this->logoUrl) : null,
          'primaryColor' => $this->primaryColor !== '' ? strtolower(trim($this->primaryColor)) : null,
          'secondaryColor' => $this->secondaryColor !== '' ? strtolower(trim($this->secondaryColor)) : null,
+         'referralCode' => $this->referralCode !== '' ? strtoupper(trim($this->referralCode)) : null,
       ];
    }
 

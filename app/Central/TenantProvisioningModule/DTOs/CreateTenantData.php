@@ -16,6 +16,7 @@ final readonly class CreateTenantData {
       public ?string $logoUrl = null,
       public ?string $primaryColor = null,
       public ?string $secondaryColor = null,
+      public ?string $referralCode = null,
    ) {
    }
 
@@ -27,6 +28,7 @@ final readonly class CreateTenantData {
       ?string $logoUrl = null,
       ?string $primaryColor = null,
       ?string $secondaryColor = null,
+      ?string $referralCode = null,
    ): self {
       return new self(
          name: trim($name),
@@ -37,6 +39,7 @@ final readonly class CreateTenantData {
          logoUrl: $logoUrl !== null && $logoUrl !== '' ? trim($logoUrl) : null,
          primaryColor: $primaryColor !== null && $primaryColor !== '' ? trim(Str::lower($primaryColor)) : null,
          secondaryColor: $secondaryColor !== null && $secondaryColor !== '' ? trim(Str::lower($secondaryColor)) : null,
+         referralCode: $referralCode !== null && $referralCode !== '' ? trim(Str::upper($referralCode)) : null,
       );
    }
 }

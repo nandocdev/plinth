@@ -74,6 +74,7 @@ final class TenantCrud extends Component {
          $payload['logoUrl'],
          $payload['primaryColor'],
          $payload['secondaryColor'],
+         $payload['referralCode'],
       );
 
       $action->execute($dto);

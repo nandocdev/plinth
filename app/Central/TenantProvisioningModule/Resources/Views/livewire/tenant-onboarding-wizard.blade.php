@@ -75,6 +75,9 @@
                 <flux:input wire:model="form.secondaryColor" :label="__('Secondary color')"
                     :placeholder="__('#ff4433')" />
 
+                <flux:input wire:model="form.referralCode" :label="__('Referral code (optional)')"
+                    :placeholder="__('PARTNER10')" class="md:col-span-2" />
+
                 <div class="md:col-span-2 flex items-center gap-3">
                     <flux:button type="submit" variant="primary">
                         {{ __('Complete onboarding') }}
