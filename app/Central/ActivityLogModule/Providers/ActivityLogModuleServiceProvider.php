@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Central\ActivityLogModule\Providers;
 
+use App\Central\ActivityLogModule\Http\Middleware\RecordCentralAuditTrail;
 use App\Central\ActivityLogModule\Models\ActivityLogEntry;
 use App\Central\ActivityLogModule\Policies\ActivityLogEntryPolicy;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -17,9 +19,17 @@ final class ActivityLogModuleServiceProvider extends ServiceProvider {
 
    public function boot(): void {
       Gate::policy(ActivityLogEntry::class, ActivityLogEntryPolicy::class);
+      $this->registerMiddleware();
 
       $this->loadRoutes();
       $this->loadViews();
+      $this->loadMigrationsFrom(database_path('migrations/central'));
+   }
+
+   private function registerMiddleware(): void {
+      /** @var Router $router */
+      $router = $this->app->make(Router::class);
+      $router->aliasMiddleware('central.audit', RecordCentralAuditTrail::class);
    }
 
    private function loadRoutes(): void {
