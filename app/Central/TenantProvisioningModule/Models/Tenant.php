@@ -38,4 +38,8 @@ final class Tenant extends BaseTenant {
    public function domains(): HasMany {
       return $this->hasMany(Domain::class, 'tenant_id', 'id');
    }
+
+   public function recoverySnapshots(): HasMany {
+      return $this->hasMany(TenantRecoverySnapshot::class, 'tenant_id', 'id');
+   }
 }
