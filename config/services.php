@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'dlocal' => [
+        'base_url' => env('DLOCAL_BASE_URL', 'https://api.dlocal.com'),
+        'x_login' => env('DLOCAL_X_LOGIN'),
+        'x_trans_key' => env('DLOCAL_X_TRANS_KEY'),
+        'secret_key' => env('DLOCAL_SECRET_KEY'),
+        'webhook_secret' => env('DLOCAL_WEBHOOK_SECRET'),
+    ],
+
 ];
