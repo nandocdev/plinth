@@ -31,6 +31,12 @@
                     :current="request()->routeIs('central.affiliates.*')" wire:navigate>
                     {{ __('Affiliates') }}
                 </flux:sidebar.item>
+                @can('viewAny', \App\Central\PartnerWebhookModule\Models\PartnerWebhookEndpoint::class)
+                    <flux:sidebar.item icon="signal" :href="route('central.partners.webhooks.index')"
+                        :current="request()->routeIs('central.partners.webhooks.*')" wire:navigate>
+                        {{ __('Partner Webhooks') }}
+                    </flux:sidebar.item>
+                @endcan
                 @can('admin-roles.viewAny')
                     <flux:sidebar.item icon="shield-check" :href="route('central.admins.roles.index')"
                         :current="request()->routeIs('central.admins.roles.*')" wire:navigate>
