@@ -9,6 +9,7 @@ use App\Central\TenantProvisioningModule\Actions\CreateDomainAction;
 use App\Central\TenantProvisioningModule\Actions\DeleteTenantAction;
 use App\Central\TenantProvisioningModule\Actions\DeleteDomainAction;
 use App\Central\TenantProvisioningModule\Actions\ListTenantsAction;
+use App\Central\TenantProvisioningModule\Actions\StartTenantImpersonationAction;
 use App\Central\TenantProvisioningModule\Actions\SuspendTenantAction;
 use App\Central\TenantProvisioningModule\Actions\VerifyDomainAction;
 use App\Central\TenantProvisioningModule\DTOs\CreateDomainData;
@@ -123,6 +124,23 @@ final class TenantCrud extends Component {
       $action->execute(new DeleteDomainData($tenantId, $domainId));
 
       session()->flash('status', 'Dominio eliminado correctamente.');
+   }
+
+   public function impersonateTenant(string $tenantId, StartTenantImpersonationAction $action): void {
+      /** @var Tenant $tenant */
+      $tenant = Tenant::query()->with('domains')->findOrFail($tenantId);
+
+      $this->authorize('impersonate', $tenant);
+
+      $impersonator = auth('central')->user();
+
+      if (! $impersonator instanceof \App\Central\AuthenticationModule\Models\User) {
+         abort(403);
+      }
+
+      $redirectUrl = $action->execute($tenant, $impersonator);
+
+      $this->redirect($redirectUrl, navigate: true);
    }
 
    public function render(ListTenantsAction $action): View {
