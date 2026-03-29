@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Central\BillingModule\Actions;
 
 use App\Central\BillingModule\DTOs\DlocalWebhookData;
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Str;
 
 final class NormalizeDlocalWebhookAction {
@@ -33,10 +34,19 @@ final class NormalizeDlocalWebhookAction {
          $payload['type'] ?? null,
       ]));
 
+      $occurredAt = $this->normalizeOccurredAt([
+         $payload['created_at'] ?? null,
+         $payload['createdAt'] ?? null,
+         $payload['event_timestamp'] ?? null,
+         $payload['timestamp'] ?? null,
+         $payload['data']['created_at'] ?? null,
+      ]);
+
       return new DlocalWebhookData(
          eventId: $eventId,
          externalSubscriptionId: $externalSubscriptionId,
          status: $status,
+         occurredAt: $occurredAt,
          payloadHash: hash('sha256', $rawPayload),
          payload: $payload,
       );
@@ -69,5 +79,30 @@ final class NormalizeDlocalWebhookAction {
          'canceled', 'cancelled', 'subscription.canceled', 'voided' => 'canceled',
          default => null,
       };
+   }
+
+   /**
+    * @param array<int, mixed> $candidates
+    */
+   private function normalizeOccurredAt(array $candidates): ?string {
+      foreach ($candidates as $candidate) {
+         if (is_numeric($candidate)) {
+            try {
+               return CarbonImmutable::createFromTimestampUTC((int) $candidate)->toIso8601String();
+            } catch (\Throwable) {
+               continue;
+            }
+         }
+
+         if (is_string($candidate) && trim($candidate) !== '') {
+            try {
+               return CarbonImmutable::parse($candidate)->toIso8601String();
+            } catch (\Throwable) {
+               continue;
+            }
+         }
+      }
+
+      return null;
    }
 }

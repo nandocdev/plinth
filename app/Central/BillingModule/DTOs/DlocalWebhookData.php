@@ -12,6 +12,7 @@ final readonly class DlocalWebhookData {
       public string $eventId,
       public ?string $externalSubscriptionId,
       public ?string $status,
+      public ?string $occurredAt,
       public string $payloadHash,
       public array $payload,
    ) {
