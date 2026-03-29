@@ -71,7 +71,7 @@
                             @else
                                 <flux:button href="{{ route('login') }}" variant="subtle">Iniciar sesión</flux:button>
                                 @if (Route::has('register'))
-                                    <flux:button href="{{ route('register') }}" variant="primary" class="!bg-orange-600 !hover:bg-orange-700 !border-none">Registrarse</flux:button>
+                                    <flux:button href="{{ route('register') }}" variant="primary" color="orange" class="!hover:bg-orange-700 !border-none">Registrarse</flux:button>
                                 @endif
                             @endauth
                         @endif
@@ -101,7 +101,7 @@
                         </p>
 
                         <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
-                            <flux:button href="{{ route('register') }}" variant="primary" class="!px-8 !py-4 !bg-orange-600 !hover:bg-orange-700 !border-none !text-lg !font-semibold">
+                            <flux:button href="{{ route('register') }}" variant="primary" color="orange" class="!px-8 !py-4 !hover:bg-orange-700 !border-none !text-lg !font-semibold">
                                 Comenzar ahora gratis
                             </flux:button>
                             <flux:button href="https://github.com" target="_blank" variant="subtle" class="!px-8 !py-4 !text-lg !font-semibold border border-white/10 hover:bg-white/5">
@@ -342,7 +342,7 @@
                                     <li class="flex items-center gap-3 text-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-500 lucide lucide-check"><path d="M20 6 9 17l-5-5"/></svg> Soporte prioritario</li>
                                     <li class="flex items-center gap-3 text-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-500 lucide lucide-check"><path d="M20 6 9 17l-5-5"/></svg> Dominio personalizado</li>
                                 </ul>
-                                <flux:button href="{{ route('register') }}" variant="primary" class="w-full !bg-orange-600 !hover:bg-orange-700 !border-none">Elegir Plan Pro</flux:button>
+                                <flux:button href="{{ route('register') }}" variant="primary" color="orange" class="w-full !hover:bg-orange-700 !border-none">Elegir Plan Pro</flux:button>
                             </div>
 
                             <!-- Enterprise -->
@@ -367,7 +367,7 @@
                     <div class="container mx-auto px-6 text-center relative z-10">
                         <h2 class="text-4xl md:text-6xl font-bold text-white mb-8">¿Listo para lanzar tu SaaS?</h2>
                         <p class="text-xl text-zinc-400 max-w-2xl mx-auto mb-12">Únete a cientos de desarrolladores que ya están construyendo con Plinth.</p>
-                        <flux:button href="{{ route('register') }}" variant="primary" class="!px-12 !py-6 !bg-orange-600 !hover:bg-orange-700 !border-none !text-xl !font-bold">
+                        <flux:button href="{{ route('register') }}" variant="primary" color="orange" class="!px-12 !py-6 !hover:bg-orange-700 !border-none !text-xl !font-bold">
                             Empezar ahora mismo
                         </flux:button>
                     </div>
