@@ -36,7 +36,7 @@ Estado base usado para este documento:
 - [Implementado] Affiliate / referral system
 - [Implementado] Advanced analytics agregados (MRR, churn, LTV, tenant growth)
 - [Implementado] Role & permission system global para system admins (Spatie)
-- [Pendiente] Audit log completo de acciones central [-]
+- [Implementado] Audit log completo de acciones central
 - [Pendiente] Webhooks admin@plinth.localsalientes para partners (nuevo tenant, etc.)
 - [Pendiente] Tenant self-service portal limitado (upgrade plan, view invoices)
 - [Pendiente] Automated tenant provisioning con Terraform/Ansible hooks
