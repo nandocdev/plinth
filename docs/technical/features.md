@@ -45,7 +45,7 @@ Estado base usado para este documento:
 ### 2. TENANT Context
 
 #### MVP (Minimo viable - lo que el cliente ve dia 1)
-- [Pendiente] (Tenant context) Registro / login de usuarios tenant (guard tenant separado)
+- [Implementado] (Tenant context) Registro / login de usuarios tenant (guard tenant separado)
 - [Pendiente] (Tenant context) Dashboard basico con welcome + tenant info
 - [Pendiente] (Tenant context) Profile & password update
 - [Pendiente] (Tenant context) Rutas en routes/tenant.php con InitializeTenancyByDomain + PreventAccessFromCentralDomains
