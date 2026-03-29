@@ -1,6 +1,7 @@
 <?php
 
 return [
+    App\Central\AdminAuthorizationModule\Providers\AdminAuthorizationModuleServiceProvider::class,
     App\Central\AffiliateModule\Providers\AffiliateModuleServiceProvider::class,
     App\Central\ActivityLogModule\Providers\ActivityLogModuleServiceProvider::class,
     App\Central\AuthenticationModule\Providers\AuthenticationModuleServiceProvider::class,
