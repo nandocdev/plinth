@@ -16,6 +16,10 @@ final readonly class UpdatePlanData {
       public ?int $priceYearlyCents,
       public int $trialDays,
       public array $features,
+      public ?int $maxUsersSoft,
+      public ?int $maxUsersHard,
+      public ?int $maxStorageMbSoft,
+      public ?int $maxStorageMbHard,
       public bool $isActive,
       public int $sortOrder,
    ) {
