@@ -7,6 +7,7 @@ return [
     App\Central\AuthenticationModule\Providers\AuthenticationModuleServiceProvider::class,
     App\Central\AuthenticationModule\Providers\FortifyServiceProvider::class,
     App\Central\BillingModule\Providers\BillingModuleServiceProvider::class,
+    App\Central\DataExportModule\Providers\DataExportModuleServiceProvider::class,
     App\Central\NotificationModule\Providers\NotificationModuleServiceProvider::class,
     App\Central\PartnerWebhookModule\Providers\PartnerWebhookModuleServiceProvider::class,
     App\Central\SystemHealthModule\Providers\SystemHealthModuleServiceProvider::class,
