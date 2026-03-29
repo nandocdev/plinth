@@ -79,7 +79,7 @@ return [
 
         'tenant_users' => [
             'driver' => 'eloquent',
-            'model' => App\Tenant\SelfServiceBillingModule\Models\User::class,
+            'model' => App\Tenant\AuthenticationModule\Models\User::class,
         ],
     ],
 
@@ -105,6 +105,13 @@ return [
     'passwords' => [
         'system_admins' => [
             'provider' => 'system_admins',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'tenant_users' => [
+            'provider' => 'tenant_users',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,

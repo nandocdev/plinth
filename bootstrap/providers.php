@@ -15,6 +15,7 @@ return [
     App\Providers\HorizonServiceProvider::class,
     App\Providers\TenancyServiceProvider::class,
     App\Shared\Infrastructure\Providers\AppServiceProvider::class,
+    App\Tenant\AuthenticationModule\Providers\AuthenticationModuleServiceProvider::class,
     App\Tenant\FeatureFlagsModule\Providers\FeatureFlagsModuleServiceProvider::class,
     App\Tenant\SelfServiceBillingModule\Providers\SelfServiceBillingModuleServiceProvider::class,
 ];

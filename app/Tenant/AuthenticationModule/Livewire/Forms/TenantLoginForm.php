@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tenant\SelfServiceBillingModule\Livewire\Forms;
+namespace App\Tenant\AuthenticationModule\Livewire\Forms;
 
 use Livewire\Form;
 

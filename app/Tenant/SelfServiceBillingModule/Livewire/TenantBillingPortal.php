@@ -34,7 +34,7 @@ final class TenantBillingPortal extends Component {
    public function mount(): void {
       // Redirect en mount() para que Livewire::test() pueda interceptarlo sin route middleware
       if (! Auth::guard('tenant')->check()) {
-         $this->redirect('/billing/login', navigate: true);
+         $this->redirect('/login', navigate: true);
       }
    }
 
@@ -43,7 +43,7 @@ final class TenantBillingPortal extends Component {
       session()->invalidate();
       session()->regenerateToken();
 
-      $this->redirect('/', navigate: true);
+      $this->redirect('/login', navigate: true);
    }
 
    public function requestUpgrade(RequestPlanUpgradeAction $action): void {

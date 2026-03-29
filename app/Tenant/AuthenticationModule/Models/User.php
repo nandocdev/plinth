@@ -2,17 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Tenant\SelfServiceBillingModule\Models;
+namespace App\Tenant\AuthenticationModule\Models;
 
 use Database\Factories\TenantUserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-/**
- * Modelo de usuario en contexto tenant.
- * Usa la conexión por defecto (tenant DB) que stancl/tenancy inicializa al resolver el dominio.
- */
 final class User extends Authenticatable {
    /** @use HasFactory<TenantUserFactory> */
    use HasFactory;
@@ -24,6 +20,7 @@ final class User extends Authenticatable {
       'name',
       'email',
       'password',
+      'email_verified_at',
    ];
 
    protected $hidden = [

@@ -7,6 +7,7 @@ use App\Central\BillingModule\Models\Plan;
 use App\Central\BillingModule\Models\TenantInvoice;
 use App\Central\BillingModule\Models\TenantSubscription;
 use App\Central\TenantProvisioningModule\Models\Tenant;
+use App\Tenant\AuthenticationModule\Models\User as TenantUser;
 use App\Tenant\SelfServiceBillingModule\Actions\GetTenantBillingOverviewAction;
 use App\Tenant\SelfServiceBillingModule\Actions\ListTenantInvoicesAction;
 use App\Tenant\SelfServiceBillingModule\Actions\RequestPlanUpgradeAction;
@@ -15,7 +16,6 @@ use App\Tenant\SelfServiceBillingModule\Events\PlanUpgradeRequestedByTenant;
 use App\Tenant\SelfServiceBillingModule\Listeners\CreateInvoiceOnPlanUpgradeListener;
 use App\Tenant\SelfServiceBillingModule\Listeners\CreateInvoiceOnSubscriptionCreatedListener;
 use App\Tenant\SelfServiceBillingModule\Livewire\TenantBillingPortal;
-use App\Tenant\SelfServiceBillingModule\Models\User as TenantUser;
 use Illuminate\Support\Facades\Event;
 use Livewire\Livewire;
 use Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper;
@@ -203,7 +203,7 @@ test('TenantBillingPortal redirige a login si usuario no autenticado', function 
 
       // Sin auth:tenant, el componente debe redirigir desde mount()
       Livewire::test(TenantBillingPortal::class)
-         ->assertRedirect('/billing/login');
+         ->assertRedirect('/login');
    } finally {
       tenancy()->end();
    }
