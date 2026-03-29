@@ -56,9 +56,22 @@ final class FortifyServiceProvider extends ServiceProvider {
         });
 
         RateLimiter::for('login', function (Request $request) {
-            $throttleKey = Str::transliterate(Str::lower((string) $request->input(Fortify::username())) . '|' . $request->ip());
+            $usernameKey = $this->normalizedLoginIdentifier($request);
+            $ipKey = $this->normalizedIpAddress($request);
 
-            return Limit::perMinute(5)->by($throttleKey);
+            return [
+                Limit::perMinute(5)->by("central-login:credentials:{$usernameKey}|{$ipKey}"),
+                Limit::perMinute(20)->by("central-login:ip:{$ipKey}"),
+                Limit::perMinutes(10, 10)->by("central-login:account:{$usernameKey}"),
+            ];
         });
+    }
+
+    private function normalizedLoginIdentifier(Request $request): string {
+        return Str::transliterate(Str::lower((string) $request->input(Fortify::username())));
+    }
+
+    private function normalizedIpAddress(Request $request): string {
+        return Str::lower((string) ($request->ip() ?? 'unknown-ip'));
     }
 }
