@@ -1,3 +1,5 @@
+<?php
+
 declare(strict_types=1);
 
 namespace App\Central\AuthenticationModule\Actions;
@@ -7,8 +9,7 @@ use App\Shared\Support\PasswordValidationRules;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\ResetsUserPasswords;
 
-class ResetUserPassword implements ResetsUserPasswords
-{
+final class ResetUserPassword implements ResetsUserPasswords {
     use PasswordValidationRules;
 
     /**
@@ -16,8 +17,7 @@ class ResetUserPassword implements ResetsUserPasswords
      *
      * @param  array<string, string>  $input
      */
-    public function reset(User $user, array $input): void
-    {
+    public function reset(User $user, array $input): void {
         Validator::make($input, [
             'password' => $this->passwordRules(),
         ])->validate();
@@ -26,9 +26,4 @@ class ResetUserPassword implements ResetsUserPasswords
             'password' => $input['password'],
         ])->save();
     }
-
-    /**
-     * [RIESGOS]
-     * - Cambio de contraseña que puede invalidar sesiones existentes si no se maneja logout de otros dispositivos.
-     */
 }
