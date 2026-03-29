@@ -10,8 +10,7 @@ use Illuminate\Support\Str;
 /**
  * @extends Factory<User>
  */
-class UserFactory extends Factory
-{
+class UserFactory extends Factory {
     protected $model = User::class;
 
     /**
@@ -24,8 +23,7 @@ class UserFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
-    {
+    public function definition(): array {
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
@@ -41,9 +39,8 @@ class UserFactory extends Factory
     /**
      * Indicate that the model's email address should be unverified.
      */
-    public function unverified(): static
-    {
-        return $this->state(fn (array $attributes) => [
+    public function unverified(): static {
+        return $this->state(fn(array $attributes) => [
             'email_verified_at' => null,
         ]);
     }
@@ -51,9 +48,8 @@ class UserFactory extends Factory
     /**
      * Indicate that the model has two-factor authentication configured.
      */
-    public function withTwoFactor(): static
-    {
-        return $this->state(fn (array $attributes) => [
+    public function withTwoFactor(): static {
+        return $this->state(fn(array $attributes) => [
             'two_factor_secret' => encrypt('secret'),
             'two_factor_recovery_codes' => encrypt(json_encode(['recovery-code-1'])),
             'two_factor_confirmed_at' => now(),
