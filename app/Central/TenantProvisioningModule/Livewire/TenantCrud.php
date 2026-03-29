@@ -9,6 +9,7 @@ use App\Central\TenantProvisioningModule\Actions\CreateDomainAction;
 use App\Central\TenantProvisioningModule\Actions\DeleteTenantAction;
 use App\Central\TenantProvisioningModule\Actions\DeleteDomainAction;
 use App\Central\TenantProvisioningModule\Actions\ListTenantsAction;
+use App\Central\TenantProvisioningModule\Actions\ListTenantProvisioningRegionsAction;
 use App\Central\TenantProvisioningModule\Actions\QueueTenantBackupAction;
 use App\Central\TenantProvisioningModule\Actions\QueueTenantRestoreAction;
 use App\Central\TenantProvisioningModule\Actions\StartTenantImpersonationAction;
@@ -48,6 +49,7 @@ final class TenantCrud extends Component {
 
    public function mount(): void {
       $this->authorize('viewAny', Tenant::class);
+      $this->form->region = $this->form->defaultRegion();
    }
 
    public function updatedSearch(): void {
@@ -58,7 +60,7 @@ final class TenantCrud extends Component {
       $this->authorize('create', Tenant::class);
 
       $payload = $this->form->payload();
-      $dto = CreateTenantData::fromValues($payload['name'], $payload['primaryDomain']);
+      $dto = CreateTenantData::fromValues($payload['name'], $payload['primaryDomain'], $payload['region']);
 
       $action->execute($dto);
 
@@ -181,9 +183,10 @@ final class TenantCrud extends Component {
       session()->flash('status', 'Restore de tenant encolado.');
    }
 
-   public function render(ListTenantsAction $action): View {
+   public function render(ListTenantsAction $action, ListTenantProvisioningRegionsAction $regions): View {
       return view('tenant-provisioning::livewire.tenant-crud', [
          'tenants' => $action->execute($this->search, $this->perPage),
+         'regionOptions' => $regions->execute(),
       ]);
    }
 }
