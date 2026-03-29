@@ -23,6 +23,10 @@
                     :current="request()->routeIs('central.tenants.*')" wire:navigate>
                     {{ __('Tenants') }}
                 </flux:sidebar.item>
+                <flux:sidebar.item icon="credit-card" :href="route('central.billing.index')"
+                    :current="request()->routeIs('central.billing.*')" wire:navigate>
+                    {{ __('Billing') }}
+                </flux:sidebar.item>
             </flux:sidebar.group>
         </flux:sidebar.nav>
 
