@@ -25,7 +25,7 @@ final class SuspendTenantAction {
          $metadata['status'] = $data->suspended ? 'suspended' : 'active';
          $metadata['suspended_at'] = $data->suspended ? CarbonImmutable::now()->toIso8601String() : null;
 
-         $tenant->setAttribute('data', $metadata);
+         $tenant->fill($metadata);
          $tenant->save();
 
          return $tenant;

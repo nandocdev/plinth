@@ -18,8 +18,16 @@ final class CompleteTenantOnboardingForm extends Form {
 
    public string $region = '';
 
+   public string $brandName = '';
+
+   public string $logoUrl = '';
+
+   public string $primaryColor = '#f53003';
+
+   public string $secondaryColor = '#ff4433';
+
    /**
-    * @return array{name: string, primaryDomain: string, planId: int, billingPeriod: string, region: string}
+    * @return array{name: string, primaryDomain: string, planId: int, billingPeriod: string, region: string, brandName: ?string, logoUrl: ?string, primaryColor: ?string, secondaryColor: ?string}
     */
    public function payload(): array {
       $this->validate([
@@ -28,6 +36,10 @@ final class CompleteTenantOnboardingForm extends Form {
          'planId' => ['required', 'integer', 'exists:plans,id'],
          'billingPeriod' => ['required', 'string', Rule::in(['monthly', 'yearly'])],
          'region' => ['required', 'string', Rule::in($this->availableRegions())],
+         'brandName' => ['nullable', 'string', 'max:120'],
+         'logoUrl' => ['nullable', 'url', 'max:2048'],
+         'primaryColor' => ['nullable', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
+         'secondaryColor' => ['nullable', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
       ]);
 
       return [
@@ -36,6 +48,10 @@ final class CompleteTenantOnboardingForm extends Form {
          'planId' => $this->planId,
          'billingPeriod' => $this->billingPeriod,
          'region' => $this->region,
+         'brandName' => $this->brandName !== '' ? trim($this->brandName) : null,
+         'logoUrl' => $this->logoUrl !== '' ? trim($this->logoUrl) : null,
+         'primaryColor' => $this->primaryColor !== '' ? strtolower(trim($this->primaryColor)) : null,
+         'secondaryColor' => $this->secondaryColor !== '' ? strtolower(trim($this->secondaryColor)) : null,
       ];
    }
 
@@ -43,6 +59,8 @@ final class CompleteTenantOnboardingForm extends Form {
       $this->reset();
       $this->billingPeriod = 'monthly';
       $this->region = $this->defaultRegion();
+      $this->primaryColor = '#f53003';
+      $this->secondaryColor = '#ff4433';
    }
 
    public function defaultRegion(): string {

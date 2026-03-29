@@ -16,6 +16,12 @@
                 <flux:input wire:model="form.primaryDomain" :label="__('Default domain')"
                     :placeholder="__('acme.localhost')" required />
 
+                <flux:input wire:model="form.brandName" :label="__('Brand name (optional)')"
+                    :placeholder="__('Acme Workspace')" />
+
+                <flux:input wire:model="form.logoUrl" :label="__('Logo URL (optional)')"
+                    :placeholder="__('https://cdn.example.com/logo.svg')" />
+
                 <div>
                     <label for="onboarding-region" class="mb-1 block text-sm text-zinc-700 dark:text-zinc-300">
                         {{ __('Region') }}
@@ -63,6 +69,11 @@
                         <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
                 </div>
+
+                <flux:input wire:model="form.primaryColor" :label="__('Primary color')" :placeholder="__('#f53003')" />
+
+                <flux:input wire:model="form.secondaryColor" :label="__('Secondary color')"
+                    :placeholder="__('#ff4433')" />
 
                 <div class="md:col-span-2 flex items-center gap-3">
                     <flux:button type="submit" variant="primary">

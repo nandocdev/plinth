@@ -41,6 +41,17 @@
                     {{ __('Create tenant') }}
                 </flux:button>
             </div>
+
+            <flux:input wire:model="form.brandName" :label="__('Brand name (optional)')"
+                :placeholder="__('Acme Workspace')" />
+
+            <flux:input wire:model="form.logoUrl" :label="__('Logo URL (optional)')"
+                :placeholder="__('https://cdn.example.com/logo.svg')" />
+
+            <flux:input wire:model="form.primaryColor" :label="__('Primary color')" :placeholder="__('#f53003')" />
+
+            <flux:input wire:model="form.secondaryColor" :label="__('Secondary color')"
+                :placeholder="__('#ff4433')" />
         </form>
 
         <form wire:submit="createDomain" class="mt-4 grid gap-4 md:grid-cols-3">
@@ -67,6 +78,48 @@
             <div class="flex items-end">
                 <flux:button type="submit" variant="primary" class="w-full md:w-auto">
                     {{ __('Add domain') }}
+                </flux:button>
+            </div>
+        </form>
+
+        <form wire:submit="updateBranding" class="mt-6 grid gap-4 md:grid-cols-3">
+            <div>
+                <label for="branding-tenant" class="mb-1 block text-sm text-zinc-700 dark:text-zinc-300">
+                    {{ __('Tenant branding target') }}
+                </label>
+                <select id="branding-tenant" wire:model="brandingForm.tenantId"
+                    class="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                    required>
+                    <option value="">{{ __('Select tenant') }}</option>
+                    @foreach ($tenantBrandingOptions as $tenantOption)
+                        <option value="{{ $tenantOption['id'] }}">{{ $tenantOption['name'] }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="flex items-end">
+                <flux:button type="button" wire:click="loadBranding" variant="filled">
+                    {{ __('Load branding') }}
+                </flux:button>
+            </div>
+
+            <div class="hidden md:block"></div>
+
+            <flux:input wire:model="brandingForm.brandName" :label="__('Brand name')"
+                :placeholder="__('Acme Workspace')" />
+
+            <flux:input wire:model="brandingForm.logoUrl" :label="__('Logo URL')"
+                :placeholder="__('https://cdn.example.com/logo.svg')" />
+
+            <flux:input wire:model="brandingForm.primaryColor" :label="__('Primary color')"
+                :placeholder="__('#f53003')" />
+
+            <flux:input wire:model="brandingForm.secondaryColor" :label="__('Secondary color')"
+                :placeholder="__('#ff4433')" />
+
+            <div class="md:col-span-3 flex justify-end">
+                <flux:button type="submit" variant="primary">
+                    {{ __('Save tenant branding') }}
                 </flux:button>
             </div>
         </form>
@@ -161,8 +214,8 @@
                             </td>
                             <td class="py-3 text-right">
                                 <div class="flex justify-end gap-2">
-                                    <flux:button wire:click="impersonateTenant('{{ $tenant->id }}')" variant="ghost"
-                                        size="sm">
+                                    <flux:button wire:click="impersonateTenant('{{ $tenant->id }}')"
+                                        variant="ghost" size="sm">
                                         {{ __('Impersonate') }}
                                     </flux:button>
 

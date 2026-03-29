@@ -38,6 +38,10 @@ final class TenantOnboardingWizard extends Component {
          $payload['planId'],
          $payload['billingPeriod'],
          $payload['region'],
+         $payload['brandName'],
+         $payload['logoUrl'],
+         $payload['primaryColor'],
+         $payload['secondaryColor'],
       ));
 
       $this->form->clear();
