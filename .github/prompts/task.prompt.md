@@ -1,5 +1,5 @@
 ---
-name: new-task
+name: task-saas
 description: Ejecutar una tarea del ROADMAP en SaaS-Kit-2026 (Monolito Modular con Multi-Tenancy) usando Laravel 12 + Livewire 4 + PostgreSQL, respetando estrictamente la arquitectura de Bounded Contexts.
 ---
 
@@ -10,16 +10,17 @@ Arquitectura: Monolito Modular por Bounded Contexts (Central / Tenant / Shared)
 Stack: Laravel 12 + PHP 8.3+ + Livewire 4 + PostgreSQL 16 + Redis + Horizon + Pulse
 
 Documentación base (leer SIEMPRE antes de generar código):
-- docs/project/00_Plan.md          → Arquitectura modular, estructura de directorios, flujo de provisioning
-- docs/project/01_Dependencias.md  → Paquetes requeridos y justificaciones
+
+- docs/project/00_Plan.md → Arquitectura modular, estructura de directorios, flujo de provisioning
+- docs/project/01_Dependencias.md → Paquetes requeridos y justificaciones
 - docs/project/02_Caracteristicas.md → Features priorizadas del kit
-- docs/project/03_VISION.md        → Alcance, actores, KPIs
-- docs/project/04_ARCHITECTURE.md  → SAD completo, decisiones arquitectónicas, flujos
-- docs/project/05_TENANCY.md       → Estrategia multi-tenancy, scoping, isolation tests
-- docs/project/06_PROVISIONING.md  → Flujo de onboarding, ProvisionTenantJob, idempotencia
-- docs/project/07_BILLING.md       → Cashier, Stripe, webhooks, feature flags
-- docs/project/08_PERMISSIONS.md   → RBAC + Teams con spatie/laravel-permission
-- docs/project/09_ROADMAP.md       → Milestones, DoD, secuencia de construcción
+- docs/project/03_VISION.md → Alcance, actores, KPIs
+- docs/project/04_ARCHITECTURE.md → SAD completo, decisiones arquitectónicas, flujos
+- docs/project/05_TENANCY.md → Estrategia multi-tenancy, scoping, isolation tests
+- docs/project/06_PROVISIONING.md → Flujo de onboarding, ProvisionTenantJob, idempotencia
+- docs/project/07_BILLING.md → Cashier, Stripe, webhooks, feature flags
+- docs/project/08_PERMISSIONS.md → RBAC + Teams con spatie/laravel-permission
+- docs/project/09_ROADMAP.md → Milestones, DoD, secuencia de construcción
 
 ---
 
@@ -45,6 +46,7 @@ Documentación base (leer SIEMPRE antes de generar código):
 {{TAREA_DEL_ROADMAP}}
 
 Ejemplos:
+
 - M2 — Implementar `ProvisionTenantJob` con idempotencia y retry
 - M2 — Crear `BillingModule`: modelo `Plan`, `Subscription`, `CreateSubscriptionAction`
 - M3 — Implementar flujo de invitaciones a Team con email + accept
@@ -56,12 +58,14 @@ Ejemplos:
 ### Paso 1 — Análisis de la tarea
 
 Identificar:
+
 - Bounded Context destino (Central / Tenant / Shared)
 - Módulo destino (`AuthenticationModule`, `TenantProvisioningModule`, `BillingModule`, etc.)
 - Entidades involucradas
 - Si requiere contexto central, tenant o ambos
 
 Determinar:
+
 - DTO necesario (en `app/Shared/DTOs/` o dentro del módulo)
 - Action principal
 - Job (si operación pesada o asíncrona)
@@ -70,6 +74,7 @@ Determinar:
 - Validaciones críticas (DB constraints + lógica)
 
 Detectar riesgos:
+
 - Race conditions (ShouldBeUnique + transaction)
 - Fugas de datos entre tenants (tenant isolation)
 - N+1 queries
@@ -139,6 +144,7 @@ git commit -m "test(<modulo>): agregar tests de <funcionalidad>"
 ```
 
 Reglas de commit:
+
 - Un commit por unidad lógica (no mezclar migration + action en el mismo commit)
 - No mezclar contextos (Central vs Tenant) en un mismo commit
 - Mensajes en español, formato Conventional Commits
@@ -170,6 +176,7 @@ git branch -d feat/<milestone>/<modulo>-<descripcion-kebab>
 Generar SOLO lo necesario, separado por archivos reales:
 
 ### Backend (obligatorio según tarea)
+
 - Model (Central o Tenant según corresponda)
 - Migration (en `database/migrations/central/` o `database/migrations/tenant/`)
 - DTO (`readonly`, tipado estricto PHP 8.3)
@@ -179,11 +186,13 @@ Generar SOLO lo necesario, separado por archivos reales:
 - Policy
 
 ### Livewire (obligatorio en tareas con UI)
+
 - Componente Livewire (orquestador, sin lógica de negocio)
 - Livewire Form Object (validación)
 - Blade (Flux UI: `<flux:input>`, `<flux:button>`, etc.)
 
 ### Infraestructura
+
 - Routes (`Routes/web.php` del módulo)
 - Registro en `ModuleServiceProvider` del módulo correspondiente
 
