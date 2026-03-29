@@ -28,6 +28,12 @@
                 :current="request()->routeIs('central.affiliates.*')" wire:navigate>
                 {{ __('Affiliates') }}
             </flux:navbar.item>
+            @can('admin-roles.viewAny')
+            <flux:navbar.item icon="shield-check" :href="route('central.admins.roles.index')"
+                :current="request()->routeIs('central.admins.roles.*')" wire:navigate>
+                {{ __('Admin Roles') }}
+            </flux:navbar.item>
+            @endcan
         </flux:navbar>
 
         <flux:spacer />
@@ -78,6 +84,12 @@
                     :current="request()->routeIs('central.affiliates.*')" wire:navigate>
                     {{ __('Affiliates') }}
                 </flux:sidebar.item>
+                @can('admin-roles.viewAny')
+                <flux:sidebar.item icon="shield-check" :href="route('central.admins.roles.index')"
+                    :current="request()->routeIs('central.admins.roles.*')" wire:navigate>
+                    {{ __('Admin Roles') }}
+                </flux:sidebar.item>
+                @endcan
             </flux:sidebar.group>
         </flux:sidebar.nav>
 
