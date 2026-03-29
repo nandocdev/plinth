@@ -10,6 +10,7 @@ use App\Central\BillingModule\Models\TenantSubscription;
 use App\Central\TenantProvisioningModule\Models\Tenant;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 use RuntimeException;
 
 final class UpdateSubscriptionAction {
@@ -28,23 +29,37 @@ final class UpdateSubscriptionAction {
          /** @var Plan $plan */
          $plan = Plan::query()->findOrFail($data->planId);
 
+         if (! in_array($data->status, TenantSubscription::statuses(), true)) {
+            throw new InvalidArgumentException('Estado de suscripcion invalido.');
+         }
+
+         TenantSubscription::assertValidTransition($subscription->status, $data->status);
+
+         $trialEndsAt = $data->status === TenantSubscription::STATUS_TRIALING
+            ? $data->trialEndsAt
+            : null;
+
          $subscription->fill([
             'tenant_id' => $tenant->id,
             'plan_id' => $plan->id,
             'billing_period' => $data->billingPeriod,
             'status' => $data->status,
-            'trial_ends_at' => $data->trialEndsAt,
+            'trial_ends_at' => $trialEndsAt,
             'ends_at' => $data->endsAt,
             'price_snapshot_cents' => $data->billingPeriod === 'yearly'
                ? ($plan->price_yearly_cents ?? $plan->price_monthly_cents)
                : $plan->price_monthly_cents,
          ]);
 
-         if ($data->status === 'canceled' && $subscription->ends_at === null) {
+         if (in_array($data->status, [TenantSubscription::STATUS_CANCELED, TenantSubscription::STATUS_DELETED], true) && $subscription->ends_at === null) {
             $subscription->setAttribute('ends_at', CarbonImmutable::now()->toDateTimeString());
          }
 
-         if ($data->status !== 'canceled' && $subscription->ends_at !== null && $data->endsAt === null) {
+         if (
+            ! in_array($data->status, [TenantSubscription::STATUS_CANCELED, TenantSubscription::STATUS_DELETED], true)
+            && $subscription->ends_at !== null
+            && $data->endsAt === null
+         ) {
             $subscription->setAttribute('ends_at', null);
          }
 

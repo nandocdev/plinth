@@ -7,8 +7,30 @@ namespace App\Central\BillingModule\Models;
 use App\Central\TenantProvisioningModule\Models\Tenant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use RuntimeException;
 
 final class TenantSubscription extends Model {
+   public const STATUS_TRIALING = 'trialing';
+
+   public const STATUS_ACTIVE = 'active';
+
+   public const STATUS_PAST_DUE = 'past_due';
+
+   public const STATUS_CANCELED = 'canceled';
+
+   public const STATUS_DELETED = 'deleted';
+
+   /**
+    * @var array<string, list<string>>
+    */
+   private const ALLOWED_TRANSITIONS = [
+      self::STATUS_TRIALING => [self::STATUS_ACTIVE, self::STATUS_PAST_DUE, self::STATUS_CANCELED],
+      self::STATUS_ACTIVE => [self::STATUS_PAST_DUE, self::STATUS_CANCELED],
+      self::STATUS_PAST_DUE => [self::STATUS_ACTIVE, self::STATUS_CANCELED],
+      self::STATUS_CANCELED => [self::STATUS_DELETED],
+      self::STATUS_DELETED => [],
+   ];
+
    protected $table = 'tenant_subscriptions';
 
    protected $fillable = [
@@ -43,5 +65,32 @@ final class TenantSubscription extends Model {
 
    public function plan(): BelongsTo {
       return $this->belongsTo(Plan::class, 'plan_id');
+   }
+
+   /**
+    * @return list<string>
+    */
+   public static function statuses(): array {
+      return [
+         self::STATUS_TRIALING,
+         self::STATUS_ACTIVE,
+         self::STATUS_PAST_DUE,
+         self::STATUS_CANCELED,
+         self::STATUS_DELETED,
+      ];
+   }
+
+   public static function assertValidTransition(string $from, string $to): void {
+      if ($from === $to) {
+         return;
+      }
+
+      $allowedTargets = self::ALLOWED_TRANSITIONS[$from] ?? [];
+
+      if (in_array($to, $allowedTargets, true)) {
+         return;
+      }
+
+      throw new RuntimeException(sprintf('Transicion de suscripcion invalida: %s -> %s.', $from, $to));
    }
 }

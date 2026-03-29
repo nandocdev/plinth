@@ -14,6 +14,7 @@ use App\Central\BillingModule\Actions\ListActivePlansAction;
 use App\Central\BillingModule\Actions\ListPlansAction;
 use App\Central\BillingModule\Actions\ListSubscriptionsAction;
 use App\Central\BillingModule\Actions\ListTenantOptionsAction;
+use App\Central\BillingModule\Actions\SyncSubscriptionLifecycleAction;
 use App\Central\BillingModule\Actions\UpdatePlanAction;
 use App\Central\BillingModule\Actions\UpdateSubscriptionAction;
 use App\Central\BillingModule\DTOs\CreatePlanData;
@@ -198,6 +199,14 @@ final class BillingCrud extends Component {
       }
 
       session()->flash('status', 'Suscripcion eliminada correctamente.');
+      $this->resetPage('subscriptionsPage');
+   }
+
+   public function syncSubscriptionLifecycle(SyncSubscriptionLifecycleAction $action): void {
+      $this->authorize('viewAny', TenantSubscription::class);
+
+      $migrated = $action->execute();
+      session()->flash('status', sprintf('Lifecycle sincronizado. Suscripciones trial->active: %d', $migrated));
       $this->resetPage('subscriptionsPage');
    }
 

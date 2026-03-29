@@ -1,8 +1,17 @@
 <x-layouts::app :title="__('Billing Management')">
     <div class="space-y-6">
         <div class="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-900">
-            <flux:heading size="xl">{{ __('Billing') }}</flux:heading>
-            <flux:subheading>{{ __('Gestiona planes y suscripciones desde el contexto central.') }}</flux:subheading>
+            <div class="flex items-center justify-between gap-3">
+                <div>
+                    <flux:heading size="xl">{{ __('Billing') }}</flux:heading>
+                    <flux:subheading>{{ __('Gestiona planes y suscripciones desde el contexto central.') }}
+                    </flux:subheading>
+                </div>
+
+                <flux:button wire:click="syncSubscriptionLifecycle" variant="filled">
+                    {{ __('Sincronizar lifecycle') }}
+                </flux:button>
+            </div>
 
             @if (session('status'))
                 <flux:text class="mt-4 text-green-600 dark:text-green-400">{{ session('status') }}</flux:text>
@@ -14,7 +23,8 @@
                 {{ $editingPlanId ? __('Editar plan') : __('Crear plan') }}
             </flux:heading>
 
-            <form wire:submit="{{ $editingPlanId ? 'updatePlan' : 'createPlan' }}" class="mt-4 grid gap-4 md:grid-cols-3">
+            <form wire:submit="{{ $editingPlanId ? 'updatePlan' : 'createPlan' }}"
+                class="mt-4 grid gap-4 md:grid-cols-3">
                 <flux:input wire:model="planForm.name" :label="__('Nombre')" required />
                 <flux:input wire:model="planForm.slug" :label="__('Slug')" :placeholder="__('pro-monthly')"
                     required />
@@ -187,6 +197,7 @@
                         <option value="active">active</option>
                         <option value="past_due">past_due</option>
                         <option value="canceled">canceled</option>
+                        <option value="deleted">deleted</option>
                     </select>
                 </div>
 
