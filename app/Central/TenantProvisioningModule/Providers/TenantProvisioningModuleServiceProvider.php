@@ -6,8 +6,10 @@ namespace App\Central\TenantProvisioningModule\Providers;
 
 use App\Central\TenantProvisioningModule\Events\TenantRecoverySnapshotCompleted;
 use App\Central\TenantProvisioningModule\Events\TenantRecoverySnapshotFailed;
+use App\Central\TenantProvisioningModule\Events\TenantCreatedFromCentral;
 use App\Central\TenantProvisioningModule\Listeners\LogTenantRecoverySnapshotCompletionListener;
 use App\Central\TenantProvisioningModule\Listeners\LogTenantRecoverySnapshotFailureListener;
+use App\Central\TenantProvisioningModule\Listeners\QueueTenantProvisioningHooksListener;
 use App\Central\TenantProvisioningModule\Models\Domain;
 use App\Central\TenantProvisioningModule\Models\Tenant;
 use App\Central\TenantProvisioningModule\Policies\DomainPolicy;
@@ -28,9 +30,11 @@ final class TenantProvisioningModuleServiceProvider extends ServiceProvider {
 
       Event::listen(TenantRecoverySnapshotCompleted::class, LogTenantRecoverySnapshotCompletionListener::class);
       Event::listen(TenantRecoverySnapshotFailed::class, LogTenantRecoverySnapshotFailureListener::class);
+      Event::listen(TenantCreatedFromCentral::class, QueueTenantProvisioningHooksListener::class);
 
       $this->loadRoutes();
       $this->loadViews();
+      $this->loadMigrationsFrom(database_path('migrations/central'));
    }
 
    private function loadRoutes(): void {
