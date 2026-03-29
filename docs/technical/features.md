@@ -40,7 +40,7 @@ Estado base usado para este documento:
 - [Implementado] Webhooks salientes para partners (nuevo tenant, etc.)
 	- [Implementado] Tenant self-service portal limitado (upgrade plan, view invoices)
 - [Pendiente] Automated tenant provisioning con Terraform/Ansible hooks
-- [Pendiente] Data export central (GDPR compliance)
+- [Implementado] Data export central (GDPR compliance)
 
 ### 2. TENANT Context
 
@@ -98,14 +98,14 @@ Estado base usado para este documento:
 
 ### Funcionalidades implementadas no explicitadas
 
-- [Implementado] Landing Builder visual del tenant con templates, preview y publicacion.
-- [Implementado] Flujo completo de 2FA tenant: setup + challenge + middleware de enforcement.
-- [Implementado] Gestion de facturacion desde tenant: plan actual, cambio de plan, checkout y customer portal.
-- [Implementado] Gestion UI de API Keys por tenant (ademas de la API basica).
-- [Implementado] Gestion UI de webhooks tenant con historial de entregas y retry.
-- [Implementado] Impersonacion bidireccional: inicio desde central y salida segura en tenant.
-- [Implementado] Enforcement de suscripcion activa y limites de plan en rutas tenant.
-- [Implementado] Dashboard central con metricas agregadas (incluye revenue mensual).
+- [Pendiente] Landing Builder visual del tenant con templates, preview y publicacion.
+- [Pendiente] Flujo completo de 2FA tenant: setup + challenge + middleware de enforcement.
+- [Pendiente] Gestion de facturacion desde tenant: plan actual, cambio de plan, checkout y customer portal.
+- [Pendiente] Gestion UI de API Keys por tenant (ademas de la API basica).
+- [Pendiente] Gestion UI de webhooks tenant con historial de entregas y retry.
+- [Pendiente] Impersonacion bidireccional: inicio desde central y salida segura en tenant.
+- [Pendiente] Enforcement de suscripcion activa y limites de plan en rutas tenant.
+- [Pendiente] Dashboard central con metricas agregadas (incluye revenue mensual).
 
 ### Proximos pasos recomendados (orden realista)
 
