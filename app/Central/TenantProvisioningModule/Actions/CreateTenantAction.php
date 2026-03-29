@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Central\TenantProvisioningModule\Actions;
 
 use App\Central\TenantProvisioningModule\DTOs\CreateTenantData;
+use App\Central\TenantProvisioningModule\Events\TenantCreatedFromCentral;
 use App\Central\TenantProvisioningModule\Models\Tenant;
 use Illuminate\Support\Facades\DB;
 
@@ -27,6 +28,8 @@ final class CreateTenantAction {
 
          return $created;
       });
+
+      event(new TenantCreatedFromCentral($tenant));
 
       return $tenant;
    }

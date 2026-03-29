@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Central\BillingModule\Actions;
 
+use App\Central\BillingModule\Events\SubscriptionDeleted;
 use App\Central\BillingModule\Models\TenantSubscription;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
 
 final class DeleteSubscriptionAction {
    public function execute(int $subscriptionId): void {
-      DB::connection('central')->transaction(function () use ($subscriptionId): void {
+      $subscription = DB::connection('central')->transaction(function () use ($subscriptionId): TenantSubscription {
          /** @var TenantSubscription $subscription */
          $subscription = TenantSubscription::query()->findOrFail($subscriptionId);
 
@@ -21,6 +22,12 @@ final class DeleteSubscriptionAction {
             'ends_at' => $subscription->ends_at ?? CarbonImmutable::now()->toDateTimeString(),
             'trial_ends_at' => null,
          ]);
+
+         return $subscription->fresh();
       });
+
+      if ($subscription instanceof TenantSubscription) {
+         event(new SubscriptionDeleted($subscription));
+      }
    }
 }
