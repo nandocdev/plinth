@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Central\TenantProvisioningModule\Models;
 
 use App\Central\BillingModule\Models\TenantSubscription;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Stancl\Tenancy\Database\Models\Tenant as BaseTenant;
 
@@ -32,5 +33,9 @@ final class Tenant extends BaseTenant {
 
    public function subscription(): HasOne {
       return $this->hasOne(TenantSubscription::class, 'tenant_id', 'id');
+   }
+
+   public function domains(): HasMany {
+      return $this->hasMany(Domain::class, 'tenant_id', 'id');
    }
 }

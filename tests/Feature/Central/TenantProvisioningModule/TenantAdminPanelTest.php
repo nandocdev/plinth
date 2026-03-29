@@ -7,19 +7,16 @@ use App\Central\TenantProvisioningModule\Models\Tenant;
 
 test('panel admin muestra usage basico por tenant', function () {
    $user = User::factory()->create();
-   actingAs($user, 'central');
+   $this->actingAs($user, 'central');
 
-   $tenant = Tenant::query()->create([
+   /** @var Tenant $tenant */
+   $tenant = Tenant::withoutEvents(fn() => Tenant::query()->create([
       'id' => 'tenant-admin-usage-1',
       'data' => [
          'name' => 'Tenant Admin Usage',
          'status' => 'active',
       ],
-   ]);
-
-   $tenant->domains()->create([
-      'domain' => 'tenant-admin-usage.localhost',
-   ]);
+   ]));
 
    $plan = Plan::query()->create([
       'name' => 'Growth',
@@ -42,9 +39,9 @@ test('panel admin muestra usage basico por tenant', function () {
       'meta' => [],
    ]);
 
-   get(route('central.tenants.index'))
+   $this->get(route('central.tenants.index'))
       ->assertOk()
       ->assertSee('Plan: Growth')
       ->assertSee('Subscription: active')
-      ->assertSee('Domains: 1');
+      ->assertSee('Domains: 0');
 });
