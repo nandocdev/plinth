@@ -93,6 +93,12 @@
                                     <div class="text-zinc-700 dark:text-zinc-300">
                                         {{ __('Domains: :count', ['count' => $tenant->domains_count]) }}
                                     </div>
+                                    <div class="text-zinc-700 dark:text-zinc-300">
+                                        {{ __('Backups: :count', ['count' => $tenant->completed_backups_count ?? 0]) }}
+                                    </div>
+                                    <div class="text-zinc-700 dark:text-zinc-300">
+                                        {{ __('Last backup: :date', ['date' => $tenant->latest_backup_completed_at ? \Illuminate\Support\Carbon::parse($tenant->latest_backup_completed_at)->toDateTimeString() : 'never']) }}
+                                    </div>
                                 </div>
                             </td>
                             <td class="py-3 pr-3">
@@ -144,6 +150,20 @@
                                     <flux:button wire:click="suspendTenant('{{ $tenant->id }}')" variant="filled"
                                         size="sm">
                                         {{ $tenant->status() === 'suspended' ? __('Unsuspend') : __('Suspend') }}
+                                    </flux:button>
+
+                                    <flux:button wire:click="queueBackup('{{ $tenant->id }}')"
+                                        wire:confirm="{{ __('Queue a DB + storage snapshot backup for this tenant?') }}"
+                                        variant="primary" size="sm">
+                                        {{ __('Backup') }}
+                                    </flux:button>
+
+                                    <flux:button
+                                        wire:click="restoreTenant('{{ $tenant->id }}', {{ (int) ($tenant->latest_backup_snapshot_id ?? 0) }})"
+                                        wire:confirm="{{ __('Restore this tenant using the latest completed backup snapshot?') }}"
+                                        variant="ghost" size="sm"
+                                        :disabled="empty($tenant->latest_backup_snapshot_id)">
+                                        {{ __('Restore latest') }}
                                     </flux:button>
 
                                     <flux:button wire:click="deleteTenant('{{ $tenant->id }}')"
