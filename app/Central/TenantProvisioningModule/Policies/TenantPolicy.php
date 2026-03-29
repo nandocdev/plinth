@@ -23,4 +23,8 @@ final class TenantPolicy {
    public function delete(User $user, Tenant $tenant): bool {
       return $user->email_verified_at !== null;
    }
+
+   public function impersonate(User $user, Tenant $tenant): bool {
+      return $user->email_verified_at !== null && $tenant->status() !== 'suspended';
+   }
 }
