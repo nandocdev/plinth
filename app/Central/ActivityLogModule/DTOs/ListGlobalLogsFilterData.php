@@ -7,7 +7,8 @@ namespace App\Central\ActivityLogModule\DTOs;
 final readonly class ListGlobalLogsFilterData {
    public function __construct(
       public ?string $tenantId,
-      public ?string $level,
+      public ?string $event,
+      public ?int $causerId,
       public string $search,
       public int $perPage,
       public int $page,
