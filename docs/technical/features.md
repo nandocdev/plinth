@@ -38,7 +38,7 @@ Estado base usado para este documento:
 - [Implementado] Role & permission system global para system admins (Spatie)
 - [Implementado] Audit log completo de acciones central
 - [Implementado] Webhooks salientes para partners (nuevo tenant, etc.)
-- [Pendiente] Tenant self-service portal limitado (upgrade plan, view invoices)
+	- [Implementado] Tenant self-service portal limitado (upgrade plan, view invoices)
 - [Pendiente] Automated tenant provisioning con Terraform/Ansible hooks
 - [Pendiente] Data export central (GDPR compliance)
 
