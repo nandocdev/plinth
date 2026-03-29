@@ -6,7 +6,7 @@ use App\Central\BillingModule\Models\TenantSubscription;
 use App\Central\TenantProvisioningModule\Models\Tenant;
 
 test('panel admin muestra usage basico por tenant', function () {
-   $user = User::factory()->create();
+   $user = User::factory()->withTwoFactor()->create();
    $this->actingAs($user, 'central');
 
    /** @var Tenant $tenant */
