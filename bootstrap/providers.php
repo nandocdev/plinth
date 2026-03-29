@@ -8,6 +8,7 @@ return [
     App\Central\AuthenticationModule\Providers\FortifyServiceProvider::class,
     App\Central\BillingModule\Providers\BillingModuleServiceProvider::class,
     App\Central\NotificationModule\Providers\NotificationModuleServiceProvider::class,
+    App\Central\PartnerWebhookModule\Providers\PartnerWebhookModuleServiceProvider::class,
     App\Central\SystemHealthModule\Providers\SystemHealthModuleServiceProvider::class,
     App\Central\TenantProvisioningModule\Providers\TenantProvisioningModuleServiceProvider::class,
     App\Providers\HorizonServiceProvider::class,
