@@ -92,12 +92,13 @@ git checkout develop
 git pull origin develop
 
 # Crear rama de feature desde develop
-# Convención: feat/<milestone>/<modulo>-<descripcion-kebab>
+# Segun el contexto, las ramas Central llevaran un prefijo "ctl-" y las tenant un prefijo "tnt-"
+# Convención: feat/<milestone>/<prefix><modulo>-<descripcion-kebab>
 # Ejemplos:
-#   feat/m2/provisioning-tenant-job
-#   feat/m2/billing-subscription-action
-#   feat/m3/workspace-invitations
-git checkout -b feat/<milestone>/<modulo>-<descripcion-kebab>
+#   feat/m2/ctl-provisioning-tenant-job
+#   feat/m2/ctl-billing-subscription-action
+#   feat/m3/tnt-workspace-invitations
+git checkout -b feat/<milestone>/<prefix><modulo>-<descripcion-kebab>
 ```
 
 > La rama debe crearse SIEMPRE desde `develop`, nunca desde `main`.
