@@ -4,6 +4,8 @@
 
 Boilerplate SaaS multi-tenant para Laravel con aislamiento fuerte por tenant y arquitectura modular por contextos.
 
+<img src="public/img/banner.png" alt="SaaS-Kit-2026 Banner" width="100%" />
+
 [![PHP](https://img.shields.io/badge/PHP-8.3+-777BB4?style=flat-square&logo=php&logoColor=white)](https://www.php.net)
 [![Laravel](https://img.shields.io/badge/Laravel-13-FF2D20?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com)
 [![Livewire](https://img.shields.io/badge/Livewire-4-FB70A9?style=flat-square&logo=livewire&logoColor=white)](https://livewire.laravel.com)
