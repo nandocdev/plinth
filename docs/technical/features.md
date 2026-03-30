@@ -47,7 +47,7 @@ Estado base usado para este documento:
 #### MVP (Minimo viable - lo que el cliente ve dia 1)
 - [Implementado] (Tenant context) Registro / login de usuarios tenant (guard tenant separado)
 - [Implementado] (Tenant context) Dashboard basico con welcome + tenant info
-- [Pendiente] (Tenant context) Profile & password update
+- [Implementado] (Tenant context) Profile & password update
 - [Pendiente] (Tenant context) Rutas en routes/tenant.php con InitializeTenancyByDomain + PreventAccessFromCentralDomains
 - [Pendiente] (Tenant context) Modelos tenant sin $connection definido
 - [Pendiente] (Tenant context) Storage disk tenant configurado (storage/app/tenants/{uuid}/)
