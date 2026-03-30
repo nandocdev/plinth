@@ -52,7 +52,7 @@ Estado base usado para este documento:
 - [Implementado] (Tenant context) Modelos tenant sin $connection definido
 - [Implementado] (Tenant context) Storage disk tenant configurado (storage/app/tenants/{uuid}/)
 - [Implementado] (Tenant context) Cache con prefijo/tag tenant-aware via bootstrapper
-- [Pendiente] (Tenant context) Jobs tenant-aware (middleware o restore context)
+- [Implementado] (Tenant context) Jobs tenant-aware (middleware o restore context)
 
 #### Produccion (Media - lo que necesita para ser usable en prod)
 - [Pendiente] (Tenant context) User management (CRUD users, roles, permissions - base RBAC)
