@@ -50,7 +50,7 @@ Estado base usado para este documento:
 - [Implementado] (Tenant context) Profile & password update
 - [Implementado] (Tenant context) Rutas en routes/tenant.php con InitializeTenancyByDomain + PreventAccessFromCentralDomains, Recordar que cada modulo contiene su propio archivo de rutas inyectado a su provider
 - [Implementado] (Tenant context) Modelos tenant sin $connection definido
-- [Pendiente] (Tenant context) Storage disk tenant configurado (storage/app/tenants/{uuid}/)
+- [Implementado] (Tenant context) Storage disk tenant configurado (storage/app/tenants/{uuid}/)
 - [Pendiente] (Tenant context) Cache con prefijo/tag tenant-aware via bootstrapper
 - [Pendiente] (Tenant context) Jobs tenant-aware (middleware o restore context)
 
