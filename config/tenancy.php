@@ -94,16 +94,19 @@ return [
     /**
      * Cache tenancy config. Used by CacheTenancyBootstrapper.
      *
-     * This works for all Cache facade calls, cache() helper
-     * calls and direct calls to injected cache stores.
+     * Aplica automaticamente un tag de la forma "{tag_base}{tenant_id}" (ej: "tenantabc-123")
+     * a todas las llamadas a Cache::, cache() helper e inyecciones de CacheManager.
+     * Esto garantiza aislamiento total entre tenants sin cambiar el store de cache.
      *
-     * Each key in cache will have a tag applied on it. This tag is used to
-     * scope the cache both when writing to it and when reading from it.
+     * Para limpiar el cache de un tenant especifico:
+     *   Cache::tags(['tenant' . $tenantId])->flush()
      *
-     * You can clear cache selectively by specifying the tag.
+     * Requiere un cache store que soporte tags: Redis, Memcached o Array (en Laravel 12).
+     * En produccion usar Redis. En tests CACHE_STORE=array es suficiente.
      */
     'cache' => [
-        'tag_base' => 'tenant', // This tag_base, followed by the tenant_id, will form a tag that will be applied on each cache call.
+        // El tag completo sera: tag_base + tenant()->getTenantKey(), ej: "tenantabc-def-123"
+        'tag_base' => 'tenant',
     ],
 
     /**
