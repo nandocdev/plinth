@@ -37,7 +37,9 @@ return [
 
         'database' => [
             'driver' => 'database',
-            'connection' => env('DB_QUEUE_CONNECTION'),
+            // La tabla jobs vive en central. El payload tenant_id lo agrega
+            // QueueTenancyBootstrapper, pero el backend de cola permanece compartido.
+            'connection' => env('DB_QUEUE_CONNECTION', 'central'),
             'table' => env('DB_QUEUE_TABLE', 'jobs'),
             'queue' => env('DB_QUEUE', 'default'),
             'retry_after' => (int) env('DB_QUEUE_RETRY_AFTER', 90),
