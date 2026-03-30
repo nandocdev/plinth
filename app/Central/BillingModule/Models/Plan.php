@@ -7,11 +7,16 @@ namespace App\Central\BillingModule\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Database\Factories\PlanFactory;
 
 final class Plan extends Model {
    use HasFactory;
 
    protected $table = 'plans';
+
+   protected static function newFactory(): PlanFactory {
+      return PlanFactory::new();
+   }
 
    protected $fillable = [
       'name',
