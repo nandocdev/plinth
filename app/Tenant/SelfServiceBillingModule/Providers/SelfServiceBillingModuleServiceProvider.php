@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace App\Tenant\SelfServiceBillingModule\Providers;
 
 use App\Central\BillingModule\Events\SubscriptionCreated;
+use App\Shared\Infrastructure\Support\RegistersTenantRoutes;
 use App\Tenant\SelfServiceBillingModule\Events\PlanUpgradeRequestedByTenant;
 use App\Tenant\SelfServiceBillingModule\Listeners\CreateInvoiceOnPlanUpgradeListener;
 use App\Tenant\SelfServiceBillingModule\Listeners\CreateInvoiceOnSubscriptionCreatedListener;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 final class SelfServiceBillingModuleServiceProvider extends ServiceProvider {
+   use RegistersTenantRoutes;
+
    public function register(): void {
       //
    }
@@ -22,8 +24,7 @@ final class SelfServiceBillingModuleServiceProvider extends ServiceProvider {
       Event::listen(PlanUpgradeRequestedByTenant::class, CreateInvoiceOnPlanUpgradeListener::class);
 
       $this->loadViews();
-
-      // Las rutas se inyectan en routes/tenant.php vía require desde el grupo de dominio.
+      $this->registerTenantRoutes(__DIR__ . '/../Routes/tenant.php');
    }
 
    private function loadViews(): void {

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Tenant\AuthenticationModule\Providers;
+namespace App\Tenant\ImpersonationModule\Providers;
 
 use App\Shared\Infrastructure\Support\RegistersTenantRoutes;
 use Illuminate\Support\ServiceProvider;
 
-final class AuthenticationModuleServiceProvider extends ServiceProvider {
+final class ImpersonationModuleServiceProvider extends ServiceProvider {
    use RegistersTenantRoutes;
 
    public function register(): void {
@@ -15,7 +15,6 @@ final class AuthenticationModuleServiceProvider extends ServiceProvider {
    }
 
    public function boot(): void {
-      $this->loadViewsFrom(__DIR__ . '/../Resources/Views', 'tenant-auth');
       $this->registerTenantRoutes(__DIR__ . '/../Routes/tenant.php');
    }
 }
