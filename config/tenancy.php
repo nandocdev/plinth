@@ -112,7 +112,8 @@ return [
      */
     'filesystem' => [
         /**
-         * Each disk listed in the 'disks' array will be suffixed by the suffix_base, followed by the tenant_id.
+         * Discos que FilesystemTenancyBootstrapper hace tenant-aware.
+         * Sus roots se cambian a storage/app/tenants/{uuid}/ durante tenancy()->initialize().
          */
         'suffix_base' => 'tenant',
         'disks' => [
@@ -122,33 +123,27 @@ return [
         ],
 
         /**
-         * Use this for local disks.
+         * Raices absolutas de los discos en contexto tenant.
+         * %storage_path% = storage_path() (base, sin modificar)
+         * %tenant%       = tenant()->getTenantKey() (UUID del tenant)
          *
-         * See https://tenancyforlaravel.com/docs/v3/tenancy-bootstrappers/#filesystem-tenancy-boostrapper
+         * Patron deseado: storage/app/tenants/{uuid}/
          */
         'root_override' => [
-            // Disks whose roots should be overridden after storage_path() is suffixed.
-            'local' => '%storage_path%/app/',
-            'public' => '%storage_path%/app/public/',
+            'local'  => '%storage_path%/app/tenants/%tenant%/',
+            'public' => '%storage_path%/app/tenants/%tenant%/public/',
         ],
 
         /**
-         * Should storage_path() be suffixed.
-         *
-         * Note: Disabling this will likely break local disk tenancy. Only disable this if you're using an external file storage service like S3.
-         *
-         * For the vast majority of applications, this feature should be enabled. But in some
-         * edge cases, it can cause issues (like using Passport with Vapor - see #196), so
-         * you may want to disable this if you are experiencing these edge case issues.
+         * false: storage_path() NO se modifica globalmente.
+         * Los logs, sessions y otros paths de framework permanecen en storage/
+         * compartido, solo los discos de archivos son tenant-scoped via root_override.
          */
-        'suffix_storage_path' => true,
+        'suffix_storage_path' => false,
 
         /**
-         * By default, asset() calls are made multi-tenant too. You can use global_asset() and mix()
-         * for global, non-tenant-specific assets. However, you might have some issues when using
-         * packages that use asset() calls inside the tenant app. To avoid such issues, you can
-         * disable asset() helper tenancy and explicitly use tenant_asset() calls in places
-         * where you want to use tenant-specific assets (product images, avatars, etc).
+         * false: asset() apunta a assets globales (CSS/JS compilados).
+         * Para assets especificos del tenant usar Storage::disk('public')->url(...).
          */
         'asset_helper_tenancy' => false,
     ],
