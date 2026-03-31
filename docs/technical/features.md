@@ -99,7 +99,7 @@ Estado base usado para este documento:
 ### Funcionalidades implementadas no explicitadas
 
 - [Pendiente] Landing Builder visual del tenant con templates, preview y publicacion.
-- [Pendiente] Flujo completo de 2FA tenant: setup + challenge + middleware de enforcement.
+- [Parcial] Flujo de 2FA tenant opcional/sugerible: setup y desactivación desde perfil; challenge/enforcement pendiente.
 - [Pendiente] Gestion de facturacion desde tenant: plan actual, cambio de plan, checkout y customer portal.
 - [Pendiente] Gestion UI de API Keys por tenant (ademas de la API basica).
 - [Pendiente] Gestion UI de webhooks tenant con historial de entregas y retry.
