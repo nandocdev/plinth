@@ -17,13 +17,14 @@ test('authenticated users can visit the dashboard', function () {
     $this->get(route('central.dashboard'))->assertOk();
 });
 
-test('authenticated users without 2fa are redirected to security settings', function () {
+test('authenticated users without 2fa pueden acceder al dashboard y reciben recomendacion', function () {
     $user = User::factory()->create();
     $this->actingAs($user, 'central');
 
     $this->get(route('dashboard'))
-        ->assertRedirect(route('security.edit'));
+        ->assertRedirect(route('central.dashboard'));
 
     $this->get(route('central.dashboard'))
-        ->assertRedirect(route('security.edit'));
+        ->assertOk()
+        ->assertSee('Recomendación de seguridad: activa 2FA para proteger tu cuenta.');
 });
