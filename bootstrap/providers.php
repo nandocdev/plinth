@@ -19,5 +19,6 @@ return [
     App\Tenant\FeatureFlagsModule\Providers\FeatureFlagsModuleServiceProvider::class,
     App\Tenant\ImpersonationModule\Providers\ImpersonationModuleServiceProvider::class,
     App\Tenant\SelfServiceBillingModule\Providers\SelfServiceBillingModuleServiceProvider::class,
+    App\Tenant\UserManagementModule\Providers\UserManagementModuleServiceProvider::class,
     App\Tenant\WorkspaceModule\Providers\WorkspaceModuleServiceProvider::class,
 ];
