@@ -9,6 +9,7 @@ use Database\Factories\TenantUserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
 final class User extends Authenticatable {
@@ -16,6 +17,7 @@ final class User extends Authenticatable {
    use HasFactory;
    use HasRoles;
    use Notifiable;
+   use TwoFactorAuthenticatable;
 
    protected $table = 'users';
 
@@ -31,6 +33,8 @@ final class User extends Authenticatable {
 
    protected $hidden = [
       'password',
+      'two_factor_secret',
+      'two_factor_recovery_codes',
       'remember_token',
    ];
 
@@ -42,6 +46,7 @@ final class User extends Authenticatable {
          'email_verified_at' => 'datetime',
          'password'          => 'hashed',
          'status'            => TenantUserStatus::class,
+         'two_factor_confirmed_at' => 'datetime',
       ];
    }
 

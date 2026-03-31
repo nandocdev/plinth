@@ -9,12 +9,12 @@ use App\Central\TenantProvisioningModule\Models\Domain;
 use App\Central\TenantProvisioningModule\Models\Tenant;
 use Livewire\Livewire;
 
-test('ruta central onboarding exige 2fa para admins centrales', function (): void {
+test('rutas centrales ya no bloquean acceso por 2fa obligatoria', function (): void {
    $user = User::factory()->create();
 
    $this->actingAs($user, 'central')
-      ->get(route('central.tenants.onboarding'))
-      ->assertRedirect(route('security.edit'));
+      ->get(route('central.tenants.index'))
+      ->assertOk();
 });
 
 test('onboarding action orquesta creacion de tenant y suscripcion', function (): void {
