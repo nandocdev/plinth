@@ -240,3 +240,38 @@ test('componente de perfil solo expone datos del usuario autenticado', function 
       tenancy()->end();
    }
 });
+
+test('usuario tenant puede iniciar y desactivar 2fa cuando lo desee', function (): void {
+   config()->set('tenancy.bootstrappers', [CacheTenancyBootstrapper::class]);
+   $this->withoutMiddleware(EnforcePlanUsageLimits::class);
+
+   $tenant = createProfileTenant('profile-two-factor-optional');
+
+   tenancy()->initialize($tenant);
+
+   try {
+      $user = TenantUser::factory()->create();
+
+      Livewire::actingAs($user, 'tenant')
+         ->test(TenantProfile::class)
+         ->call('enableTwoFactor')
+         ->assertHasNoErrors()
+         ->assertSet('twoFactorSuccess', '2FA iniciado. Escanea el QR y confirma con tu código.');
+
+      $enabledUser = $user->fresh();
+      expect($enabledUser->two_factor_secret)->not->toBeNull();
+
+      Livewire::actingAs($enabledUser, 'tenant')
+         ->test(TenantProfile::class)
+         ->call('disableTwoFactor')
+         ->assertHasNoErrors()
+         ->assertSet('twoFactorSuccess', '2FA deshabilitado.');
+
+      $disabledUser = $enabledUser->fresh();
+      expect($disabledUser->two_factor_secret)->toBeNull()
+         ->and($disabledUser->two_factor_recovery_codes)->toBeNull()
+         ->and($disabledUser->two_factor_confirmed_at)->toBeNull();
+   } finally {
+      tenancy()->end();
+   }
+});
