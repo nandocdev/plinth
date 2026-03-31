@@ -55,7 +55,7 @@ Estado base usado para este documento:
 - [Implementado] (Tenant context) Jobs tenant-aware (middleware o restore context)
 
 #### Produccion (Media - lo que necesita para ser usable en prod)
-- [Pendiente] (Tenant context) User management (CRUD users, roles, permissions - base RBAC)
+- [Implementado] (Tenant context) User management (CRUD users, roles, permissions - base RBAC)
 - [Pendiente] (Tenant context) Settings tenant (company info, branding, preferences) con cache tenant-aware
 - [Pendiente] (Tenant context) Activity log tenant (con tenant_id)
 - [Pendiente] (Tenant context) File uploads seguros usando tenant disk
