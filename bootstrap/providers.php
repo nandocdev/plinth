@@ -17,6 +17,7 @@ return [
     App\Shared\Infrastructure\Providers\AppServiceProvider::class,
     App\Tenant\AuthenticationModule\Providers\AuthenticationModuleServiceProvider::class,
     App\Tenant\ActivityLogModule\Providers\TenantActivityLogModuleServiceProvider::class,
+    App\Tenant\FileUploadModule\Providers\FileUploadModuleServiceProvider::class,
     App\Tenant\FeatureFlagsModule\Providers\FeatureFlagsModuleServiceProvider::class,
     App\Tenant\ImpersonationModule\Providers\ImpersonationModuleServiceProvider::class,
     App\Tenant\SettingsModule\Providers\SettingsModuleServiceProvider::class,
