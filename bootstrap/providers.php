@@ -20,6 +20,7 @@ return [
     App\Tenant\FileUploadModule\Providers\FileUploadModuleServiceProvider::class,
     App\Tenant\FeatureFlagsModule\Providers\FeatureFlagsModuleServiceProvider::class,
     App\Tenant\ImpersonationModule\Providers\ImpersonationModuleServiceProvider::class,
+    App\Tenant\NotificationModule\Providers\TenantNotificationModuleServiceProvider::class,
     App\Tenant\SettingsModule\Providers\SettingsModuleServiceProvider::class,
     App\Tenant\SelfServiceBillingModule\Providers\SelfServiceBillingModuleServiceProvider::class,
     App\Tenant\UserManagementModule\Providers\UserManagementModuleServiceProvider::class,

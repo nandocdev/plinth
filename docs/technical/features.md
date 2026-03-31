@@ -59,7 +59,7 @@ Estado base usado para este documento:
 - [Implementado] (Tenant context) Settings tenant (company info, branding, preferences) con cache tenant-aware
 - [Implementado] (Tenant context) Activity log tenant (con tenant_id)
 - [Implementado] (Tenant context) File uploads seguros usando tenant disk
-- [Pendiente] (Tenant context) Notifications tenant (mail + database)
+- [Implementado] (Tenant context) Notifications tenant (mail + database)
 - [Pendiente] (Tenant context) API basica con Sanctum (tenant-aware)
 - [Pendiente] (Tenant context) Queue system con tenant context restore
 - [Pendiente] (Tenant context) Feature flags por plan (ej: max_users, max_storage)
