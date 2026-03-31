@@ -23,6 +23,9 @@
                             <a href="/dashboard" wire:navigate>
                                 <flux:button variant="ghost" size="sm" icon="home">Dashboard</flux:button>
                             </a>
+                            <a href="/settings/tenant" wire:navigate>
+                                <flux:button variant="ghost" size="sm" icon="cog-6-tooth">Configuración</flux:button>
+                            </a>
                             <a href="/billing" wire:navigate>
                                 <flux:button variant="ghost" size="sm" icon="credit-card">Facturación</flux:button>
                             </a>
