@@ -30,6 +30,9 @@
                                 <flux:button variant="ghost" size="sm" icon="clipboard-document-list">Activity log
                                 </flux:button>
                             </a>
+                            <a href="/files" wire:navigate>
+                                <flux:button variant="ghost" size="sm" icon="paper-clip">Archivos</flux:button>
+                            </a>
                             <a href="/billing" wire:navigate>
                                 <flux:button variant="ghost" size="sm" icon="credit-card">Facturación</flux:button>
                             </a>

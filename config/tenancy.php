@@ -122,6 +122,7 @@ return [
         'disks' => [
             'local',
             'public',
+            'tenant',
             // 's3',
         ],
 
@@ -135,6 +136,7 @@ return [
         'root_override' => [
             'local'  => '%storage_path%/app/tenants/%tenant%/',
             'public' => '%storage_path%/app/tenants/%tenant%/public/',
+            'tenant' => '%storage_path%/app/tenants/%tenant%/files/',
         ],
 
         /**
