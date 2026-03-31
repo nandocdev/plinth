@@ -20,7 +20,8 @@ final readonly class TenantSettingsData {
       public string  $currency,
       public bool    $allowWeeklyDigest,
       public string  $dateFormat,
-   ) {}
+   ) {
+   }
 
    public static function defaults(): self {
       return new self(
