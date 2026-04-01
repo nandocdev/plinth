@@ -39,6 +39,9 @@
                             <a href="/billing" wire:navigate>
                                 <flux:button variant="ghost" size="sm" icon="credit-card">Facturación</flux:button>
                             </a>
+                            <a href="/plan-features" wire:navigate>
+                                <flux:button variant="ghost" size="sm" icon="sparkles">Mi Plan</flux:button>
+                            </a>
                         </nav>
                     @endauth
                 </div>
