@@ -61,7 +61,7 @@ Estado base usado para este documento:
 - [Implementado] (Tenant context) File uploads seguros usando tenant disk
 - [Implementado] (Tenant context) Notifications tenant (mail + database)
 - [Implementado] (Tenant context) API basica con Sanctum (tenant-aware)
-- [Pendiente] (Tenant context) Queue system con tenant context restore
+- [Implementado] (Tenant context) Queue system con tenant context restore
 - [Pendiente] (Tenant context) Feature flags por plan (ej: max_users, max_storage)
 - [Pendiente] (Tenant context) Dark mode + basic Tailwind/Flux UI con layout.tenant separado
 - [Pendiente] (Tenant context) Error pages y maintenance mode tenant-isolated
