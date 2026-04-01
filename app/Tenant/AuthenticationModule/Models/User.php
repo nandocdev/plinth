@@ -9,11 +9,13 @@ use Database\Factories\TenantUserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
 final class User extends Authenticatable {
    /** @use HasFactory<TenantUserFactory> */
+   use HasApiTokens;
    use HasFactory;
    use HasRoles;
    use Notifiable;
