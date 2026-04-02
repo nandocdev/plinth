@@ -59,12 +59,14 @@ test('pagina signup renderiza sin autenticacion', function (): void {
 });
 
 test('pagina signup muestra los planes disponibles', function (): void {
-   /** @var \Tests\TestCase $this */
-   Plan::factory()->create(['is_active' => true, 'name' => 'Plan Signup Test']);
+   $plan = Plan::factory()->create(['is_active' => true, 'name' => 'Plan Signup Test']);
 
-   $this->get('/signup')
-      ->assertOk()
-      ->assertSee('Plan Signup Test');
+   \Livewire\Livewire::test(PublicTenantSignup::class)
+      ->set('form.companyName', 'Plan Viewer Corp')
+      ->set('form.subdomain', 'plan-viewer-corp')
+      ->call('nextStep')
+      ->assertSet('currentStep', 2)
+      ->assertSee($plan->name);
 });
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -164,4 +166,28 @@ test('signup livewire registra tenant completo y expone url de redirect', functi
          ->assertHasNoErrors()
          ->assertSet('successRedirectUrl', fn($url) => str_contains($url, $subdomain) && str_ends_with($url, '/login'));
    });
+});
+
+test('signup livewire wizard valida por paso antes de avanzar', function (): void {
+   $plan = Plan::factory()->create(['is_active' => true]);
+
+   \Livewire\Livewire::test(PublicTenantSignup::class)
+      ->assertSet('currentStep', 1)
+      ->call('nextStep')
+      ->assertHasErrors(['form.companyName', 'form.subdomain'])
+      ->set('form.companyName', 'Wizard Corp')
+      ->set('form.subdomain', 'wizard-corp')
+      ->call('nextStep')
+      ->assertSet('currentStep', 2)
+      ->call('nextStep')
+      ->assertHasErrors(['form.planId'])
+      ->set('form.planId', $plan->id)
+      ->call('nextStep')
+      ->assertSet('currentStep', 3)
+      ->set('form.adminName', 'Admin Wizard')
+      ->set('form.adminEmail', 'admin@wizard.com')
+      ->set('form.adminPassword', 'password123')
+      ->set('form.adminPasswordConfirmation', 'password123')
+      ->call('nextStep')
+      ->assertSet('currentStep', 4);
 });
