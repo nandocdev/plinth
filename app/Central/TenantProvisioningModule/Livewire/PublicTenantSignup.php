@@ -20,6 +20,10 @@ final class PublicTenantSignup extends Component {
 
    public ?string $successRedirectUrl = null;
 
+   public int $currentStep = 1;
+
+   public int $totalSteps = 4;
+
    public function mount(): void {
       $planSlug = request()->query('plan', '');
 
@@ -35,6 +39,33 @@ final class PublicTenantSignup extends Component {
       }
    }
 
+   public function nextStep(): void {
+      $this->validate($this->form->rulesForStep($this->currentStep));
+
+      $this->currentStep = min($this->totalSteps, $this->currentStep + 1);
+   }
+
+   public function previousStep(): void {
+      $this->currentStep = max(1, $this->currentStep - 1);
+   }
+
+   public function goToStep(int $step): void {
+      $targetStep = max(1, min($this->totalSteps, $step));
+
+      if ($targetStep <= $this->currentStep) {
+         $this->currentStep = $targetStep;
+
+         return;
+      }
+
+      // Evita saltos hacia adelante sin validar los pasos intermedios.
+      for ($index = $this->currentStep; $index < $targetStep; $index++) {
+         $this->validate($this->form->rulesForStep($index));
+      }
+
+      $this->currentStep = $targetStep;
+   }
+
    public function register(RegisterPublicTenantAction $action): void {
       $key = 'public-signup:' . request()->ip();
 
@@ -44,7 +75,7 @@ final class PublicTenantSignup extends Component {
          return;
       }
 
-      $this->form->validate();
+      $this->validate($this->form->rulesForAllSteps());
 
       if (! $this->form->validateSubdomainAvailable()) {
          $this->addError('form.subdomain', 'Este subdominio ya está en uso. Elige otro.');
@@ -66,6 +97,7 @@ final class PublicTenantSignup extends Component {
       $baseHost = parse_url(config('app.url'), PHP_URL_HOST) ?? 'localhost';
       $scheme = parse_url(config('app.url'), PHP_URL_SCHEME) ?? 'http';
       $this->successRedirectUrl = "{$scheme}://{$this->form->subdomain}.{$baseHost}/login";
+      $this->currentStep = $this->totalSteps;
 
       RateLimiter::clear($key);
    }
@@ -74,6 +106,13 @@ final class PublicTenantSignup extends Component {
       return view('tenant-provisioning::livewire.public-tenant-signup', [
          'plans' => $this->form->availablePlans(),
          'baseHost' => parse_url(config('app.url'), PHP_URL_HOST) ?? 'localhost',
+         'steps' => [
+            ['number' => 1, 'label' => 'Empresa', 'description' => 'Nombre y subdominio', 'icon' => 'building-office-2'],
+            ['number' => 2, 'label' => 'Plan', 'description' => 'Elige tu suscripción', 'icon' => 'credit-card'],
+            ['number' => 3, 'label' => 'Admin', 'description' => 'Cuenta principal', 'icon' => 'user-circle'],
+            ['number' => 4, 'label' => 'Confirmar', 'description' => 'Términos y creación', 'icon' => 'check-badge'],
+         ],
+         'progressPercent' => (int) round(($this->currentStep / $this->totalSteps) * 100),
       ]);
    }
 }
