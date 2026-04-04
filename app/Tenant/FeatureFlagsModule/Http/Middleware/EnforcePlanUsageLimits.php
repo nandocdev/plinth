@@ -10,14 +10,19 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class EnforcePlanUsageLimits {
-   public function handle(Request $request, Closure $next, EvaluateTenantUsageLimitsAction $action): Response {
+   public function __construct(
+      private readonly EvaluateTenantUsageLimitsAction $action,
+   ) {
+   }
+
+   public function handle(Request $request, Closure $next): Response {
       $tenant = tenancy()->tenant;
 
       if ($tenant === null) {
          return $next($request);
       }
 
-      $evaluation = $action->execute((string) data_get($tenant, 'id'));
+      $evaluation = $this->action->execute((string) data_get($tenant, 'id'));
 
       if ($evaluation->hardLimitReached) {
          return response(

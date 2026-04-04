@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Shared\Infrastructure\Support;
 
+use App\Tenant\ErrorHandlingModule\Http\Middleware\EnsureTenantNotInMaintenance;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
@@ -22,6 +23,7 @@ trait RegistersTenantRoutes {
             'web',
             InitializeTenancyByDomain::class,
             PreventAccessFromCentralDomains::class,
+            EnsureTenantNotInMaintenance::class,
             ...$middleware,
          ])
             ->domain('{tenantDomain}')
