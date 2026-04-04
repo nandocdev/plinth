@@ -36,16 +36,21 @@
             @endif
         @enderror
 
+        @error('register')
+            <flux:callout variant="danger" icon="x-circle">{{ $message }}</flux:callout>
+        @enderror
+
         <form wire:submit="register" class="space-y-5">
-            @if ($currentStep === 1)
+            <div @class(['hidden' => $currentStep !== 1]) wire:key="signup-step-1">
                 <flux:card class="space-y-4 p-5">
                     <p class="text-xs font-semibold uppercase tracking-widest text-zinc-400">Paso 1 · Tu empresa</p>
 
-                    <flux:input wire:model.blur="form.companyName" label="Nombre de la empresa" placeholder="Acme Inc."
-                        required />
+                    <flux:input wire:model.live.debounce.250ms="form.companyName"
+                        wire:blur="syncSubdomainFromCompanyName" label="Nombre de la empresa"
+                        placeholder="Acme Inc." required />
 
-                    <flux:input wire:model.live.debounce.500ms="form.subdomain" label="Subdominio" placeholder="acme"
-                        required>
+                    <flux:input wire:model.live.debounce.250ms="form.subdomain" label="Subdominio"
+                        placeholder="acme" required>
                         <x-slot name="description">
                             <span class="text-xs text-zinc-500">
                                 URL de acceso:
@@ -55,9 +60,9 @@
                         </x-slot>
                     </flux:input>
                 </flux:card>
-            @endif
+            </div>
 
-            @if ($currentStep === 2)
+            <div @class(['hidden' => $currentStep !== 2]) wire:key="signup-step-2">
                 <flux:card class="space-y-3 p-5">
                     <p class="text-xs font-semibold uppercase tracking-widest text-zinc-400">Paso 2 · Selecciona un plan
                     </p>
@@ -91,25 +96,25 @@
                         @endforeach
                     </div>
                 </flux:card>
-            @endif
+            </div>
 
-            @if ($currentStep === 3)
+            <div @class(['hidden' => $currentStep !== 3]) wire:key="signup-step-3">
                 <flux:card class="space-y-4 p-5">
                     <p class="text-xs font-semibold uppercase tracking-widest text-zinc-400">Paso 3 · Cuenta
                         administradora</p>
 
-                    <flux:input wire:model.blur="form.adminName" label="Nombre completo" placeholder="Fernando Castillo"
+                    <flux:input wire:model="form.adminName" label="Nombre completo" placeholder="Fernando Castillo"
                         required />
-                    <flux:input wire:model.blur="form.adminEmail" type="email" label="Correo electrónico"
+                    <flux:input wire:model="form.adminEmail" type="email" label="Correo electrónico"
                         placeholder="tu@empresa.com" required />
-                    <flux:input wire:model.blur="form.adminPassword" type="password" label="Contraseña"
+                    <flux:input wire:model="form.adminPassword" type="password" label="Contraseña"
                         placeholder="Mínimo 8 caracteres" required />
-                    <flux:input wire:model.blur="form.adminPasswordConfirmation" type="password"
-                        label="Confirmar contraseña" required />
+                    <flux:input wire:model="form.adminPasswordConfirmation" type="password" label="Confirmar contraseña"
+                        required />
                 </flux:card>
-            @endif
+            </div>
 
-            @if ($currentStep === 4)
+            <div @class(['hidden' => $currentStep !== 4]) wire:key="signup-step-4">
                 <flux:card class="space-y-4 p-5">
                     <p class="text-xs font-semibold uppercase tracking-widest text-zinc-400">Paso 4 · Confirmación</p>
 
@@ -139,7 +144,7 @@
                         <p class="-mt-2 text-xs text-red-400">{{ $message }}</p>
                     @enderror
                 </flux:card>
-            @endif
+            </div>
 
             <div class="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>

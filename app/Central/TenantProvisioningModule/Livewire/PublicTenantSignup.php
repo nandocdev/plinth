@@ -7,11 +7,14 @@ namespace App\Central\TenantProvisioningModule\Livewire;
 use App\Central\TenantProvisioningModule\Actions\RegisterPublicTenantAction;
 use App\Central\TenantProvisioningModule\DTOs\PublicTenantRegistrationData;
 use App\Central\TenantProvisioningModule\Livewire\Forms\PublicTenantSignupForm;
+use Illuminate\Database\QueryException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Throwable;
 
 #[Layout('layouts.auth')]
 #[Title('Crear workspace — Plinth')]
@@ -23,6 +26,10 @@ final class PublicTenantSignup extends Component {
    public int $currentStep = 1;
 
    public int $totalSteps = 4;
+
+   public bool $subdomainTouched = false;
+
+   private bool $isSynchronizingSubdomain = false;
 
    public function mount(): void {
       $planSlug = request()->query('plan', '');
@@ -66,6 +73,43 @@ final class PublicTenantSignup extends Component {
       $this->currentStep = $targetStep;
    }
 
+   public function updatedFormCompanyName(?string $value): void {
+      $this->syncSubdomainFromCompanyName($value);
+   }
+
+   public function updatedFormSubdomain(?string $value): void {
+      if ($this->isSynchronizingSubdomain) {
+         return;
+      }
+
+      $normalized = $this->normalizeSubdomain((string) $value);
+
+      if ($normalized !== (string) $value) {
+         $this->isSynchronizingSubdomain = true;
+         $this->form->subdomain = $normalized;
+         $this->isSynchronizingSubdomain = false;
+      }
+
+      // Si el usuario borra el subdominio, permitimos volver al modo autogenerado.
+      $this->subdomainTouched = $normalized !== '';
+   }
+
+   public function syncSubdomainFromCompanyName(?string $value = null): void {
+      if ($this->subdomainTouched && $this->form->subdomain !== '') {
+         return;
+      }
+
+      $generated = $this->normalizeSubdomain((string) ($value ?? $this->form->companyName));
+
+      if ($generated === '') {
+         return;
+      }
+
+      $this->isSynchronizingSubdomain = true;
+      $this->form->subdomain = $generated;
+      $this->isSynchronizingSubdomain = false;
+   }
+
    public function register(RegisterPublicTenantAction $action): void {
       $key = 'public-signup:' . request()->ip();
 
@@ -85,14 +129,27 @@ final class PublicTenantSignup extends Component {
 
       RateLimiter::hit($key, 120);
 
-      $tenant = $action->execute(new PublicTenantRegistrationData(
-         companyName: $this->form->companyName,
-         subdomain: $this->form->subdomain,
-         adminName: $this->form->adminName,
-         adminEmail: $this->form->adminEmail,
-         adminPassword: $this->form->adminPassword,
-         planId: $this->form->planId,
-      ));
+      try {
+         $action->execute(new PublicTenantRegistrationData(
+            companyName: $this->form->companyName,
+            subdomain: $this->form->subdomain,
+            adminName: $this->form->adminName,
+            adminEmail: $this->form->adminEmail,
+            adminPassword: $this->form->adminPassword,
+            planId: $this->form->planId,
+         ));
+      } catch (QueryException $exception) {
+         report($exception);
+         RateLimiter::clear($key);
+         $this->addError('register', 'No pudimos provisionar tu workspace en este momento. Verifica la conexión de base de datos e intenta nuevamente.');
+
+         return;
+      } catch (Throwable $exception) {
+         report($exception);
+         $this->addError('register', 'No pudimos completar el registro en este momento. Intenta nuevamente en unos minutos.');
+
+         return;
+      }
 
       $baseHost = parse_url(config('app.url'), PHP_URL_HOST) ?? 'localhost';
       $scheme = parse_url(config('app.url'), PHP_URL_SCHEME) ?? 'http';
@@ -100,6 +157,14 @@ final class PublicTenantSignup extends Component {
       $this->currentStep = $this->totalSteps;
 
       RateLimiter::clear($key);
+   }
+
+   private function normalizeSubdomain(string $value): string {
+      $slug = Str::slug($value);
+      $slug = preg_replace('/[^a-z0-9\-]/', '', $slug) ?? '';
+      $slug = trim($slug, '-');
+
+      return Str::limit($slug, 40, '');
    }
 
    public function render(): View {

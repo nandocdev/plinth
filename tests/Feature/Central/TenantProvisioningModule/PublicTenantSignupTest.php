@@ -191,3 +191,18 @@ test('signup livewire wizard valida por paso antes de avanzar', function (): voi
       ->call('nextStep')
       ->assertSet('currentStep', 4);
 });
+
+   test('signup livewire autogenera subdominio desde nombre de empresa', function (): void {
+      \Livewire\Livewire::test(PublicTenantSignup::class)
+      ->set('form.companyName', 'Mi Empresa SPA')
+      ->assertSet('form.subdomain', 'mi-empresa-spa');
+   });
+
+   test('signup livewire no pisa subdominio editado manualmente', function (): void {
+      \Livewire\Livewire::test(PublicTenantSignup::class)
+      ->set('form.companyName', 'Acme Uno')
+      ->assertSet('form.subdomain', 'acme-uno')
+      ->set('form.subdomain', 'custom-acme')
+      ->set('form.companyName', 'Acme Dos')
+      ->assertSet('form.subdomain', 'custom-acme');
+   });
