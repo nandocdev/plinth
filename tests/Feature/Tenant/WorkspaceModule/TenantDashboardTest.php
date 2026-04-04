@@ -39,6 +39,7 @@ test('usuario tenant autenticado ve dashboard basico con welcome y tenant info',
          ->get('http://tenant-dashboard-auth.localhost/dashboard')
          ->assertOk()
          ->assertSee('Bienvenido, Workspace Owner')
+         ->assertSee('Tema:')
          ->assertSee('tenant-dashboard-auth.localhost')
          ->assertSee('owner@tenant-dashboard-auth.test')
          ->assertSee('Tenant Dashboard Auth')
