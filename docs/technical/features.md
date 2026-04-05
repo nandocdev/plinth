@@ -65,7 +65,7 @@ Estado base usado para este documento:
 - [Implementado] (Tenant context) Feature flags por plan (ej: max_users, max_storage)
 - [Implementado] (Tenant context) Dark mode + basic Tailwind/Flux UI con layout.tenant separado
 - [Implementado] (Tenant context) Error pages y maintenance mode tenant-isolated
-- [Pendiente] (Tenant context) Export/Import basicos (CSV) con jobs tenant-aware
+- [Implementado] (Tenant context) Export/Import basicos (CSV) con jobs tenant-aware
 
 #### Avanzadas (Actualizaciones futuras - diferenciacion & scaling)
 - [Pendiente] (Tenant context) Modular features (plugins/addons instalables por tenant)
