@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Central\BillingModule\Models\Plan;
+use App\Central\AuthenticationModule\Models\User as SystemAdmin;
 use App\Central\TenantProvisioningModule\Actions\RegisterPublicTenantAction;
 use App\Central\TenantProvisioningModule\DTOs\PublicTenantRegistrationData;
 use App\Central\TenantProvisioningModule\Livewire\PublicTenantSignup;
@@ -98,6 +99,15 @@ test('RegisterPublicTenantAction crea tenant suscripcion y usuario owner', funct
    expect($domain)->not->toBeNull();
    expect($tenant->fresh()->name)->toBe('Acme Corp');
 
+   // Usuario owner creado o reutilizado en contexto central
+   $centralOwner = SystemAdmin::query()->where('email', 'admin@acme-test.com')->first();
+   expect($centralOwner)->not->toBeNull();
+   expect($centralOwner?->name)->toBe('Admin Acme');
+
+   $tenantFresh = $tenant->fresh();
+   expect($tenantFresh?->getAttribute('owner_system_admin_id'))->toBe($centralOwner?->getKey());
+   expect($tenantFresh?->getAttribute('owner_email'))->toBe('admin@acme-test.com');
+
    // Usuario owner creado en contexto tenant
    tenancy()->initialize($tenant);
    try {
@@ -107,6 +117,48 @@ test('RegisterPublicTenantAction crea tenant suscripcion y usuario owner', funct
       expect($user)->not->toBeNull();
       expect($user->name)->toBe('Admin Acme');
       expect($user->hasRole(TenantRole::Admin->value, 'tenant'))->toBeTrue();
+   } finally {
+      tenancy()->end();
+   }
+});
+
+test('RegisterPublicTenantAction reutiliza owner central existente por email', function (): void {
+   config()->set('tenancy.bootstrappers', [CacheTenancyBootstrapper::class]);
+
+   $plan = Plan::factory()->create(['is_active' => true]);
+   $existingOwner = SystemAdmin::factory()->create([
+      'name' => 'Owner Existente',
+      'email' => 'owner@tenant-owner-test.com',
+   ]);
+
+   /** @var RegisterPublicTenantAction $action */
+   $action = app(RegisterPublicTenantAction::class);
+
+   $tenant = Tenant::withoutEvents(fn() => $action->execute(new PublicTenantRegistrationData(
+      companyName: 'Existing Owner Corp',
+      subdomain: 'existing-owner-public-signup-test',
+      adminName: 'Owner Nuevo Nombre',
+      adminEmail: 'owner@tenant-owner-test.com',
+      adminPassword: 'password123',
+      planId: $plan->id,
+   )));
+
+   expect(SystemAdmin::query()->where('email', 'owner@tenant-owner-test.com')->count())->toBe(1);
+
+   $currentOwner = SystemAdmin::query()->where('email', 'owner@tenant-owner-test.com')->first();
+   expect($currentOwner?->getKey())->toBe($existingOwner->getKey());
+
+   $tenantFresh = $tenant->fresh();
+   expect($tenantFresh?->getAttribute('owner_system_admin_id'))->toBe($existingOwner->getKey());
+
+   tenancy()->initialize($tenant);
+   try {
+      $tenantOwner = \App\Tenant\AuthenticationModule\Models\User::query()
+         ->where('email', 'owner@tenant-owner-test.com')
+         ->first();
+
+      expect($tenantOwner)->not->toBeNull();
+      expect($tenantOwner?->hasRole(TenantRole::Admin->value, 'tenant'))->toBeTrue();
    } finally {
       tenancy()->end();
    }
