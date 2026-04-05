@@ -27,7 +27,7 @@ final class WebhookEndpointForm extends Form {
    #[Validate('integer|min:1|max:10')]
    public int $maxAttempts = 5;
 
-   public function fill(\App\Tenant\WebhookModule\Models\WebhookEndpoint $endpoint): void {
+   public function fillFromModel(\App\Tenant\WebhookModule\Models\WebhookEndpoint $endpoint): void {
       $this->endpointId = $endpoint->id;
       $this->name = $endpoint->name;
       $this->targetUrl = $endpoint->target_url;

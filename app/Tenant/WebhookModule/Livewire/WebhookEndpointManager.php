@@ -50,7 +50,7 @@ final class WebhookEndpointManager extends Component {
       /** @var WebhookEndpoint $endpoint */
       $endpoint = WebhookEndpoint::query()->findOrFail($endpointId);
       $this->authorize('update', $endpoint);
-      $this->form->fill($endpoint);
+      $this->form->fillFromModel($endpoint);
       $this->showForm = true;
       $this->clearMessages();
    }
