@@ -109,6 +109,11 @@
                             <flux:icon name="sparkles" class="size-4" />
                             <span>Mi Plan</span>
                         </a>
+                        <a href="/webhooks" wire:navigate
+                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('webhooks') || request()->is('webhooks/*') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
+                            <flux:icon name="arrow-path-rounded-square" class="size-4" />
+                            <span>Webhooks</span>
+                        </a>
                     </nav>
                 @endauth
 
@@ -229,6 +234,11 @@
                             class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('plan-features') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
                             <flux:icon name="sparkles" class="size-4" />
                             <span>Mi Plan</span>
+                        </a>
+                        <a href="/webhooks" wire:navigate x-on:click="sidebarOpen = false"
+                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('webhooks') || request()->is('webhooks/*') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
+                            <flux:icon name="arrow-path-rounded-square" class="size-4" />
+                            <span>Webhooks</span>
                         </a>
                     </nav>
                 @endauth

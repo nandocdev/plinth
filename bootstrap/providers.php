@@ -28,5 +28,6 @@ return [
     App\Tenant\SettingsModule\Providers\SettingsModuleServiceProvider::class,
     App\Tenant\SelfServiceBillingModule\Providers\SelfServiceBillingModuleServiceProvider::class,
     App\Tenant\UserManagementModule\Providers\UserManagementModuleServiceProvider::class,
+    App\Tenant\WebhookModule\Providers\WebhookModuleServiceProvider::class,
     App\Tenant\WorkspaceModule\Providers\WorkspaceModuleServiceProvider::class,
 ];
