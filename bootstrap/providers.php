@@ -17,6 +17,7 @@ return [
     App\Shared\Infrastructure\Providers\AppServiceProvider::class,
     App\Tenant\AuthenticationModule\Providers\AuthenticationModuleServiceProvider::class,
     App\Tenant\ActivityLogModule\Providers\TenantActivityLogModuleServiceProvider::class,
+    App\Tenant\AddonsModule\Providers\AddonsModuleServiceProvider::class,
     App\Tenant\ApiAccessModule\Providers\ApiAccessModuleServiceProvider::class,
     App\Tenant\ErrorHandlingModule\Providers\ErrorHandlingModuleServiceProvider::class,
     App\Tenant\ExportImportModule\Providers\ExportImportModuleServiceProvider::class,
