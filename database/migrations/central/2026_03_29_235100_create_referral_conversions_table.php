@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
    public function up(): void {
-      Schema::create('referral_conversions', function (Blueprint $table): void {
+      Schema::connection('central')->create('referral_conversions', function (Blueprint $table): void {
          $table->id();
          $table->foreignId('referral_partner_id')->constrained('referral_partners')->cascadeOnDelete();
          $table->string('tenant_id', 64)->unique();
@@ -31,6 +31,6 @@ return new class extends Migration {
 
    public function down(): void {
       DB::connection('central')->statement('ALTER TABLE referral_conversions DROP CONSTRAINT IF EXISTS referral_conversions_status_check');
-      Schema::dropIfExists('referral_conversions');
+      Schema::connection('central')->dropIfExists('referral_conversions');
    }
 };
