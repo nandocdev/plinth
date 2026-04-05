@@ -197,7 +197,8 @@
                             {{ tenant()?->brandName() ?? config('app.name') }}
                         </p>
                     </div>
-                    <button type="button" class="rounded-lg p-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                    <button type="button"
+                        class="rounded-lg p-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                         x-on:click="sidebarOpen = false" aria-label="Cerrar menú">
                         <flux:icon name="x-mark" class="size-5" />
                     </button>

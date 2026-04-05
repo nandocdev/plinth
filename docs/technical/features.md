@@ -35,6 +35,7 @@ Estado base usado para este documento:
 - [Implementado] White-labeling para tenants (branding central configurable)
 - [Implementado] Affiliate / referral system
 - [Parcial] Advanced analytics agregados (MRR, churn, LTV, tenant growth)
+  <!-- Pendiente: no existe UI ni queries reales sobre datos de billing/tenants; solo sumario estático en SystemHealth. Requiere: agregaciones sobre subscriptions + churn rate + LTV calculado + dashboard MRR en central AdminDashboard. -->
 - [Implementado] Role & permission system global para system admins (Spatie)
 - [Implementado] Audit log completo de acciones central
 - [Implementado] Webhooks salientes para partners (nuevo tenant, etc.)
@@ -69,8 +70,9 @@ Estado base usado para este documento:
 
 #### Avanzadas (Actualizaciones futuras - diferenciacion & scaling)
 - [Pendiente] (Tenant context) Modular features (plugins/addons instalables por tenant)
-- [Pendiente] (Tenant context) Advanced reporting & analytics (tenant-specific)
-- [Parcial] (Tenant context) Webhooks entrantes y salientes tenant
+- [Parcial] (Tenant context) Advanced reporting & analytics (tenant-specific)
+  <!-- Pendiente: registrar CollectDailyMetricsJob en el scheduler (Kernel/console), agregar comando Artisan manual `reporting:collect`, métricas reales de users_active_day (falta campo last_login_at), gráfica más completa (Chart.js o similar), exportar snapshot CSV. -->
+- [Implementado] (Tenant context) Webhooks entrantes y salientes tenant
 - [Pendiente] (Tenant context) Custom domain full management + SSL auto (Let's Encrypt)
 - [Pendiente] (Tenant context) Multi-language + currency per tenant
 - [Pendiente] (Tenant context) Team / workspace dentro del tenant (sub-tenancy light)
@@ -101,9 +103,10 @@ Estado base usado para este documento:
 - [Pendiente] Landing Builder visual del tenant con templates, preview y publicacion.
 - [Implementado] Wizard de outboarding en /signup publico (multi-step en Flux con stepper custom).
 - [Parcial] Flujo de 2FA tenant opcional/sugerible: setup y desactivación desde perfil; challenge/enforcement pendiente.
+  <!-- Pendiente: middleware de enforcement 2FA en rutas tenant protegidas, challenge page tras login si 2FA habilitado, opción de marcar 2FA como obligatorio por plan/admin. -->
 - [Pendiente] Gestion de facturacion desde tenant: plan actual, cambio de plan, checkout y customer portal.
 - [Pendiente] Gestion UI de API Keys por tenant (ademas de la API basica).
-- [Pendiente] Gestion UI de webhooks tenant con historial de entregas y retry.
+- [Implementado] Gestion UI de webhooks tenant con historial de entregas y retry.
 - [Pendiente] Impersonacion bidireccional: inicio desde central y salida segura en tenant.
 - [Pendiente] Enforcement de suscripcion activa y limites de plan en rutas tenant.
 - [Pendiente] Dashboard central con metricas agregadas (incluye revenue mensual).
