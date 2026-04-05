@@ -64,7 +64,7 @@ return [
         ],
 
         'database' => [
-            'connection' => env('PULSE_DB_CONNECTION', 'central'),
+            'connection' => env('PULSE_DB_CONNECTION', 'landlord'),
             'chunk' => 1000,
         ],
     ],

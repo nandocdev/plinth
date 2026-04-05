@@ -7,20 +7,25 @@ namespace App\Central\TenantProvisioningModule\Actions;
 use App\Central\TenantProvisioningModule\DTOs\CreateTenantData;
 use App\Central\TenantProvisioningModule\Events\TenantCreatedFromCentral;
 use App\Central\TenantProvisioningModule\Models\Tenant;
+use Illuminate\Database\DatabaseManager;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Throwable;
 
 final class CreateTenantAction {
    public function __construct(
       private readonly ResolveTenantProvisioningRegionAction $resolveRegion,
+      private readonly DatabaseManager $databaseManager,
    ) {
    }
 
    public function execute(CreateTenantData $data): Tenant {
       $region = $this->resolveRegion->execute($data->region);
+      $tenantConnection = $this->resolveTemplateConnection($region->dbConnection);
 
       /** @var Tenant $tenant */
-      $tenant = DB::connection('central')->transaction(function () use ($data, $region): Tenant {
+      $tenant = DB::connection('central')->transaction(function () use ($data, $region, $tenantConnection): Tenant {
          /** @var Tenant $created */
          $created = Tenant::query()->create([
             'id' => $data->tenantId,
@@ -34,7 +39,7 @@ final class CreateTenantAction {
                'secondary_color' => $data->secondaryColor,
             ],
             'referral_code' => $data->referralCode,
-            'tenancy_db_connection' => $region->dbConnection,
+            'tenancy_db_connection' => $tenantConnection,
             'tenancy_db_name' => $this->databaseNameForRegion($data->tenantId, $region->code),
          ]);
 
@@ -48,6 +53,35 @@ final class CreateTenantAction {
       event(new TenantCreatedFromCentral($tenant));
 
       return $tenant;
+   }
+
+   private function resolveTemplateConnection(string $requestedConnection): string {
+      $fallbackConnection = (string) config('tenancy.database.template_tenant_connection', 'tenant_template');
+
+      if ($this->canConnect($requestedConnection)) {
+         return $requestedConnection;
+      }
+
+      if ($requestedConnection !== $fallbackConnection && $this->canConnect($fallbackConnection)) {
+         Log::warning('Tenant provisioning fallback a conexion template por defecto.', [
+            'requested_connection' => $requestedConnection,
+            'fallback_connection' => $fallbackConnection,
+         ]);
+
+         return $fallbackConnection;
+      }
+
+      return $requestedConnection;
+   }
+
+   private function canConnect(string $connectionName): bool {
+      try {
+         $this->databaseManager->connection($connectionName)->getPdo();
+
+         return true;
+      } catch (Throwable) {
+         return false;
+      }
    }
 
    private function databaseNameForRegion(string $tenantId, string $region): string {

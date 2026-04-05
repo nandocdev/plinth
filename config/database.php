@@ -3,6 +3,12 @@
 use Illuminate\Support\Str;
 use Pdo\Mysql;
 
+$envOr = static function (string $key, mixed $default): mixed {
+    $value = env($key);
+
+    return $value === null || $value === '' ? $default : $value;
+};
+
 return [
 
     /*
@@ -17,7 +23,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'central'),
+    'default' => env('DB_CONNECTION', 'landlord'),
 
     /*
     |--------------------------------------------------------------------------
@@ -32,14 +38,30 @@ return [
 
     'connections' => [
 
+        'landlord' => [
+            'driver' => 'pgsql',
+            'url' => $envOr('LANDLORD_DB_URL', env('DB_URL')),
+            'host' => $envOr('LANDLORD_DB_HOST', $envOr('DB_HOST', '127.0.0.1')),
+            'port' => $envOr('LANDLORD_DB_PORT', $envOr('DB_PORT', '5432')),
+            'database' => $envOr('LANDLORD_DB_DATABASE', $envOr('DB_DATABASE', 'plinth_central')),
+            'username' => $envOr('LANDLORD_DB_USERNAME', $envOr('DB_USERNAME', 'postgres')),
+            'password' => $envOr('LANDLORD_DB_PASSWORD', $envOr('DB_PASSWORD', '')),
+            'charset' => env('DB_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => env('DB_SSLMODE', 'prefer'),
+        ],
+
+        // Alias retrocompatible: mantener mientras exista codigo que llame DB::connection('central').
         'central' => [
             'driver' => 'pgsql',
-            'url' => env('DB_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'plinth_central'),
-            'username' => env('DB_USERNAME', 'postgres'),
-            'password' => env('DB_PASSWORD', ''),
+            'url' => $envOr('LANDLORD_DB_URL', env('DB_URL')),
+            'host' => $envOr('LANDLORD_DB_HOST', $envOr('DB_HOST', '127.0.0.1')),
+            'port' => $envOr('LANDLORD_DB_PORT', $envOr('DB_PORT', '5432')),
+            'database' => $envOr('LANDLORD_DB_DATABASE', $envOr('DB_DATABASE', 'plinth_central')),
+            'username' => $envOr('LANDLORD_DB_USERNAME', $envOr('DB_USERNAME', 'postgres')),
+            'password' => $envOr('LANDLORD_DB_PASSWORD', $envOr('DB_PASSWORD', '')),
             'charset' => env('DB_CHARSET', 'utf8'),
             'prefix' => '',
             'prefix_indexes' => true,
@@ -49,12 +71,12 @@ return [
 
         'tenant_template' => [
             'driver' => 'pgsql',
-            'url' => env('TENANCY_DB_URL'),
-            'host' => env('TENANCY_DB_HOST', env('DB_HOST', '127.0.0.1')),
-            'port' => env('TENANCY_DB_PORT', env('DB_PORT', '5432')),
-            'database' => env('TENANCY_DB_DATABASE', 'postgres'),
-            'username' => env('TENANCY_DB_USERNAME', env('DB_USERNAME', 'postgres')),
-            'password' => env('TENANCY_DB_PASSWORD', env('DB_PASSWORD', '')),
+            'url' => $envOr('TENANCY_DB_URL', null),
+            'host' => $envOr('TENANCY_DB_HOST', $envOr('LANDLORD_DB_HOST', $envOr('DB_HOST', '127.0.0.1'))),
+            'port' => $envOr('TENANCY_DB_PORT', $envOr('LANDLORD_DB_PORT', $envOr('DB_PORT', '5432'))),
+            'database' => $envOr('TENANCY_DB_DATABASE', $envOr('LANDLORD_DB_DATABASE', $envOr('DB_DATABASE', 'postgres'))),
+            'username' => $envOr('TENANCY_DB_USERNAME', $envOr('LANDLORD_DB_USERNAME', $envOr('DB_USERNAME', 'postgres'))),
+            'password' => $envOr('TENANCY_DB_PASSWORD', $envOr('LANDLORD_DB_PASSWORD', $envOr('DB_PASSWORD', ''))),
             'charset' => env('DB_CHARSET', 'utf8'),
             'prefix' => '',
             'prefix_indexes' => true,
@@ -64,12 +86,12 @@ return [
 
         'tenant_template_us_east_1' => [
             'driver' => 'pgsql',
-            'url' => env('TENANCY_US_EAST_1_DB_URL', env('TENANCY_DB_URL')),
-            'host' => env('TENANCY_US_EAST_1_DB_HOST', env('TENANCY_DB_HOST', env('DB_HOST', '127.0.0.1'))),
-            'port' => env('TENANCY_US_EAST_1_DB_PORT', env('TENANCY_DB_PORT', env('DB_PORT', '5432'))),
-            'database' => env('TENANCY_US_EAST_1_DB_DATABASE', env('TENANCY_DB_DATABASE', 'postgres')),
-            'username' => env('TENANCY_US_EAST_1_DB_USERNAME', env('TENANCY_DB_USERNAME', env('DB_USERNAME', 'postgres'))),
-            'password' => env('TENANCY_US_EAST_1_DB_PASSWORD', env('TENANCY_DB_PASSWORD', env('DB_PASSWORD', ''))),
+            'url' => $envOr('TENANCY_US_EAST_1_DB_URL', $envOr('TENANCY_DB_URL', null)),
+            'host' => $envOr('TENANCY_US_EAST_1_DB_HOST', $envOr('TENANCY_DB_HOST', $envOr('LANDLORD_DB_HOST', $envOr('DB_HOST', '127.0.0.1')))),
+            'port' => $envOr('TENANCY_US_EAST_1_DB_PORT', $envOr('TENANCY_DB_PORT', $envOr('LANDLORD_DB_PORT', $envOr('DB_PORT', '5432')))),
+            'database' => $envOr('TENANCY_US_EAST_1_DB_DATABASE', $envOr('TENANCY_DB_DATABASE', $envOr('LANDLORD_DB_DATABASE', $envOr('DB_DATABASE', 'postgres')))),
+            'username' => $envOr('TENANCY_US_EAST_1_DB_USERNAME', $envOr('TENANCY_DB_USERNAME', $envOr('LANDLORD_DB_USERNAME', $envOr('DB_USERNAME', 'postgres')))),
+            'password' => $envOr('TENANCY_US_EAST_1_DB_PASSWORD', $envOr('TENANCY_DB_PASSWORD', $envOr('LANDLORD_DB_PASSWORD', $envOr('DB_PASSWORD', '')))),
             'charset' => env('DB_CHARSET', 'utf8'),
             'prefix' => '',
             'prefix_indexes' => true,
@@ -79,12 +101,12 @@ return [
 
         'tenant_template_eu_west_1' => [
             'driver' => 'pgsql',
-            'url' => env('TENANCY_EU_WEST_1_DB_URL', env('TENANCY_DB_URL')),
-            'host' => env('TENANCY_EU_WEST_1_DB_HOST', env('TENANCY_DB_HOST', env('DB_HOST', '127.0.0.1'))),
-            'port' => env('TENANCY_EU_WEST_1_DB_PORT', env('TENANCY_DB_PORT', env('DB_PORT', '5432'))),
-            'database' => env('TENANCY_EU_WEST_1_DB_DATABASE', env('TENANCY_DB_DATABASE', 'postgres')),
-            'username' => env('TENANCY_EU_WEST_1_DB_USERNAME', env('TENANCY_DB_USERNAME', env('DB_USERNAME', 'postgres'))),
-            'password' => env('TENANCY_EU_WEST_1_DB_PASSWORD', env('TENANCY_DB_PASSWORD', env('DB_PASSWORD', ''))),
+            'url' => $envOr('TENANCY_EU_WEST_1_DB_URL', $envOr('TENANCY_DB_URL', null)),
+            'host' => $envOr('TENANCY_EU_WEST_1_DB_HOST', $envOr('TENANCY_DB_HOST', $envOr('LANDLORD_DB_HOST', $envOr('DB_HOST', '127.0.0.1')))),
+            'port' => $envOr('TENANCY_EU_WEST_1_DB_PORT', $envOr('TENANCY_DB_PORT', $envOr('LANDLORD_DB_PORT', $envOr('DB_PORT', '5432')))),
+            'database' => $envOr('TENANCY_EU_WEST_1_DB_DATABASE', $envOr('TENANCY_DB_DATABASE', $envOr('LANDLORD_DB_DATABASE', $envOr('DB_DATABASE', 'postgres')))),
+            'username' => $envOr('TENANCY_EU_WEST_1_DB_USERNAME', $envOr('TENANCY_DB_USERNAME', $envOr('LANDLORD_DB_USERNAME', $envOr('DB_USERNAME', 'postgres')))),
+            'password' => $envOr('TENANCY_EU_WEST_1_DB_PASSWORD', $envOr('TENANCY_DB_PASSWORD', $envOr('LANDLORD_DB_PASSWORD', $envOr('DB_PASSWORD', '')))),
             'charset' => env('DB_CHARSET', 'utf8'),
             'prefix' => '',
             'prefix_indexes' => true,

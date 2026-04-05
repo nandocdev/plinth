@@ -90,7 +90,7 @@ return [
              * For a complete list of available customization options, see https://github.com/spatie/db-dumper
              */
             'databases' => [
-                env('BACKUP_DB_CONNECTION', 'central'),
+                env('BACKUP_DB_CONNECTION', 'landlord'),
             ],
         ],
 
