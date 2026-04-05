@@ -19,6 +19,7 @@ return [
     App\Tenant\ActivityLogModule\Providers\TenantActivityLogModuleServiceProvider::class,
     App\Tenant\ApiAccessModule\Providers\ApiAccessModuleServiceProvider::class,
     App\Tenant\ErrorHandlingModule\Providers\ErrorHandlingModuleServiceProvider::class,
+    App\Tenant\ExportImportModule\Providers\ExportImportModuleServiceProvider::class,
     App\Tenant\FileUploadModule\Providers\FileUploadModuleServiceProvider::class,
     App\Tenant\FeatureFlagsModule\Providers\FeatureFlagsModuleServiceProvider::class,
     App\Tenant\ImpersonationModule\Providers\ImpersonationModuleServiceProvider::class,
