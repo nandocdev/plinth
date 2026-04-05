@@ -198,8 +198,8 @@
                 class="fixed inset-y-0 left-0 z-50 w-72 border-r border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-900 lg:hidden"
                 x-show="sidebarOpen" x-transition:enter="transform transition ease-out duration-200"
                 x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
-                x-transition:leave="transform transition ease-in duration-150" x-transition:leave-start="translate-x-0"
-                x-transition:leave-end="-translate-x-full" x-cloak>
+                x-transition:leave="transform transition ease-in duration-150"
+                x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full" x-cloak>
                 <div class="mb-4 flex items-center justify-between border-b border-zinc-200 pb-4 dark:border-zinc-700">
                     <div>
                         <p class="text-xs uppercase tracking-wide text-zinc-500">Workspace Tenant</p>
