@@ -2,10 +2,11 @@
     {{-- Encabezado --}}
     <div class="mb-6">
         <flux:heading size="xl">Características del Plan</flux:heading>
-        <flux:subheading>Revisa las funcionalidades habilitadas y los límites de uso de tu plan actual.</flux:subheading>
+        <flux:subheading>Revisa las funcionalidades habilitadas y los límites de uso de tu plan actual.
+        </flux:subheading>
     </div>
 
-    @if (! $features->hasPlan())
+    @if (!$features->hasPlan())
         <flux:callout variant="warning" icon="exclamation-triangle">
             No tienes una suscripción activa. Contacta a soporte para activar tu plan.
         </flux:callout>
@@ -21,17 +22,17 @@
             </div>
             <flux:badge
                 :color="match($features->subscriptionStatus) {
-                    'active'   => 'green',
-                    'trialing' => 'blue',
-                    'past_due' => 'yellow',
-                    default    => 'zinc',
-                }"
+                                    'active'   => 'green',
+                                    'trialing' => 'blue',
+                                    'past_due' => 'yellow',
+                                    default    => 'zinc',
+                                }"
                 size="lg">
-                {{ match($features->subscriptionStatus) {
-                    'active'   => 'Activo',
+                {{ match ($features->subscriptionStatus) {
+                    'active' => 'Activo',
                     'trialing' => 'En prueba',
                     'past_due' => 'Pago pendiente',
-                    default    => $features->subscriptionStatus ?? 'Desconocido',
+                    default => $features->subscriptionStatus ?? 'Desconocido',
                 } }}
             </flux:badge>
         </div>
@@ -39,11 +40,13 @@
         {{-- Advertencias de límites --}}
         @if ($limits->hardLimitReached)
             <flux:callout variant="danger" icon="x-circle" class="mb-6">
-                <strong>Límite máximo alcanzado:</strong> {{ implode(', ', $limits->hardViolations) }}. Actualiza tu plan para continuar.
+                <strong>Límite máximo alcanzado:</strong> {{ implode(', ', $limits->hardViolations) }}. Actualiza tu
+                plan para continuar.
             </flux:callout>
         @elseif ($limits->softLimitReached)
             <flux:callout variant="warning" icon="exclamation-triangle" class="mb-6">
-                <strong>Acercándote al límite:</strong> {{ implode(', ', $limits->softWarnings) }}. Considera actualizar tu plan pronto.
+                <strong>Acercándote al límite:</strong> {{ implode(', ', $limits->softWarnings) }}. Considera actualizar
+                tu plan pronto.
             </flux:callout>
         @endif
 
@@ -61,7 +64,7 @@
                     <ul class="space-y-2">
                         @foreach ($features->features as $flag)
                             <li class="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
-                                <flux:icon name="check-circle" class="size-4 flex-shrink-0 text-green-500" />
+                                <flux:icon name="check-circle" class="size-4 shrink-0 text-green-500" />
                                 <span>{{ ucwords(str_replace(['_', '-'], ' ', $flag)) }}</span>
                                 <flux:badge color="green" size="sm" class="ml-auto">Activo</flux:badge>
                             </li>
@@ -85,17 +88,19 @@
                                 <span class="font-medium text-zinc-700 dark:text-zinc-300">Usuarios</span>
                                 <div class="flex gap-2">
                                     @if ($features->maxUsersSoft !== null)
-                                        <flux:badge color="yellow" size="sm">Aviso: {{ $features->maxUsersSoft }}</flux:badge>
+                                        <flux:badge color="yellow" size="sm">Aviso: {{ $features->maxUsersSoft }}
+                                        </flux:badge>
                                     @endif
                                     @if ($features->maxUsersHard !== null)
-                                        <flux:badge color="red" size="sm">Máx: {{ $features->maxUsersHard }}</flux:badge>
+                                        <flux:badge color="red" size="sm">Máx: {{ $features->maxUsersHard }}
+                                        </flux:badge>
                                     @endif
                                 </div>
                             </div>
                         </div>
                     @else
                         <div class="flex items-center gap-2 text-sm text-zinc-400">
-                            <flux:icon name="infinity" class="size-4" />
+                            <flux:icon name="check-circle" class="size-4 text-green-500" />
                             <span>Usuarios ilimitados</span>
                         </div>
                     @endif
@@ -107,17 +112,19 @@
                                 <span class="font-medium text-zinc-700 dark:text-zinc-300">Almacenamiento</span>
                                 <div class="flex gap-2">
                                     @if ($features->maxStorageMbSoft !== null)
-                                        <flux:badge color="yellow" size="sm">Aviso: {{ $features->maxStorageMbSoft }} MB</flux:badge>
+                                        <flux:badge color="yellow" size="sm">Aviso:
+                                            {{ $features->maxStorageMbSoft }} MB</flux:badge>
                                     @endif
                                     @if ($features->maxStorageMbHard !== null)
-                                        <flux:badge color="red" size="sm">Máx: {{ $features->maxStorageMbHard }} MB</flux:badge>
+                                        <flux:badge color="red" size="sm">Máx: {{ $features->maxStorageMbHard }}
+                                            MB</flux:badge>
                                     @endif
                                 </div>
                             </div>
                         </div>
                     @else
                         <div class="flex items-center gap-2 text-sm text-zinc-400">
-                            <flux:icon name="infinity" class="size-4" />
+                            <flux:icon name="check-circle" class="size-4 text-green-500" />
                             <span>Almacenamiento ilimitado</span>
                         </div>
                     @endif

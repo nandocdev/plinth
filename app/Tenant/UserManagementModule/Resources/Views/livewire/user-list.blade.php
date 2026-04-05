@@ -20,70 +20,73 @@
 
     {{-- Tabla --}}
     <flux:card>
-        <flux:table>
-            <flux:columns>
-                <flux:column>{{ __('Usuario') }}</flux:column>
-                <flux:column>{{ __('Rol') }}</flux:column>
-                <flux:column>{{ __('Estado') }}</flux:column>
-                <flux:column></flux:column>
-            </flux:columns>
-
-            <flux:rows>
-                @forelse ($users as $user)
-                    <flux:row :key="$user->id">
-                        <flux:cell>
-                            <div>
+        <div class="overflow-x-auto rounded-xl border border-zinc-200 dark:border-zinc-700">
+            <table class="min-w-full divide-y divide-zinc-200 text-sm dark:divide-zinc-700">
+                <thead class="bg-zinc-50 dark:bg-zinc-800/50">
+                    <tr>
+                        <th class="px-4 py-3 text-left font-medium text-zinc-600 dark:text-zinc-300">{{ __('Usuario') }}
+                        </th>
+                        <th class="px-4 py-3 text-left font-medium text-zinc-600 dark:text-zinc-300">{{ __('Rol') }}
+                        </th>
+                        <th class="px-4 py-3 text-left font-medium text-zinc-600 dark:text-zinc-300">{{ __('Estado') }}
+                        </th>
+                        <th class="px-4 py-3 text-right font-medium text-zinc-600 dark:text-zinc-300"></th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-zinc-100 bg-white dark:divide-zinc-800 dark:bg-zinc-900">
+                    @forelse ($users as $user)
+                        <tr wire:key="user-row-{{ $user->id }}">
+                            <td class="px-4 py-3">
                                 <p class="font-medium text-zinc-900 dark:text-white">{{ $user->name }}</p>
                                 <p class="text-xs text-zinc-500">{{ $user->email }}</p>
-                            </div>
-                        </flux:cell>
+                            </td>
 
-                        <flux:cell>
-                            @php $roleName = $user->roles->first()?->name; @endphp
-                            @if ($roleName)
+                            <td class="px-4 py-3">
+                                @php $roleName = $user->roles->first()?->name; @endphp
+                                @if ($roleName)
+                                    <flux:badge
+                                        color="{{ match ($roleName) {'admin' => 'red','manager' => 'blue',default => 'zinc'} }}"
+                                        size="sm">
+                                        {{ \App\Tenant\UserManagementModule\Enums\TenantRole::from($roleName)->label() }}
+                                    </flux:badge>
+                                @else
+                                    <flux:badge color="zinc" size="sm">{{ __('Sin rol') }}</flux:badge>
+                                @endif
+                            </td>
+
+                            <td class="px-4 py-3">
+                                @php $status = $user->status instanceof \App\Tenant\UserManagementModule\Enums\TenantUserStatus ? $user->status : \App\Tenant\UserManagementModule\Enums\TenantUserStatus::from((string)$user->status); @endphp
                                 <flux:badge
-                                    color="{{ match ($roleName) {'admin' => 'red','manager' => 'blue',default => 'zinc'} }}"
+                                    color="{{ $status === \App\Tenant\UserManagementModule\Enums\TenantUserStatus::Active ? 'green' : 'zinc' }}"
                                     size="sm">
-                                    {{ \App\Tenant\UserManagementModule\Enums\TenantRole::from($roleName)->label() }}
+                                    {{ $status->label() }}
                                 </flux:badge>
-                            @else
-                                <flux:badge color="zinc" size="sm">{{ __('Sin rol') }}</flux:badge>
-                            @endif
-                        </flux:cell>
+                            </td>
 
-                        <flux:cell>
-                            @php $status = $user->status instanceof \App\Tenant\UserManagementModule\Enums\TenantUserStatus ? $user->status : \App\Tenant\UserManagementModule\Enums\TenantUserStatus::from((string)$user->status); @endphp
-                            <flux:badge
-                                color="{{ $status === \App\Tenant\UserManagementModule\Enums\TenantUserStatus::Active ? 'green' : 'zinc' }}"
-                                size="sm">
-                                {{ $status->label() }}
-                            </flux:badge>
-                        </flux:cell>
+                            <td class="px-4 py-3">
+                                <div class="flex justify-end gap-2">
+                                    @can('update', $user)
+                                        <flux:button wire:click="openEditModal({{ $user->id }})" variant="ghost"
+                                            size="sm" icon="pencil" />
+                                    @endcan
 
-                        <flux:cell>
-                            <div class="flex justify-end gap-2">
-                                @can('update', $user)
-                                    <flux:button wire:click="openEditModal({{ $user->id }})" variant="ghost"
-                                        size="sm" icon="pencil" />
-                                @endcan
-
-                                @can('delete', $user)
-                                    <flux:button wire:click="confirmDelete({{ $user->id }})" variant="ghost"
-                                        size="sm" icon="trash" class="text-red-500 hover:text-red-700" />
-                                @endcan
-                            </div>
-                        </flux:cell>
-                    </flux:row>
-                @empty
-                    <flux:row>
-                        <flux:cell colspan="4">
-                            <p class="py-6 text-center text-sm text-zinc-500">{{ __('No se encontraron usuarios.') }}
-                            </p>
-                        </flux:cell>
-                    </flux:row>
-                @endforelse
-            </flux:rows>
-        </flux:table>
+                                    @can('delete', $user)
+                                        <flux:button wire:click="confirmDelete({{ $user->id }})" variant="ghost"
+                                            size="sm" icon="trash" class="text-red-500 hover:text-red-700" />
+                                    @endcan
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="px-4 py-6 text-center text-sm text-zinc-500">
+                                {{ __('No se encontraron usuarios.') }}
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
 
         <div class="mt-4">
             {{ $users->links() }}
@@ -111,14 +114,15 @@
 
                     <flux:select wire:model="form.role" label="{{ __('Rol') }}">
                         @foreach ($roles as $value => $label)
-                            <flux:option value="{{ $value }}">{{ $label }}</flux:option>
+                            <flux:select.option value="{{ $value }}">{{ $label }}</flux:select.option>
                         @endforeach
                     </flux:select>
 
                     @if ($form->editingId)
                         <flux:select wire:model="form.status" label="{{ __('Estado') }}">
                             @foreach ($statuses as $value => $label)
-                                <flux:option value="{{ $value }}">{{ $label }}</flux:option>
+                                <flux:select.option value="{{ $value }}">{{ $label }}
+                                </flux:select.option>
                             @endforeach
                         </flux:select>
                     @endif
