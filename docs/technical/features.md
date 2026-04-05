@@ -69,7 +69,8 @@ Estado base usado para este documento:
 - [Implementado] (Tenant context) Export/Import basicos (CSV) con jobs tenant-aware
 
 #### Avanzadas (Actualizaciones futuras - diferenciacion & scaling)
-- [Pendiente] (Tenant context) Modular features (plugins/addons instalables por tenant)
+- [Parcial] (Tenant context) Modular features (plugins/addons instalables por tenant)
+  <!-- Pendiente: el catálogo e instalación por tenant ya existen, pero falta aislar rutas/menú/feature enforcement por addon, persistir configuración específica por addon y conectar cada módulo para ocultarse o bloquearse cuando el addon esté desactivado. -->
 - [Parcial] (Tenant context) Advanced reporting & analytics (tenant-specific)
   <!-- Pendiente: registrar CollectDailyMetricsJob en el scheduler (Kernel/console), agregar comando Artisan manual `reporting:collect`, métricas reales de users_active_day (falta campo last_login_at), gráfica más completa (Chart.js o similar), exportar snapshot CSV. -->
 - [Implementado] (Tenant context) Webhooks entrantes y salientes tenant
