@@ -119,6 +119,11 @@
                             <flux:icon name="chart-bar" class="size-4" />
                             <span>Analytics</span>
                         </a>
+                        <a href="/addons" wire:navigate
+                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('addons') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
+                            <flux:icon name="puzzle-piece" class="size-4" />
+                            <span>Addons</span>
+                        </a>
                     </nav>
                 @endauth
 
@@ -250,6 +255,11 @@
                             class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('analytics') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
                             <flux:icon name="chart-bar" class="size-4" />
                             <span>Analytics</span>
+                        </a>
+                        <a href="/addons" wire:navigate x-on:click="sidebarOpen = false"
+                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('addons') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
+                            <flux:icon name="puzzle-piece" class="size-4" />
+                            <span>Addons</span>
                         </a>
                     </nav>
                 @endauth
