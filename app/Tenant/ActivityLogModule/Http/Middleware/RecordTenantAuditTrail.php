@@ -7,6 +7,7 @@ namespace App\Tenant\ActivityLogModule\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 use Spatie\Activitylog\Models\Activity;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -37,7 +38,11 @@ final class RecordTenantAuditTrail {
          ->withProperties($properties)
          ->tap(function (Activity $activity) use ($event, $tenantId): void {
             $activity->event = $event;
-            $activity->tenant_id = $tenantId;
+
+            // Compatibilidad con tenants antiguos que aun no tienen la columna tenant_id.
+            if (Schema::hasColumn('activity_log', 'tenant_id')) {
+               $activity->tenant_id = $tenantId;
+            }
          })
          ->log($description);
 
