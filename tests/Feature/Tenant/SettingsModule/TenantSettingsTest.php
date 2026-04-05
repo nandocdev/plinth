@@ -109,3 +109,29 @@ test('usuario no admin recibe 403 en settings tenant', function (): void {
       ->get('http://settings-member.localhost/settings/tenant')
       ->assertForbidden();
 });
+
+test('primer usuario sin roles recibe bootstrap admin en settings tenant', function (): void {
+   $tenant = createSettingsTenant('settings-bootstrap-owner');
+
+   tenancy()->initialize($tenant);
+
+   try {
+      $owner = TenantUser::factory()->create(['email' => 'owner@settings-bootstrap-owner.test']);
+   } finally {
+      tenancy()->end();
+   }
+
+   $this->actingAs($owner, 'tenant')
+      ->get('http://settings-bootstrap-owner.localhost/settings/tenant')
+      ->assertOk();
+
+   tenancy()->initialize($tenant);
+
+   try {
+      $owner->refresh();
+
+      expect($owner->hasRole('admin', 'tenant'))->toBeTrue();
+   } finally {
+      tenancy()->end();
+   }
+});

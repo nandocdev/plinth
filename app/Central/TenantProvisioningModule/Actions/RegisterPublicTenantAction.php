@@ -9,11 +9,14 @@ use App\Central\TenantProvisioningModule\DTOs\PublicTenantRegistrationData;
 use App\Central\TenantProvisioningModule\Models\Tenant;
 use App\Tenant\AuthenticationModule\Actions\RegisterTenantUserAction;
 use App\Tenant\AuthenticationModule\DTOs\RegisterTenantUserData;
+use App\Tenant\UserManagementModule\Actions\SeedDefaultRolesAction;
+use App\Tenant\UserManagementModule\Enums\TenantRole;
 
 final class RegisterPublicTenantAction {
    public function __construct(
       private readonly CompleteTenantOnboardingAction $completeTenantOnboarding,
       private readonly RegisterTenantUserAction $registerTenantUser,
+      private readonly SeedDefaultRolesAction $seedDefaultRoles,
    ) {
    }
 
@@ -32,11 +35,14 @@ final class RegisterPublicTenantAction {
       tenancy()->initialize($tenant);
 
       try {
-         $this->registerTenantUser->execute(new RegisterTenantUserData(
+         $owner = $this->registerTenantUser->execute(new RegisterTenantUserData(
             name: $data->adminName,
             email: $data->adminEmail,
             password: $data->adminPassword,
          ));
+
+         $this->seedDefaultRoles->execute();
+         $owner->assignRole(TenantRole::Admin->value);
       } finally {
          tenancy()->end();
       }

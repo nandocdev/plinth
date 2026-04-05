@@ -8,6 +8,7 @@ use App\Central\TenantProvisioningModule\DTOs\PublicTenantRegistrationData;
 use App\Central\TenantProvisioningModule\Livewire\PublicTenantSignup;
 use App\Central\TenantProvisioningModule\Models\Domain;
 use App\Central\TenantProvisioningModule\Models\Tenant;
+use App\Tenant\UserManagementModule\Enums\TenantRole;
 use Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper;
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -105,6 +106,7 @@ test('RegisterPublicTenantAction crea tenant suscripcion y usuario owner', funct
          ->first();
       expect($user)->not->toBeNull();
       expect($user->name)->toBe('Admin Acme');
+      expect($user->hasRole(TenantRole::Admin->value, 'tenant'))->toBeTrue();
    } finally {
       tenancy()->end();
    }
@@ -192,17 +194,17 @@ test('signup livewire wizard valida por paso antes de avanzar', function (): voi
       ->assertSet('currentStep', 4);
 });
 
-   test('signup livewire autogenera subdominio desde nombre de empresa', function (): void {
-      \Livewire\Livewire::test(PublicTenantSignup::class)
+test('signup livewire autogenera subdominio desde nombre de empresa', function (): void {
+   \Livewire\Livewire::test(PublicTenantSignup::class)
       ->set('form.companyName', 'Mi Empresa SPA')
       ->assertSet('form.subdomain', 'mi-empresa-spa');
-   });
+});
 
-   test('signup livewire no pisa subdominio editado manualmente', function (): void {
-      \Livewire\Livewire::test(PublicTenantSignup::class)
+test('signup livewire no pisa subdominio editado manualmente', function (): void {
+   \Livewire\Livewire::test(PublicTenantSignup::class)
       ->set('form.companyName', 'Acme Uno')
       ->assertSet('form.subdomain', 'acme-uno')
       ->set('form.subdomain', 'custom-acme')
       ->set('form.companyName', 'Acme Dos')
       ->assertSet('form.subdomain', 'custom-acme');
-   });
+});
