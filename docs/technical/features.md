@@ -70,7 +70,7 @@ Estado base usado para este documento:
 #### Avanzadas (Actualizaciones futuras - diferenciacion & scaling)
 - [Pendiente] (Tenant context) Modular features (plugins/addons instalables por tenant)
 - [Pendiente] (Tenant context) Advanced reporting & analytics (tenant-specific)
-- [Pendiente] (Tenant context) Webhooks entrantes y salientes tenant
+- [Parcial] (Tenant context) Webhooks entrantes y salientes tenant
 - [Pendiente] (Tenant context) Custom domain full management + SSL auto (Let's Encrypt)
 - [Pendiente] (Tenant context) Multi-language + currency per tenant
 - [Pendiente] (Tenant context) Team / workspace dentro del tenant (sub-tenancy light)
