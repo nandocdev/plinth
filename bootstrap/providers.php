@@ -19,6 +19,7 @@ return [
     App\Tenant\ActivityLogModule\Providers\TenantActivityLogModuleServiceProvider::class,
     App\Tenant\AddonsModule\Providers\AddonsModuleServiceProvider::class,
     App\Tenant\ApiAccessModule\Providers\ApiAccessModuleServiceProvider::class,
+    App\Tenant\CustomDomainModule\Providers\CustomDomainModuleServiceProvider::class,
     App\Tenant\ErrorHandlingModule\Providers\ErrorHandlingModuleServiceProvider::class,
     App\Tenant\ExportImportModule\Providers\ExportImportModuleServiceProvider::class,
     App\Tenant\FileUploadModule\Providers\FileUploadModuleServiceProvider::class,
