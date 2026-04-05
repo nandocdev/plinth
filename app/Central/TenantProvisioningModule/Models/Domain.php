@@ -11,5 +11,8 @@ final class Domain extends BaseDomain {
 
    protected $casts = [
       'verified_at' => 'datetime',
+      'ssl_requested_at' => 'datetime',
+      'ssl_issued_at' => 'datetime',
+      'ssl_expires_at' => 'datetime',
    ];
 }

@@ -74,7 +74,8 @@ Estado base usado para este documento:
 - [Parcial] (Tenant context) Advanced reporting & analytics (tenant-specific)
   <!-- Pendiente: registrar CollectDailyMetricsJob en el scheduler (Kernel/console), agregar comando Artisan manual `reporting:collect`, métricas reales de users_active_day (falta campo last_login_at), gráfica más completa (Chart.js o similar), exportar snapshot CSV. -->
 - [Implementado] (Tenant context) Webhooks entrantes y salientes tenant
-- [Pendiente] (Tenant context) Custom domain full management + SSL auto (Let's Encrypt)
+- [Parcial] (Tenant context) Custom domain full management + SSL auto (Let's Encrypt)
+  <!-- Pendiente: validación DNS real (TXT/CNAME) automática, integración ACME real con proveedor DNS/SSL (no simulación), webhook/callback de emisión, renovación automática programada y pruebas E2E con dominio real en staging. -->
 - [Pendiente] (Tenant context) Multi-language + currency per tenant
 - [Pendiente] (Tenant context) Team / workspace dentro del tenant (sub-tenancy light)
 - [Pendiente] (Tenant context) Audit log avanzado + export
