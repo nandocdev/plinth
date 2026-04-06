@@ -56,7 +56,7 @@
     }">
     <div
         class="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(245,48,3,0.12),_transparent_38%),linear-gradient(to_bottom,_#fafafa_0%,_#f4f4f5_100%)] dark:bg-[radial-gradient(circle_at_top,_rgba(245,48,3,0.10),_transparent_35%),linear-gradient(to_bottom,_#0a0a0b_0%,_#111114_100%)]">
-        <div class="mx-auto flex min-h-screen max-w-7xl">
+        <div class="flex min-h-screen">
             <aside
                 class="hidden w-72 shrink-0 border-r border-zinc-200/80 bg-zinc-50/80 p-4 backdrop-blur dark:border-zinc-700/70 dark:bg-zinc-900/70 lg:flex lg:flex-col">
                 <div class="flex items-center gap-3 border-b border-zinc-200/80 pb-4 dark:border-zinc-700/70">
@@ -140,10 +140,13 @@
                     </flux:button>
 
                     @auth('tenant')
-                        <flux:button wire:click="logout" variant="ghost" size="sm"
-                            icon="arrow-right-start-on-rectangle" class="w-full justify-start">
-                            Salir
-                        </flux:button>
+                        <form method="POST" action="{{ url('/logout') }}">
+                            @csrf
+                            <flux:button type="submit" variant="ghost" size="sm" icon="arrow-right-start-on-rectangle"
+                                class="w-full justify-start">
+                                Salir
+                            </flux:button>
+                        </form>
                     @endauth
                 </div>
             </aside>
@@ -198,8 +201,8 @@
                 class="fixed inset-y-0 left-0 z-50 w-72 border-r border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-900 lg:hidden"
                 x-show="sidebarOpen" x-transition:enter="transform transition ease-out duration-200"
                 x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
-                x-transition:leave="transform transition ease-in duration-150" x-transition:leave-start="translate-x-0"
-                x-transition:leave-end="-translate-x-full" x-cloak>
+                x-transition:leave="transform transition ease-in duration-150"
+                x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full" x-cloak>
                 <div class="mb-4 flex items-center justify-between border-b border-zinc-200 pb-4 dark:border-zinc-700">
                     <div>
                         <p class="text-xs uppercase tracking-wide text-zinc-500">Workspace Tenant</p>
@@ -282,11 +285,13 @@
                     </flux:button>
 
                     @auth('tenant')
-                        <flux:button wire:click="logout" variant="ghost" size="sm"
-                            icon="arrow-right-start-on-rectangle" class="w-full justify-start"
-                            x-on:click="sidebarOpen = false">
-                            Salir
-                        </flux:button>
+                        <form method="POST" action="{{ url('/logout') }}" x-on:submit="sidebarOpen = false">
+                            @csrf
+                            <flux:button type="submit" variant="ghost" size="sm"
+                                icon="arrow-right-start-on-rectangle" class="w-full justify-start">
+                                Salir
+                            </flux:button>
+                        </form>
                     @endauth
                 </div>
             </aside>

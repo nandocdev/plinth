@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
    public function up(): void {
-      Schema::create('referral_partners', function (Blueprint $table): void {
+      Schema::connection('central')->create('referral_partners', function (Blueprint $table): void {
          $table->id();
          $table->string('code', 40)->unique();
          $table->string('name', 120);
@@ -32,6 +32,6 @@ return new class extends Migration {
    public function down(): void {
       DB::connection('central')->statement('ALTER TABLE referral_partners DROP CONSTRAINT IF EXISTS referral_partners_payout_value_check');
       DB::connection('central')->statement('ALTER TABLE referral_partners DROP CONSTRAINT IF EXISTS referral_partners_payout_type_check');
-      Schema::dropIfExists('referral_partners');
+      Schema::connection('central')->dropIfExists('referral_partners');
    }
 };

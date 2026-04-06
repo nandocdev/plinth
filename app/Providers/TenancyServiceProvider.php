@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Tenant\ErrorHandlingModule\Http\Middleware\EnsureTenantNotInMaintenance;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
 use Stancl\JobPipeline\JobPipeline;
 use Stancl\Tenancy\Events;
 use Stancl\Tenancy\Jobs;
@@ -92,6 +94,14 @@ class TenancyServiceProvider extends ServiceProvider {
 
     public function boot() {
         $this->bootEvents();
+
+        // Livewire ejecuta acciones en su endpoint /livewire-*/update.
+        // Sin middleware persistente, las acciones tenant pueden correr en contexto central.
+        Livewire::addPersistentMiddleware([
+            Middleware\InitializeTenancyByDomain::class,
+            Middleware\PreventAccessFromCentralDomains::class,
+            EnsureTenantNotInMaintenance::class,
+        ]);
 
         $this->makeTenancyMiddlewareHighestPriority();
     }
