@@ -12,8 +12,7 @@ final class ToggleTenantCustomDomainVerificationAction {
       /** @var Domain $domain */
       $domain = DB::connection('central')->transaction(function () use ($tenantId, $domainId): Domain {
          /** @var Domain $domain */
-         $domain = Domain::query()
-            ->on('central')
+         $domain = Domain::on('central')
             ->where('tenant_id', $tenantId)
             ->where('id', $domainId)
             ->firstOrFail();

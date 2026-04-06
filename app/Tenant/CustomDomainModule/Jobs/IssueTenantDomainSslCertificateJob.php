@@ -37,8 +37,7 @@ final class IssueTenantDomainSslCertificateJob implements ShouldQueue, ShouldBeU
    public function handle(): void {
       DB::connection('central')->transaction(function (): void {
          /** @var Domain $domain */
-         $domain = Domain::query()
-            ->on('central')
+         $domain = Domain::on('central')
             ->where('tenant_id', $this->tenantId)
             ->where('id', $this->domainId)
             ->firstOrFail();
@@ -62,8 +61,7 @@ final class IssueTenantDomainSslCertificateJob implements ShouldQueue, ShouldBeU
    }
 
    public function failed(\Throwable $e): void {
-      Domain::query()
-         ->on('central')
+      Domain::on('central')
          ->where('tenant_id', $this->tenantId)
          ->where('id', $this->domainId)
          ->update([

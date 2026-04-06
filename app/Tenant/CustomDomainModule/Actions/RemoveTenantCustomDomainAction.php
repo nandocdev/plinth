@@ -10,8 +10,7 @@ use Illuminate\Support\Facades\DB;
 final class RemoveTenantCustomDomainAction {
    public function execute(string $tenantId, int $domainId): void {
       DB::connection('central')->transaction(function () use ($tenantId, $domainId): void {
-         Domain::query()
-            ->on('central')
+         Domain::on('central')
             ->where('tenant_id', $tenantId)
             ->where('id', $domainId)
             ->delete();

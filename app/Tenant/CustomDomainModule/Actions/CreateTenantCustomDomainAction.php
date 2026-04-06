@@ -13,12 +13,12 @@ final class CreateTenantCustomDomainAction {
    public function execute(CreateCustomDomainData $data): Domain {
       /** @var Domain $domain */
       $domain = DB::connection('central')->transaction(function () use ($data): Domain {
-         if (Domain::query()->on('central')->where('domain', $data->domain)->exists()) {
+         if (Domain::on('central')->where('domain', $data->domain)->exists()) {
             throw new RuntimeException('El dominio ya está registrado.');
          }
 
          /** @var Domain $domain */
-         $domain = Domain::query()->on('central')->create([
+         $domain = Domain::on('central')->create([
             'tenant_id' => $data->tenantId,
             'domain' => strtolower(trim($data->domain)),
             'verified_at' => null,

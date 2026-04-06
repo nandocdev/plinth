@@ -12,8 +12,7 @@ final class ListTenantCustomDomainsAction {
     * @return Collection<int, Domain>
     */
    public function execute(string $tenantId): Collection {
-      return Domain::query()
-         ->on('central')
+      return Domain::on('central')
          ->where('tenant_id', $tenantId)
          ->orderByDesc('created_at')
          ->get([
