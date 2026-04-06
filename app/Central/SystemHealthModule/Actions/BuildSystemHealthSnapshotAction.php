@@ -12,9 +12,15 @@ use Illuminate\Support\Facades\DB;
 use Throwable;
 
 final class BuildSystemHealthSnapshotAction {
+   public function __construct(
+      private readonly BuildCentralAggregateMetricsAction $buildCentralAggregateMetrics,
+   ) {
+   }
+
    public function execute(): SystemHealthSnapshotData {
       return new SystemHealthSnapshotData(
          connections: $this->checkConnections(),
+         centralMetrics: $this->buildCentralAggregateMetrics->execute(),
          queue: $this->buildQueueHealth(),
          storage: $this->buildStorageHealth(),
          generatedAt: now()->toDateTimeString(),

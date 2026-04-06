@@ -111,7 +111,7 @@ Estado base usado para este documento:
 - [Implementado] Gestion UI de webhooks tenant con historial de entregas y retry.
 - [Pendiente] Impersonacion bidireccional: inicio desde central y salida segura en tenant.
 - [Pendiente] Enforcement de suscripcion activa y limites de plan en rutas tenant.
-- [Pendiente] Dashboard central con metricas agregadas (incluye revenue mensual).
+- [Implementado] Dashboard central con metricas agregadas (incluye revenue mensual).
 
 ### Proximos pasos recomendados (orden realista)
 
