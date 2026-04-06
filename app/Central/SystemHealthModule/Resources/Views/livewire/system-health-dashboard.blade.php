@@ -1,7 +1,49 @@
 <div class="space-y-6">
+    <div class="grid gap-4 md:grid-cols-4">
+        <div class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
+            <p class="text-xs uppercase tracking-wide text-zinc-500">Tenants activos</p>
+            <p class="mt-2 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
+                {{ number_format($snapshot->centralMetrics->activeTenants) }}
+            </p>
+            <p class="mt-1 text-xs text-zinc-500">
+                de {{ number_format($snapshot->centralMetrics->totalTenants) }} tenants
+            </p>
+        </div>
+
+        <div class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
+            <p class="text-xs uppercase tracking-wide text-zinc-500">Suscripciones activas</p>
+            <p class="mt-2 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
+                {{ number_format($snapshot->centralMetrics->activeSubscriptions) }}
+            </p>
+            <p class="mt-1 text-xs text-zinc-500">
+                Trial: {{ number_format($snapshot->centralMetrics->trialingSubscriptions) }} | Past due:
+                {{ number_format($snapshot->centralMetrics->pastDueSubscriptions) }}
+            </p>
+        </div>
+
+        <div class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
+            <p class="text-xs uppercase tracking-wide text-zinc-500">Revenue mensual (USD)</p>
+            <p class="mt-2 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
+                ${{ number_format($snapshot->centralMetrics->monthlyRevenueUsdCents / 100, 2) }}
+            </p>
+            <p class="mt-1 text-xs text-zinc-500">
+                Facturas pagadas: {{ number_format($snapshot->centralMetrics->monthlyPaidInvoices) }}
+            </p>
+        </div>
+
+        <div class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
+            <p class="text-xs uppercase tracking-wide text-zinc-500">MRR estimado (USD)</p>
+            <p class="mt-2 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
+                ${{ number_format($snapshot->centralMetrics->monthlyRecurringRevenueUsdCents / 100, 2) }}
+            </p>
+            <p class="mt-1 text-xs text-zinc-500">Normalizado mensual sobre suscripciones vigentes</p>
+        </div>
+    </div>
+
     <div class="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-900">
         <flux:heading size="xl">{{ __('System health') }}</flux:heading>
-        <flux:subheading>{{ __('Monitorea conexiones de DB, estado de cola y uso de storage en tiempo real.') }}</flux:subheading>
+        <flux:subheading>{{ __('Monitorea conexiones de DB, estado de cola y uso de storage en tiempo real.') }}
+        </flux:subheading>
 
         <div class="mt-6 grid gap-4 md:grid-cols-3">
             <div>
@@ -38,12 +80,14 @@
                     <div class="rounded-lg border border-zinc-200 p-3 text-sm dark:border-zinc-700">
                         <div class="flex items-center justify-between">
                             <span class="font-mono">{{ $connection->name }}</span>
-                            <span class="rounded-full px-2 py-1 text-xs {{ $connection->ok ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' }}">
+                            <span
+                                class="rounded-full px-2 py-1 text-xs {{ $connection->ok ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' }}">
                                 {{ $connection->status }}
                             </span>
                         </div>
                         @if ($connection->error)
-                            <p class="mt-2 break-all text-xs text-red-600 dark:text-red-400">{{ $connection->error }}</p>
+                            <p class="mt-2 break-all text-xs text-red-600 dark:text-red-400">{{ $connection->error }}
+                            </p>
                         @endif
                     </div>
                 @empty
@@ -56,11 +100,13 @@
             <flux:heading size="lg">{{ __('Queue status') }}</flux:heading>
             <div class="mt-4 space-y-2 text-sm">
                 <p><span class="font-semibold">{{ __('Connection:') }}</span> {{ $snapshot->queue->connection }}</p>
-                <p><span class="font-semibold">{{ __('Pending jobs:') }}</span> {{ $snapshot->queue->pendingJobs }}</p>
+                <p><span class="font-semibold">{{ __('Pending jobs:') }}</span> {{ $snapshot->queue->pendingJobs }}
+                </p>
                 <p><span class="font-semibold">{{ __('Failed jobs:') }}</span> {{ $snapshot->queue->failedJobs }}</p>
                 <p>
                     <span class="font-semibold">{{ __('Health:') }}</span>
-                    <span class="rounded-full px-2 py-1 text-xs {{ $snapshot->queue->healthy ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' }}">
+                    <span
+                        class="rounded-full px-2 py-1 text-xs {{ $snapshot->queue->healthy ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' }}">
                         {{ $snapshot->queue->healthy ? 'ok' : 'warning' }}
                     </span>
                 </p>
@@ -72,13 +118,15 @@
             <div class="mt-4 space-y-2 text-sm">
                 <p><span class="font-semibold">app:</span> {{ number_format($snapshot->storage->appBytes) }} B</p>
                 <p><span class="font-semibold">logs:</span> {{ number_format($snapshot->storage->logsBytes) }} B</p>
-                <p><span class="font-semibold">framework:</span> {{ number_format($snapshot->storage->frameworkBytes) }} B</p>
+                <p><span class="font-semibold">framework:</span>
+                    {{ number_format($snapshot->storage->frameworkBytes) }} B</p>
                 <p><span class="font-semibold">total:</span> {{ $snapshot->storage->formattedTotal }}</p>
             </div>
         </div>
     </div>
 
-    <div class="rounded-xl border border-zinc-200 bg-white p-4 text-xs text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400">
+    <div
+        class="rounded-xl border border-zinc-200 bg-white p-4 text-xs text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400">
         {{ __('Snapshot generated at: :time', ['time' => $snapshot->generatedAt]) }}
     </div>
 </div>
