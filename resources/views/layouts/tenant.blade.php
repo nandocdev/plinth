@@ -140,10 +140,13 @@
                     </flux:button>
 
                     @auth('tenant')
-                        <flux:button wire:click="logout" variant="ghost" size="sm"
-                            icon="arrow-right-start-on-rectangle" class="w-full justify-start">
-                            Salir
-                        </flux:button>
+                        <form method="POST" action="{{ url('/logout') }}">
+                            @csrf
+                            <flux:button type="submit" variant="ghost" size="sm" icon="arrow-right-start-on-rectangle"
+                                class="w-full justify-start">
+                                Salir
+                            </flux:button>
+                        </form>
                     @endauth
                 </div>
             </aside>
@@ -282,11 +285,13 @@
                     </flux:button>
 
                     @auth('tenant')
-                        <flux:button wire:click="logout" variant="ghost" size="sm"
-                            icon="arrow-right-start-on-rectangle" class="w-full justify-start"
-                            x-on:click="sidebarOpen = false">
-                            Salir
-                        </flux:button>
+                        <form method="POST" action="{{ url('/logout') }}" x-on:submit="sidebarOpen = false">
+                            @csrf
+                            <flux:button type="submit" variant="ghost" size="sm"
+                                icon="arrow-right-start-on-rectangle" class="w-full justify-start">
+                                Salir
+                            </flux:button>
+                        </form>
                     @endauth
                 </div>
             </aside>
