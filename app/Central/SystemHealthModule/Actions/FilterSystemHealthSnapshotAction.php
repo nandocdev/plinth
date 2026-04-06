@@ -27,6 +27,7 @@ final class FilterSystemHealthSnapshotAction {
 
       return new SystemHealthSnapshotData(
          connections: array_values($connections),
+         centralMetrics: $snapshot->centralMetrics,
          queue: $snapshot->queue,
          storage: $snapshot->storage,
          generatedAt: $snapshot->generatedAt,
