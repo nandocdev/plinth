@@ -66,10 +66,11 @@ final class WebhookEndpointManager extends Component {
    ): void {
       $this->form->validate();
       $data = $this->form->toArray();
+      $resolvedEndpointId = $this->form->resolvedEndpointId();
 
       try {
-         if ($this->form->endpointId !== null) {
-            $this->authorize('update', WebhookEndpoint::query()->findOrFail($this->form->endpointId));
+         if ($resolvedEndpointId !== null) {
+            $this->authorize('update', WebhookEndpoint::query()->findOrFail($resolvedEndpointId));
             $updateAction->execute(UpdateWebhookEndpointData::fromArray($data));
             $this->successMessage = 'Endpoint actualizado correctamente.';
          } else {

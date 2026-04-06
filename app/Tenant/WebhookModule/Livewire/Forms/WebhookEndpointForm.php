@@ -12,6 +12,9 @@ final class WebhookEndpointForm extends Form {
    #[Validate('nullable|integer|min:1')]
    public ?int $endpointId = null;
 
+   #[Validate('nullable|integer|min:1')]
+   public ?int $endpoint_id = null;
+
    #[Validate('required|string|max:100')]
    public string $name = '';
 
@@ -29,6 +32,7 @@ final class WebhookEndpointForm extends Form {
 
    public function fillFromModel(\App\Tenant\WebhookModule\Models\WebhookEndpoint $endpoint): void {
       $this->endpointId = $endpoint->id;
+      $this->endpoint_id = $endpoint->id;
       $this->name = $endpoint->name;
       $this->targetUrl = $endpoint->target_url;
       $this->subscribedEvents = is_array($endpoint->subscribed_events)
@@ -40,6 +44,20 @@ final class WebhookEndpointForm extends Form {
 
    public function clear(): void {
       $this->reset();
+      $this->endpointId = null;
+      $this->endpoint_id = null;
+   }
+
+   public function resolvedEndpointId(): ?int {
+      if ($this->endpointId !== null) {
+         return $this->endpointId;
+      }
+
+      if ($this->endpoint_id !== null) {
+         return $this->endpoint_id;
+      }
+
+      return null;
    }
 
    /** @return array<string, mixed> */
@@ -47,7 +65,7 @@ final class WebhookEndpointForm extends Form {
       $validEvents = TenantWebhookEvent::values();
 
       return [
-         'endpoint_id' => $this->endpointId,
+         'endpoint_id' => $this->resolvedEndpointId(),
          'name' => $this->name,
          'target_url' => $this->targetUrl,
          'subscribed_events' => array_values(
