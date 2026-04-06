@@ -36,7 +36,7 @@ test('marca verificado y solicita SSL por action', function (): void {
    $tenantId = (string) tenant('id');
 
    /** @var Domain $domain */
-   $domain = Domain::query()->on('central')->create([
+   $domain = Domain::on('central')->create([
       'tenant_id' => $tenantId,
       'domain' => 'verify-ssl.test',
       'verified_at' => null,
@@ -50,7 +50,7 @@ test('marca verificado y solicita SSL por action', function (): void {
 
    Queue::assertPushed(IssueTenantDomainSslCertificateJob::class);
 
-   $fresh = Domain::query()->on('central')->find($domain->id);
+   $fresh = Domain::on('central')->find($domain->id);
 
    expect($fresh?->verified_at)->not->toBeNull()
       ->and($fresh?->ssl_status)->toBe('requested');
@@ -60,7 +60,7 @@ test('job de ssl marca issued y fecha de expiración', function (): void {
    $tenantId = (string) tenant('id');
 
    /** @var Domain $domain */
-   $domain = Domain::query()->on('central')->create([
+   $domain = Domain::on('central')->create([
       'tenant_id' => $tenantId,
       'domain' => 'issued-cert.test',
       'verified_at' => now(),
@@ -71,7 +71,7 @@ test('job de ssl marca issued y fecha de expiración', function (): void {
    $job = new IssueTenantDomainSslCertificateJob($tenantId, (int) $domain->id);
    $job->handle();
 
-   $fresh = Domain::query()->on('central')->find($domain->id);
+   $fresh = Domain::on('central')->find($domain->id);
 
    expect($fresh?->ssl_status)->toBe('issued')
       ->and($fresh?->ssl_issued_at)->not->toBeNull()
