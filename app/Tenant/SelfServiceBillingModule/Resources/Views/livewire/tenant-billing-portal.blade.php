@@ -1,4 +1,8 @@
 <div>
+    @php
+        $tenantCurrency = (string) config('tenant.preferences.currency', 'USD');
+    @endphp
+
     {{-- Encabezado del portal --}}
     <div class="mb-6">
         <flux:heading size="xl">Portal de Facturación</flux:heading>
@@ -45,12 +49,12 @@
                             </div>
                             <flux:badge
                                 :color="match($overview->status) {
-                                                                                                                                                                            'active' => 'green',
-                                                                                                                                                                            'trialing' => 'blue',
-                                                                                                                                                                            'past_due' => 'yellow',
-                                                                                                                                                                            'canceled' => 'red',
-                                                                                                                                                                            default => 'zinc',
-                                                                                                                                                                        }">
+                                                                                                                                                                                                            'active' => 'green',
+                                                                                                                                                                                                            'trialing' => 'blue',
+                                                                                                                                                                                                            'past_due' => 'yellow',
+                                                                                                                                                                                                            'canceled' => 'red',
+                                                                                                                                                                                                            default => 'zinc',
+                                                                                                                                                                                                        }">
                                 {{ match ($overview->status) {
                                     'active' => 'Activo',
                                     'trialing' => 'Prueba',
@@ -68,7 +72,7 @@
                             actual</p>
                         <p class="text-xl font-bold text-zinc-900 dark:text-white">
                             @if ($overview->priceSnapshotCents !== null)
-                                ${{ number_format($overview->priceSnapshotCents / 100, 2) }} USD
+                                {{ $tenantCurrency }} {{ number_format($overview->priceSnapshotCents / 100, 2) }}
                                 <span class="text-sm font-normal text-zinc-500">/
                                     {{ $overview->billingPeriod === 'yearly' ? 'año' : 'mes' }}</span>
                             @else
@@ -82,7 +86,7 @@
                             <p class="text-xs text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-1">Inicio
                                 de suscripción</p>
                             <p class="text-sm font-medium text-zinc-900 dark:text-white">
-                                {{ \Carbon\Carbon::parse($overview->startsAt)->format('d M Y') }}
+                                {{ \Carbon\Carbon::parse($overview->startsAt)->translatedFormat('d M Y') }}
                             </p>
                         </flux:card>
                     @endif
@@ -92,7 +96,7 @@
                             <p class="text-xs text-blue-600 dark:text-blue-400 uppercase tracking-wide mb-1">Período
                                 de prueba hasta</p>
                             <p class="text-sm font-medium text-zinc-900 dark:text-white">
-                                {{ \Carbon\Carbon::parse($overview->trialEndsAt)->format('d M Y') }}
+                                {{ \Carbon\Carbon::parse($overview->trialEndsAt)->translatedFormat('d M Y') }}
                             </p>
                         </flux:card>
                     @endif
@@ -102,7 +106,7 @@
                             <p class="text-xs text-red-600 dark:text-red-400 uppercase tracking-wide mb-1">Acceso
                                 hasta</p>
                             <p class="text-sm font-medium text-zinc-900 dark:text-white">
-                                {{ \Carbon\Carbon::parse($overview->endsAt)->format('d M Y') }}
+                                {{ \Carbon\Carbon::parse($overview->endsAt)->translatedFormat('d M Y') }}
                             </p>
                         </flux:card>
                     @endif
@@ -181,7 +185,7 @@
                                 <p class="font-semibold text-zinc-900 dark:text-white text-base mb-1">
                                     {{ $plan->name }}</p>
                                 <p class="text-2xl font-bold text-zinc-900 dark:text-white">
-                                    ${{ number_format($price / 100, 2) }}
+                                    {{ $tenantCurrency }} {{ number_format($price / 100, 2) }}
                                     <span class="text-sm font-normal text-zinc-500">/
                                         {{ $upgradeForm->billingPeriod === 'yearly' ? 'año' : 'mes' }}</span>
                                 </p>
@@ -240,7 +244,7 @@
                             @foreach ($invoices as $invoice)
                                 <tr>
                                     <td class="px-4 py-3 text-zinc-600 dark:text-zinc-400">
-                                        {{ $invoice->created_at->format('d M Y') }}
+                                        {{ $invoice->created_at->translatedFormat('d M Y') }}
                                     </td>
                                     <td class="px-4 py-3 font-mono text-xs text-zinc-500">
                                         {{ $invoice->invoice_number }}
@@ -257,11 +261,11 @@
                                     <td class="px-4 py-3">
                                         <flux:badge
                                             :color="match($invoice->status) {
-                                                                                                                                            'paid' => 'green',
-                                                                                                                                            'open' => 'yellow',
-                                                                                                                                            'void' => 'zinc',
-                                                                                                                                            default => 'zinc',
-                                                                                                                                        }"
+                                                                                                                                                                                        'paid' => 'green',
+                                                                                                                                                                                        'open' => 'yellow',
+                                                                                                                                                                                        'void' => 'zinc',
+                                                                                                                                                                                        default => 'zinc',
+                                                                                                                                                                                    }"
                                             size="sm">
                                             {{ match ($invoice->status) {
                                                 'paid' => 'Pagada',

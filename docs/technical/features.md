@@ -76,7 +76,7 @@ Estado base usado para este documento:
 - [Implementado] (Tenant context) Webhooks entrantes y salientes tenant
 - [Parcial] (Tenant context) Custom domain full management + SSL auto (Let's Encrypt)
   <!-- Pendiente: validación DNS real (TXT/CNAME) automática, integración ACME real con proveedor DNS/SSL (no simulación), webhook/callback de emisión, renovación automática programada y pruebas E2E con dominio real en staging. -->
-- [Pendiente] (Tenant context) Multi-language + currency per tenant
+- [Implementado] (Tenant context) Multi-language + currency per tenant
 - [Pendiente] (Tenant context) Team / workspace dentro del tenant (sub-tenancy light)
 - [Pendiente] (Tenant context) Audit log avanzado + export
 - [Pendiente] (Tenant context) SSO (SAML/OIDC) support

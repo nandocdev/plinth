@@ -56,6 +56,7 @@ final class UpdateTenantSettingsAction {
       });
 
       Cache::forget($this->cacheKey());
+      Cache::forget($this->runtimeCacheKey());
       Cache::put($this->cacheKey(), $updated->toCachePayload(), now()->addMinutes(15));
 
       return $updated;
@@ -65,6 +66,12 @@ final class UpdateTenantSettingsAction {
       $tenantId = $this->tenantId();
 
       return 'tenant_' . $tenantId . '_workspace_settings';
+   }
+
+   private function runtimeCacheKey(): string {
+      $tenantId = $this->tenantId();
+
+      return 'tenant_' . $tenantId . '_runtime_preferences';
    }
 
    private function tenantId(): string {
