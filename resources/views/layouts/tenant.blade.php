@@ -56,7 +56,7 @@
     }">
     <div
         class="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(245,48,3,0.12),_transparent_38%),linear-gradient(to_bottom,_#fafafa_0%,_#f4f4f5_100%)] dark:bg-[radial-gradient(circle_at_top,_rgba(245,48,3,0.10),_transparent_35%),linear-gradient(to_bottom,_#0a0a0b_0%,_#111114_100%)]">
-        <div class="mx-auto flex min-h-screen max-w-7xl">
+        <div class="flex min-h-screen">
             <aside
                 class="hidden w-72 shrink-0 border-r border-zinc-200/80 bg-zinc-50/80 p-4 backdrop-blur dark:border-zinc-700/70 dark:bg-zinc-900/70 lg:flex lg:flex-col">
                 <div class="flex items-center gap-3 border-b border-zinc-200/80 pb-4 dark:border-zinc-700/70">
