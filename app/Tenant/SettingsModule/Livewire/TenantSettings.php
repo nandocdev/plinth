@@ -55,7 +55,10 @@ final class TenantSettings extends Component {
    }
 
    public function render(): View {
-      return view('settings::livewire.tenant-settings');
+      return view('settings::livewire.tenant-settings', [
+         'localeOptions' => $this->form->localeOptions(),
+         'currencyOptions' => $this->form->currencyOptions(),
+      ]);
    }
 
    private function bootstrapFounderAdminRole(User $user): void {

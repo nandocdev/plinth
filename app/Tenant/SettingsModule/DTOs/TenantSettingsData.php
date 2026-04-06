@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tenant\SettingsModule\DTOs;
 
+use App\Shared\Support\TenantPreferenceCatalog;
 use App\Tenant\SettingsModule\Models\TenantSetting;
 
 final readonly class TenantSettingsData {
@@ -32,9 +33,9 @@ final readonly class TenantSettingsData {
          logoUrl: null,
          primaryColor: '#0f172a',
          secondaryColor: '#2563eb',
-         locale: 'es',
+         locale: TenantPreferenceCatalog::defaultLocale(),
          timezone: 'UTC',
-         currency: 'USD',
+         currency: TenantPreferenceCatalog::defaultCurrency(),
          allowWeeklyDigest: true,
          dateFormat: 'd/m/Y',
       );
@@ -52,9 +53,9 @@ final readonly class TenantSettingsData {
          logoUrl: isset($branding['logo_url']) && $branding['logo_url'] !== '' ? (string) $branding['logo_url'] : null,
          primaryColor: (string) ($branding['primary_color'] ?? '#0f172a'),
          secondaryColor: (string) ($branding['secondary_color'] ?? '#2563eb'),
-         locale: (string) ($settings->locale ?? 'es'),
+         locale: TenantPreferenceCatalog::normalizeLocale((string) ($settings->locale ?? TenantPreferenceCatalog::defaultLocale())),
          timezone: (string) ($settings->timezone ?? 'UTC'),
-         currency: (string) ($settings->currency ?? 'USD'),
+         currency: TenantPreferenceCatalog::normalizeCurrency((string) ($settings->currency ?? TenantPreferenceCatalog::defaultCurrency())),
          allowWeeklyDigest: (bool) ($preferences['allow_weekly_digest'] ?? true),
          dateFormat: (string) ($preferences['date_format'] ?? 'd/m/Y'),
       );
@@ -75,9 +76,9 @@ final readonly class TenantSettingsData {
          logoUrl: isset($branding['logo_url']) && $branding['logo_url'] !== '' ? (string) $branding['logo_url'] : null,
          primaryColor: (string) ($branding['primary_color'] ?? '#0f172a'),
          secondaryColor: (string) ($branding['secondary_color'] ?? '#2563eb'),
-         locale: (string) ($record['locale'] ?? 'es'),
+         locale: TenantPreferenceCatalog::normalizeLocale((string) ($record['locale'] ?? TenantPreferenceCatalog::defaultLocale())),
          timezone: (string) ($record['timezone'] ?? 'UTC'),
-         currency: strtoupper((string) ($record['currency'] ?? 'USD')),
+         currency: TenantPreferenceCatalog::normalizeCurrency((string) ($record['currency'] ?? TenantPreferenceCatalog::defaultCurrency())),
          allowWeeklyDigest: (bool) ($preferences['allow_weekly_digest'] ?? true),
          dateFormat: (string) ($preferences['date_format'] ?? 'd/m/Y'),
       );
@@ -95,9 +96,9 @@ final readonly class TenantSettingsData {
          logoUrl: isset($payload['logo_url']) && $payload['logo_url'] !== '' ? (string) $payload['logo_url'] : null,
          primaryColor: (string) ($payload['primary_color'] ?? '#0f172a'),
          secondaryColor: (string) ($payload['secondary_color'] ?? '#2563eb'),
-         locale: (string) ($payload['locale'] ?? 'es'),
+         locale: TenantPreferenceCatalog::normalizeLocale((string) ($payload['locale'] ?? TenantPreferenceCatalog::defaultLocale())),
          timezone: (string) ($payload['timezone'] ?? 'UTC'),
-         currency: strtoupper((string) ($payload['currency'] ?? 'USD')),
+         currency: TenantPreferenceCatalog::normalizeCurrency((string) ($payload['currency'] ?? TenantPreferenceCatalog::defaultCurrency())),
          allowWeeklyDigest: (bool) ($payload['allow_weekly_digest'] ?? true),
          dateFormat: (string) ($payload['date_format'] ?? 'd/m/Y'),
       );

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tenant\SettingsModule\Livewire\Forms;
 
+use App\Shared\Support\TenantPreferenceCatalog;
 use App\Tenant\SettingsModule\DTOs\TenantSettingsData;
+use Illuminate\Validation\Rule;
 use Livewire\Form;
 
 final class TenantSettingsForm extends Form {
@@ -29,9 +31,9 @@ final class TenantSettingsForm extends Form {
       $this->logoUrl = $data->logoUrl ?? '';
       $this->primaryColor = $data->primaryColor;
       $this->secondaryColor = $data->secondaryColor;
-      $this->locale = $data->locale;
+      $this->locale = TenantPreferenceCatalog::normalizeLocale($data->locale);
       $this->timezone = $data->timezone;
-      $this->currency = strtoupper($data->currency);
+      $this->currency = TenantPreferenceCatalog::normalizeCurrency($data->currency);
       $this->allowWeeklyDigest = $data->allowWeeklyDigest;
       $this->dateFormat = $data->dateFormat;
    }
@@ -45,12 +47,26 @@ final class TenantSettingsForm extends Form {
          'logo_url' => trim($this->logoUrl),
          'primary_color' => trim($this->primaryColor),
          'secondary_color' => trim($this->secondaryColor),
-         'locale' => trim($this->locale),
+         'locale' => TenantPreferenceCatalog::normalizeLocale($this->locale),
          'timezone' => trim($this->timezone),
-         'currency' => strtoupper(trim($this->currency)),
+         'currency' => TenantPreferenceCatalog::normalizeCurrency($this->currency),
          'allow_weekly_digest' => $this->allowWeeklyDigest,
          'date_format' => trim($this->dateFormat),
       ]);
+   }
+
+   /**
+    * @return array<string, string>
+    */
+   public function localeOptions(): array {
+      return TenantPreferenceCatalog::locales();
+   }
+
+   /**
+    * @return array<string, string>
+    */
+   public function currencyOptions(): array {
+      return TenantPreferenceCatalog::currencies();
    }
 
    /**
@@ -65,9 +81,9 @@ final class TenantSettingsForm extends Form {
          'logoUrl' => ['nullable', 'url', 'max:2048'],
          'primaryColor' => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
          'secondaryColor' => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
-         'locale' => ['required', 'in:es,en'],
+         'locale' => ['required', Rule::in(array_keys($this->localeOptions()))],
          'timezone' => ['required', 'timezone'],
-         'currency' => ['required', 'string', 'size:3'],
+         'currency' => ['required', Rule::in(array_keys($this->currencyOptions()))],
          'allowWeeklyDigest' => ['required', 'boolean'],
          'dateFormat' => ['required', 'in:d/m/Y,m/d/Y,Y-m-d'],
       ];

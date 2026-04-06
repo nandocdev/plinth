@@ -42,12 +42,17 @@
 
             <div class="grid gap-4 md:grid-cols-3">
                 <flux:select wire:model="form.locale" label="Idioma">
-                    <flux:select.option value="es">Español</flux:select.option>
-                    <flux:select.option value="en">Inglés</flux:select.option>
+                    @foreach ($localeOptions as $localeValue => $localeLabel)
+                        <flux:select.option value="{{ $localeValue }}">{{ $localeLabel }}</flux:select.option>
+                    @endforeach
                 </flux:select>
 
                 <flux:input wire:model="form.timezone" label="Zona horaria" placeholder="America/Bogota" />
-                <flux:input wire:model="form.currency" label="Moneda (ISO)" placeholder="USD" />
+                <flux:select wire:model="form.currency" label="Moneda">
+                    @foreach ($currencyOptions as $currencyValue => $currencyLabel)
+                        <flux:select.option value="{{ $currencyValue }}">{{ $currencyLabel }}</flux:select.option>
+                    @endforeach
+                </flux:select>
             </div>
 
             <flux:select wire:model="form.dateFormat" label="Formato de fecha">
