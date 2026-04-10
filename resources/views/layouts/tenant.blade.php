@@ -74,93 +74,44 @@
 
                 @auth('tenant')
                     <nav class="mt-4 space-y-6">
-                        <!-- Platform Context -->
-                        <div>
-                            <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Plataforma</p>
-                            <div class="space-y-1">
-                                <a href="/dashboard" wire:navigate
-                                    class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('dashboard') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                                    <flux:icon name="home" class="size-4" />
-                                    <span>Dashboard</span>
-                                </a>
-                                <a href="/files" wire:navigate
-                                    class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('files') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                                    <flux:icon name="paper-clip" class="size-4" />
-                                    <span>Archivos</span>
-                                </a>
+                        @foreach (\App\Shared\Helpers\TenantSidebarMenuHelper::getMenu() as $section)
+                            <div>
+                                <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+                                    {{ $section['heading'] }}
+                                </p>
+                                <div class="space-y-1">
+                                    @foreach ($section['items'] as $item)
+                                        @if (empty($item['children']))
+                                            <a href="{{ route($item['route']) }}" wire:navigate
+                                                class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ $item['active'] ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
+                                                <flux:icon :name="$item['icon']" class="size-4" />
+                                                <span>{{ $item['label'] }}</span>
+                                            </a>
+                                        @else
+                                            <div x-data="{ open: {{ $item['active'] ? 'true' : 'false' }} }">
+                                                <button @click="open = !open"
+                                                    class="flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition {{ $item['active'] ? 'text-zinc-900 dark:text-white' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
+                                                    <div class="flex items-center gap-3">
+                                                        <flux:icon :name="$item['icon']" class="size-4" />
+                                                        <span>{{ $item['label'] }}</span>
+                                                    </div>
+                                                    <flux:icon name="chevron-down" class="size-3 transition-transform duration-200"
+                                                        ::class="{ 'rotate-180': open }" />
+                                                </button>
+                                                <div x-show="open" x-collapse class="ml-7 mt-1 space-y-1 border-l border-zinc-200 pl-3 dark:border-zinc-700">
+                                                    @foreach ($item['children'] as $child)
+                                                        <a href="{{ route($child['route']) }}" wire:navigate
+                                                            class="block rounded-md px-3 py-1.5 text-xs font-medium transition {{ $child['active'] ? 'text-zinc-900 dark:text-white' : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white' }}">
+                                                            {{ $child['label'] }}
+                                                        </a>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                </div>
                             </div>
-                        </div>
-
-                        <!-- Identity Context -->
-                        <div>
-                            <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Identidad</p>
-                            <div class="space-y-1">
-                                <a href="/users" wire:navigate
-                                    class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('users') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                                    <flux:icon name="users" class="size-4" />
-                                    <span>Usuarios</span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Operations Context -->
-                        <div>
-                            <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Operaciones</p>
-                            <div class="space-y-1">
-                                <a href="/notifications" wire:navigate
-                                    class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('notifications') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                                    <flux:icon name="bell" class="size-4" />
-                                    <span>Notificaciones</span>
-                                </a>
-                                <a href="/activity-log" wire:navigate
-                                    class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('activity-log') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                                    <flux:icon name="clipboard-document-list" class="size-4" />
-                                    <span>Activity Log</span>
-                                </a>
-                                <a href="/analytics" wire:navigate
-                                    class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('analytics') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                                    <flux:icon name="chart-bar" class="size-4" />
-                                    <span>Analytics</span>
-                                </a>
-                                <a href="/webhooks" wire:navigate
-                                    class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('webhooks') || request()->is('webhooks/*') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                                    <flux:icon name="arrow-path-rounded-square" class="size-4" />
-                                    <span>Webhooks</span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Governance Context -->
-                        <div>
-                            <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Gestión</p>
-                            <div class="space-y-1">
-                                <a href="/settings/tenant" wire:navigate
-                                    class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('settings/tenant') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                                    <flux:icon name="cog-6-tooth" class="size-4" />
-                                    <span>Configuración</span>
-                                </a>
-                                <a href="/billing" wire:navigate
-                                    class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('billing') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                                    <flux:icon name="credit-card" class="size-4" />
-                                    <span>Facturación</span>
-                                </a>
-                                <a href="/plan-features" wire:navigate
-                                    class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('plan-features') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                                    <flux:icon name="sparkles" class="size-4" />
-                                    <span>Mi Plan</span>
-                                </a>
-                                <a href="/addons" wire:navigate
-                                    class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('addons') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                                    <flux:icon name="puzzle-piece" class="size-4" />
-                                    <span>Addons</span>
-                                </a>
-                                <a href="/custom-domains" wire:navigate
-                                    class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('custom-domains') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                                    <flux:icon name="globe-alt" class="size-4" />
-                                    <span>Dominios</span>
-                                </a>
-                            </div>
-                        </div>
+                        @endforeach
                     </nav>
                 @endauth
 
@@ -250,62 +201,45 @@
                 </div>
 
                 @auth('tenant')
-                    <nav class="space-y-1">
-                        <a href="/dashboard" wire:navigate x-on:click="sidebarOpen = false"
-                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('dashboard') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                            <flux:icon name="home" class="size-4" />
-                            <span>Dashboard</span>
-                        </a>
-                        <a href="/settings/tenant" wire:navigate x-on:click="sidebarOpen = false"
-                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('settings/tenant') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                            <flux:icon name="cog-6-tooth" class="size-4" />
-                            <span>Configuración</span>
-                        </a>
-                        <a href="/activity-log" wire:navigate x-on:click="sidebarOpen = false"
-                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('activity-log') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                            <flux:icon name="clipboard-document-list" class="size-4" />
-                            <span>Activity Log</span>
-                        </a>
-                        <a href="/files" wire:navigate x-on:click="sidebarOpen = false"
-                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('files') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                            <flux:icon name="paper-clip" class="size-4" />
-                            <span>Archivos</span>
-                        </a>
-                        <a href="/notifications" wire:navigate x-on:click="sidebarOpen = false"
-                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('notifications') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                            <flux:icon name="bell" class="size-4" />
-                            <span>Notificaciones</span>
-                        </a>
-                        <a href="/billing" wire:navigate x-on:click="sidebarOpen = false"
-                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('billing') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                            <flux:icon name="credit-card" class="size-4" />
-                            <span>Facturación</span>
-                        </a>
-                        <a href="/plan-features" wire:navigate x-on:click="sidebarOpen = false"
-                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('plan-features') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                            <flux:icon name="sparkles" class="size-4" />
-                            <span>Mi Plan</span>
-                        </a>
-                        <a href="/webhooks" wire:navigate x-on:click="sidebarOpen = false"
-                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('webhooks') || request()->is('webhooks/*') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                            <flux:icon name="arrow-path-rounded-square" class="size-4" />
-                            <span>Webhooks</span>
-                        </a>
-                        <a href="/analytics" wire:navigate x-on:click="sidebarOpen = false"
-                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('analytics') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                            <flux:icon name="chart-bar" class="size-4" />
-                            <span>Analytics</span>
-                        </a>
-                        <a href="/addons" wire:navigate x-on:click="sidebarOpen = false"
-                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('addons') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                            <flux:icon name="puzzle-piece" class="size-4" />
-                            <span>Addons</span>
-                        </a>
-                        <a href="/custom-domains" wire:navigate x-on:click="sidebarOpen = false"
-                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->is('custom-domains') ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
-                            <flux:icon name="globe-alt" class="size-4" />
-                            <span>Dominios</span>
-                        </a>
+                    <nav class="space-y-6">
+                        @foreach (\App\Shared\Helpers\TenantSidebarMenuHelper::getMenu() as $section)
+                            <div>
+                                <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+                                    {{ $section['heading'] }}
+                                </p>
+                                <div class="space-y-1">
+                                    @foreach ($section['items'] as $item)
+                                        @if (empty($item['children']))
+                                            <a href="{{ route($item['route']) }}" wire:navigate x-on:click="sidebarOpen = false"
+                                                class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ $item['active'] ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
+                                                <flux:icon :name="$item['icon']" class="size-4" />
+                                                <span>{{ $item['label'] }}</span>
+                                            </a>
+                                        @else
+                                            <div x-data="{ open: {{ $item['active'] ? 'true' : 'false' }} }">
+                                                <button @click="open = !open"
+                                                    class="flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition {{ $item['active'] ? 'text-zinc-900 dark:text-white' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white' }}">
+                                                    <div class="flex items-center gap-3">
+                                                        <flux:icon :name="$item['icon']" class="size-4" />
+                                                        <span>{{ $item['label'] }}</span>
+                                                    </div>
+                                                    <flux:icon name="chevron-down" class="size-3 transition-transform duration-200"
+                                                        ::class="{ 'rotate-180': open }" />
+                                                </button>
+                                                <div x-show="open" x-collapse class="ml-7 mt-1 space-y-1 border-l border-zinc-200 pl-3 dark:border-zinc-700">
+                                                    @foreach ($item['children'] as $child)
+                                                        <a href="{{ route($child['route']) }}" wire:navigate x-on:click="sidebarOpen = false"
+                                                            class="block rounded-md px-3 py-1.5 text-xs font-medium transition {{ $child['active'] ? 'text-zinc-900 dark:text-white' : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white' }}">
+                                                            {{ $child['label'] }}
+                                                        </a>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endforeach
                     </nav>
                 @endauth
 
