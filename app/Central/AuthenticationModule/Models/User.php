@@ -50,4 +50,16 @@ final class User extends Authenticatable {
             ->map(fn($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
+
+    /**
+     * Get the tenant owned by this user, if any.
+     */
+    public function ownedTenant(): ?\App\Central\TenantProvisioningModule\Models\Tenant {
+        /** @var \App\Central\TenantProvisioningModule\Models\Tenant|null $tenant */
+        $tenant = \App\Central\TenantProvisioningModule\Models\Tenant::query()
+            ->where('data->owner_system_admin_id', $this->id)
+            ->first();
+
+        return $tenant;
+    }
 }

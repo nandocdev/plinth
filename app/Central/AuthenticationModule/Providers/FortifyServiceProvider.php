@@ -17,7 +17,10 @@ use Laravel\Fortify\Fortify;
 
 final class FortifyServiceProvider extends ServiceProvider {
     public function register(): void {
-        //
+        $this->app->singleton(
+            \Laravel\Fortify\Contracts\LoginResponse::class,
+            \App\Central\AuthenticationModule\Http\Responses\LoginResponse::class
+        );
     }
 
     public function boot(): void {
