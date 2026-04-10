@@ -8,10 +8,10 @@ use App\Central\AuthenticationModule\Actions\FindOrCreateSystemAdminAction;
 use App\Central\TenantProvisioningModule\DTOs\CompleteTenantOnboardingData;
 use App\Central\TenantProvisioningModule\DTOs\PublicTenantRegistrationData;
 use App\Central\TenantProvisioningModule\Models\Tenant;
-use App\Tenant\AuthenticationModule\Actions\RegisterTenantUserAction;
-use App\Tenant\AuthenticationModule\DTOs\RegisterTenantUserData;
-use App\Tenant\UserManagementModule\Actions\SeedDefaultRolesAction;
-use App\Tenant\UserManagementModule\Enums\TenantRole;
+use App\Tenant\IdentityContext\AuthenticationModule\Actions\RegisterTenantUserAction;
+use App\Tenant\IdentityContext\AuthenticationModule\DTOs\RegisterTenantUserData;
+use App\Tenant\IdentityContext\UserManagementModule\Actions\SeedDefaultRolesAction;
+use App\Tenant\IdentityContext\UserManagementModule\Enums\TenantRole;
 
 final class RegisterPublicTenantAction {
    public function __construct(
