@@ -4,6 +4,7 @@ description: Describe when these instructions should be loaded by the agent base
 ---
 
 # GitHub Copilot Instructions — SaaS-Kit-2026
+
 # Laravel 12+ · PHP 8.3+ · Multi-Tenancy · Modular Architecture
 
 > **These rules are non-negotiable.** When in doubt, ask before generating.
@@ -21,7 +22,7 @@ description: Describe when these instructions should be loaded by the agent base
 **Feature Flags:** `laravel/pennant`  
 **Queues:** `laravel/horizon`  
 **Observability:** `laravel/pulse`  
-**Testing:** `pestphp/pest` + `pestphp/pest-plugin-laravel`  
+**Testing:** `pestphp/pest` + `pestphp/pest-plugin-laravel`
 
 ---
 
@@ -74,6 +75,7 @@ SomeModule/
 ```
 
 **Rules:**
+
 - Central modules → `app.com` only (no tenant context).
 - Tenant modules → `*.app.com` only (always assume tenant is initialized).
 - Shared → pure contracts, DTOs, value objects. Zero framework coupling.
@@ -134,6 +136,7 @@ final class CreateTenantAction
 ```
 
 **Rules:**
+
 - One public method: `execute()` or `handle()`.
 - No `static` methods — always inject via constructor or resolve via `app()`.
 - Actions call other Actions or dispatch Jobs. Never call Artisan directly from a controller.
@@ -168,6 +171,7 @@ final readonly class CreateTenantDTO
 ```
 
 **Rules:**
+
 - `final readonly` — always.
 - No setters, no mutation.
 - Static factory methods for common sources (`fromRequest`, `fromModel`, `fromArray`).
@@ -215,6 +219,7 @@ final class ProvisionTenantJob implements ShouldQueue, ShouldBeUnique
 ```
 
 **Rules:**
+
 - `ShouldBeUnique` on idempotent jobs (provisioning, billing webhooks).
 - Always implement `failed()`.
 - Always set `$tries` and `$timeout` explicitly.
@@ -382,6 +387,7 @@ final class TeamList extends Component
 ```
 
 **Rules:**
+
 - `$this->authorize()` in **every** `mount()` and every public action method.
 - No business logic in `render()`. Delegate to Actions or Services.
 - Namespace views with module prefix: `billing::livewire.subscription-form`.
@@ -391,6 +397,7 @@ final class TeamList extends Component
 ## 9. Testing Rules (Pest)
 
 **File structure mirrors source:**
+
 ```
 tests/
 ├── Feature/
@@ -401,6 +408,7 @@ tests/
 ```
 
 **Mandatory test types per feature:**
+
 1. Happy path
 2. Tenant isolation (no data leaks between tenants)
 3. Auth/permission boundary (403 on unauthorized)
@@ -434,6 +442,7 @@ it('does not leak data between tenants', function () {
 ```
 
 **Rules:**
+
 - `RefreshDatabase` on every test file.
 - `tenancy()->end()` after every tenant initialization in tests.
 - Factories for every model — no manual `Model::create()` in tests.
@@ -454,40 +463,41 @@ it('does not leak data between tenants', function () {
 
 ## 11. Prohibited Patterns
 
-| Anti-Pattern | Reason | Correct Alternative |
-|---|---|---|
-| Fat controller | Untestable, violates SRP | Thin controller → Action |
-| Logic in Blade/View | Untestable, mixed concerns | Computed property or ViewComposer |
-| `Model::all()` | Never in production | `->paginate()` or `->limit()` |
-| Sync heavy ops in request | Blocks UX, no retry | Queue + Job |
-| Magic strings for permissions | Typo-prone | Constants or Enum |
-| `\App\User` global import in Tenant | Wrong model context | `\App\Tenant\AuthenticationModule\Models\User` |
-| `env()` outside `config()` files | Breaks config cache | Always wrap in `config()` |
-| `schema-less` migration rollbacks | Data loss | Always implement `down()` |
-| `public $property` in Livewire without validation | Exposes all data | Use `#[Validate]` attribute or `validate()` |
+| Anti-Pattern                                      | Reason                     | Correct Alternative                                            |
+| ------------------------------------------------- | -------------------------- | -------------------------------------------------------------- |
+| Fat controller                                    | Untestable, violates SRP   | Thin controller → Action                                       |
+| Logic in Blade/View                               | Untestable, mixed concerns | Computed property or ViewComposer                              |
+| `Model::all()`                                    | Never in production        | `->paginate()` or `->limit()`                                  |
+| Sync heavy ops in request                         | Blocks UX, no retry        | Queue + Job                                                    |
+| Magic strings for permissions                     | Typo-prone                 | Constants or Enum                                              |
+| `\App\User` global import in Tenant               | Wrong model context        | `\App\Tenant\IdentityContext\AuthenticationModule\Models\User` |
+| `env()` outside `config()` files                  | Breaks config cache        | Always wrap in `config()`                                      |
+| `schema-less` migration rollbacks                 | Data loss                  | Always implement `down()`                                      |
+| `public $property` in Livewire without validation | Exposes all data           | Use `#[Validate]` attribute or `validate()`                    |
 
 ---
 
 ## 12. Naming Conventions
 
-| Type | Convention | Example |
-|---|---|---|
-| Action | `VerbNounAction` | `CreateTenantAction`, `SendWelcomeEmailAction` |
-| Job | `VerbNounJob` | `ProvisionTenantJob`, `ProcessWebhookJob` |
-| DTO | `NounDTO` | `CreateTenantDTO`, `PlanFeaturesDTO` |
-| Service | `NounService` | `BillingService`, `FeatureService` |
-| Event | `NounVerbed` (past) | `TenantProvisioned`, `SubscriptionCancelled` |
-| Listener | `VerbNounOnEvent` | `ActivateFeaturesOnSubscription` |
-| Request | `VerbNounRequest` | `CreateTenantRequest`, `UpdateTeamRequest` |
-| Policy | `NounPolicy` | `TenantPolicy`, `TeamPolicy` |
-| Livewire | `NounContext` | `TeamList`, `SubscriptionForm` |
-| Migration | `snake_case_description` | `create_teams_table`, `add_status_to_tenants` |
+| Type      | Convention               | Example                                        |
+| --------- | ------------------------ | ---------------------------------------------- |
+| Action    | `VerbNounAction`         | `CreateTenantAction`, `SendWelcomeEmailAction` |
+| Job       | `VerbNounJob`            | `ProvisionTenantJob`, `ProcessWebhookJob`      |
+| DTO       | `NounDTO`                | `CreateTenantDTO`, `PlanFeaturesDTO`           |
+| Service   | `NounService`            | `BillingService`, `FeatureService`             |
+| Event     | `NounVerbed` (past)      | `TenantProvisioned`, `SubscriptionCancelled`   |
+| Listener  | `VerbNounOnEvent`        | `ActivateFeaturesOnSubscription`               |
+| Request   | `VerbNounRequest`        | `CreateTenantRequest`, `UpdateTeamRequest`     |
+| Policy    | `NounPolicy`             | `TenantPolicy`, `TeamPolicy`                   |
+| Livewire  | `NounContext`            | `TeamList`, `SubscriptionForm`                 |
+| Migration | `snake_case_description` | `create_teams_table`, `add_status_to_tenants`  |
 
 ---
 
 ## 13. Git Workflow
 
 **Branch naming:**
+
 ```
 feat/module-name/short-description     # New feature
 fix/module-name/short-description      # Bug fix
@@ -497,6 +507,7 @@ chore/short-description                # Tooling, deps
 ```
 
 **Commit format (Conventional Commits):**
+
 ```
 feat(billing): add subscription swap action
 fix(provisioning): handle artisan migrate failure in job
@@ -506,6 +517,7 @@ chore(deps): upgrade cashier to 15.2
 ```
 
 **PR Rules:**
+
 - No PR merges without passing CI (lint + tests + Larastan).
 - PR description must include: What changed, Why, How to test.
 - Max 400 lines changed per PR. Larger changes = split into smaller PRs.
