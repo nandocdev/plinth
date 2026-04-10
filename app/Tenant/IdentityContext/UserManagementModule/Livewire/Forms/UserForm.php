@@ -33,10 +33,10 @@ final class UserForm extends Form {
 
       return [
          'name'     => ['required', 'string', 'max:100'],
-         'email'    => [$emailUnique],
+         'email'    => $emailUnique,
          'password' => $this->editingId ? ['nullable', 'string', 'min:8', 'max:100'] : ['required', 'string', 'min:8', 'max:100'],
          'role'     => ['required', 'string', 'in:' . implode(',', TenantRole::values())],
-         'status'   => ['required', 'string', 'in:active,inactive'],
+         'status'   => ['required', 'string', 'in:' . implode(',', TenantUserStatus::values())],
       ];
    }
 
