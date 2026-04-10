@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 use App\Central\TenantProvisioningModule\Models\Domain;
-use App\Tenant\AuthenticationModule\Models\User;
-use App\Tenant\CustomDomainModule\Actions\CreateTenantCustomDomainAction;
-use App\Tenant\CustomDomainModule\Actions\RequestTenantDomainSslCertificateAction;
-use App\Tenant\CustomDomainModule\Actions\ToggleTenantCustomDomainVerificationAction;
-use App\Tenant\CustomDomainModule\DTOs\CreateCustomDomainData;
-use App\Tenant\CustomDomainModule\Jobs\IssueTenantDomainSslCertificateJob;
-use App\Tenant\CustomDomainModule\Policies\TenantCustomDomainPolicy;
-use App\Tenant\UserManagementModule\Actions\SeedDefaultRolesAction;
+use App\Tenant\[Bundle]\AuthenticationModule\Models\User;
+use App\Tenant\[Bundle]\CustomDomainModule\Actions\CreateTenantCustomDomainAction;
+use App\Tenant\[Bundle]\CustomDomainModule\Actions\RequestTenantDomainSslCertificateAction;
+use App\Tenant\[Bundle]\CustomDomainModule\Actions\ToggleTenantCustomDomainVerificationAction;
+use App\Tenant\[Bundle]\CustomDomainModule\DTOs\CreateCustomDomainData;
+use App\Tenant\[Bundle]\CustomDomainModule\Jobs\IssueTenantDomainSslCertificateJob;
+use App\Tenant\[Bundle]\CustomDomainModule\Policies\TenantCustomDomainPolicy;
+use App\Tenant\[Bundle]\UserManagementModule\Actions\SeedDefaultRolesAction;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Queue;
 use Spatie\Permission\PermissionRegistrar;

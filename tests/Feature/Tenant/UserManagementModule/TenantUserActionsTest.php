@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-use App\Tenant\AuthenticationModule\Models\User;
-use App\Tenant\UserManagementModule\Actions\CreateTenantUserAction;
-use App\Tenant\UserManagementModule\Actions\DeleteTenantUserAction;
-use App\Tenant\UserManagementModule\Actions\SeedDefaultRolesAction;
-use App\Tenant\UserManagementModule\Actions\UpdateTenantUserAction;
-use App\Tenant\UserManagementModule\DTOs\CreateTenantUserData;
-use App\Tenant\UserManagementModule\DTOs\UpdateTenantUserData;
-use App\Tenant\UserManagementModule\Enums\TenantRole;
-use App\Tenant\UserManagementModule\Enums\TenantUserStatus;
-use App\Tenant\UserManagementModule\Events\TenantUserCreated;
-use App\Tenant\UserManagementModule\Events\TenantUserDeleted;
+use App\Tenant\[Bundle]\AuthenticationModule\Models\User;
+use App\Tenant\[Bundle]\UserManagementModule\Actions\CreateTenantUserAction;
+use App\Tenant\[Bundle]\UserManagementModule\Actions\DeleteTenantUserAction;
+use App\Tenant\[Bundle]\UserManagementModule\Actions\SeedDefaultRolesAction;
+use App\Tenant\[Bundle]\UserManagementModule\Actions\UpdateTenantUserAction;
+use App\Tenant\[Bundle]\UserManagementModule\DTOs\CreateTenantUserData;
+use App\Tenant\[Bundle]\UserManagementModule\DTOs\UpdateTenantUserData;
+use App\Tenant\[Bundle]\UserManagementModule\Enums\TenantRole;
+use App\Tenant\[Bundle]\UserManagementModule\Enums\TenantUserStatus;
+use App\Tenant\[Bundle]\UserManagementModule\Events\TenantUserCreated;
+use App\Tenant\[Bundle]\UserManagementModule\Events\TenantUserDeleted;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;

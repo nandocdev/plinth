@@ -36,7 +36,7 @@ it('ningun modelo tenant define $connection explicitamente', function (): void {
          DIRECTORY_SEPARATOR
       );
 
-      // app/Tenant/SomeModule/Models/Foo.php -> App\Tenant\SomeModule\Models\Foo
+      // app/Tenant/SomeModule/Models/Foo.php -> App\Tenant\[Bundle]\SomeModule\Models\Foo
       $fqcn = str_replace(
          ['/', '.php'],
          ['\\', ''],

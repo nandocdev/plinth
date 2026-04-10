@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-use App\Tenant\AuthenticationModule\Models\User;
-use App\Tenant\UserManagementModule\Actions\SeedDefaultRolesAction;
-use App\Tenant\WebhookModule\Actions\CreateIncomingTokenAction;
-use App\Tenant\WebhookModule\Actions\CreateWebhookEndpointAction;
-use App\Tenant\WebhookModule\Actions\DispatchOutgoingWebhookAction;
-use App\Tenant\WebhookModule\Actions\RevokeIncomingTokenAction;
-use App\Tenant\WebhookModule\DTOs\CreateIncomingTokenData;
-use App\Tenant\WebhookModule\DTOs\CreateWebhookEndpointData;
-use App\Tenant\WebhookModule\Enums\TenantWebhookEvent;
-use App\Tenant\WebhookModule\Events\IncomingWebhookReceived;
-use App\Tenant\WebhookModule\Jobs\DeliverTenantWebhookJob;
-use App\Tenant\WebhookModule\Models\IncomingWebhookToken;
-use App\Tenant\WebhookModule\Models\WebhookDelivery;
-use App\Tenant\WebhookModule\Models\WebhookEndpoint;
+use App\Tenant\[Bundle]\AuthenticationModule\Models\User;
+use App\Tenant\[Bundle]\UserManagementModule\Actions\SeedDefaultRolesAction;
+use App\Tenant\[Bundle]\WebhookModule\Actions\CreateIncomingTokenAction;
+use App\Tenant\[Bundle]\WebhookModule\Actions\CreateWebhookEndpointAction;
+use App\Tenant\[Bundle]\WebhookModule\Actions\DispatchOutgoingWebhookAction;
+use App\Tenant\[Bundle]\WebhookModule\Actions\RevokeIncomingTokenAction;
+use App\Tenant\[Bundle]\WebhookModule\DTOs\CreateIncomingTokenData;
+use App\Tenant\[Bundle]\WebhookModule\DTOs\CreateWebhookEndpointData;
+use App\Tenant\[Bundle]\WebhookModule\Enums\TenantWebhookEvent;
+use App\Tenant\[Bundle]\WebhookModule\Events\IncomingWebhookReceived;
+use App\Tenant\[Bundle]\WebhookModule\Jobs\DeliverTenantWebhookJob;
+use App\Tenant\[Bundle]\WebhookModule\Models\IncomingWebhookToken;
+use App\Tenant\[Bundle]\WebhookModule\Models\WebhookDelivery;
+use App\Tenant\[Bundle]\WebhookModule\Models\WebhookEndpoint;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;

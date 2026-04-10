@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Central\TenantProvisioningModule\Models\Domain;
 use App\Central\TenantProvisioningModule\Models\Tenant;
-use App\Tenant\AuthenticationModule\Models\User as TenantUser;
+use App\Tenant\[Bundle]\AuthenticationModule\Models\User as TenantUser;
 use Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper;
 
 function createTenantForErrorHandling(string $tenantId, string $domain, string $status = 'active'): Tenant {

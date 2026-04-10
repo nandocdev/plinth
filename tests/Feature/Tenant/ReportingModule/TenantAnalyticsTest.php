@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-use App\Tenant\AuthenticationModule\Models\User;
-use App\Tenant\ReportingModule\Actions\GetAnalyticsSummaryAction;
-use App\Tenant\ReportingModule\Actions\GetMetricSeriesAction;
-use App\Tenant\ReportingModule\Actions\TakeMetricSnapshotAction;
-use App\Tenant\ReportingModule\DTOs\AnalyticsPeriodData;
-use App\Tenant\ReportingModule\Enums\TenantMetricKey;
-use App\Tenant\ReportingModule\Jobs\CollectDailyMetricsJob;
-use App\Tenant\ReportingModule\Models\TenantMetricSnapshot;
-use App\Tenant\ReportingModule\Policies\ReportingPolicy;
-use App\Tenant\UserManagementModule\Actions\SeedDefaultRolesAction;
+use App\Tenant\[Bundle]\AuthenticationModule\Models\User;
+use App\Tenant\[Bundle]\ReportingModule\Actions\GetAnalyticsSummaryAction;
+use App\Tenant\[Bundle]\ReportingModule\Actions\GetMetricSeriesAction;
+use App\Tenant\[Bundle]\ReportingModule\Actions\TakeMetricSnapshotAction;
+use App\Tenant\[Bundle]\ReportingModule\DTOs\AnalyticsPeriodData;
+use App\Tenant\[Bundle]\ReportingModule\Enums\TenantMetricKey;
+use App\Tenant\[Bundle]\ReportingModule\Jobs\CollectDailyMetricsJob;
+use App\Tenant\[Bundle]\ReportingModule\Models\TenantMetricSnapshot;
+use App\Tenant\[Bundle]\ReportingModule\Policies\ReportingPolicy;
+use App\Tenant\[Bundle]\UserManagementModule\Actions\SeedDefaultRolesAction;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\PermissionRegistrar;
