@@ -35,6 +35,10 @@ class AppServiceProvider extends ServiceProvider {
      */
     protected function configureMorphMaps(): void {
         Relation::morphMap([
+            // Alias para registros existentes en la BD con el namespace antiguo
+            'App\Tenant\AuthenticationModule\Models\User' => \App\Tenant\IdentityContext\AuthenticationModule\Models\User::class,
+            
+            // Mapeos estandar para nuevos registros
             'tenant_user'  => \App\Tenant\IdentityContext\AuthenticationModule\Models\User::class,
             'system_admin' => \App\Central\AuthenticationModule\Models\User::class,
             'tenant'       => \App\Central\TenantProvisioningModule\Models\Tenant::class,
