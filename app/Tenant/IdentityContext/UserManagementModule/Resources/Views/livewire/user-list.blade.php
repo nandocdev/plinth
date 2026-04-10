@@ -47,7 +47,7 @@
                                     <flux:badge
                                         color="{{ match ($roleName) {'admin' => 'red','manager' => 'blue',default => 'zinc'} }}"
                                         size="sm">
-                                        {{ \App\Tenant\UserManagementModule\Enums\TenantRole::from($roleName)->label() }}
+                                        {{ \App\Tenant\IdentityContext\UserManagementModule\Enums\TenantRole::from($roleName)->label() }}
                                     </flux:badge>
                                 @else
                                     <flux:badge color="zinc" size="sm">{{ __('Sin rol') }}</flux:badge>
@@ -55,9 +55,9 @@
                             </td>
 
                             <td class="px-4 py-3">
-                                @php $status = $user->status instanceof \App\Tenant\UserManagementModule\Enums\TenantUserStatus ? $user->status : \App\Tenant\UserManagementModule\Enums\TenantUserStatus::from((string)$user->status); @endphp
+                                @php $status = $user->status instanceof \App\Tenant\IdentityContext\UserManagementModule\Enums\TenantUserStatus ? $user->status : \App\Tenant\IdentityContext\UserManagementModule\Enums\TenantUserStatus::from((string)$user->status); @endphp
                                 <flux:badge
-                                    color="{{ $status === \App\Tenant\UserManagementModule\Enums\TenantUserStatus::Active ? 'green' : 'zinc' }}"
+                                    color="{{ $status === \App\Tenant\IdentityContext\UserManagementModule\Enums\TenantUserStatus::Active ? 'green' : 'zinc' }}"
                                     size="sm">
                                     {{ $status->label() }}
                                 </flux:badge>
