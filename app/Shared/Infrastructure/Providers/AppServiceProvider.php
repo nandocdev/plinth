@@ -6,6 +6,7 @@ namespace App\Shared\Infrastructure\Providers;
 
 use App\Central\AuthenticationModule\Models\User;
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -26,6 +27,18 @@ class AppServiceProvider extends ServiceProvider {
     public function boot(): void {
         $this->configureDefaults();
         $this->configureMonitoringAccess();
+        $this->configureMorphMaps();
+    }
+
+    /**
+     * Configure Eloquent Morph Maps for portable polymorphic relations.
+     */
+    protected function configureMorphMaps(): void {
+        Relation::morphMap([
+            'tenant_user'  => \App\Tenant\IdentityContext\AuthenticationModule\Models\User::class,
+            'system_admin' => \App\Central\AuthenticationModule\Models\User::class,
+            'tenant'       => \App\Central\TenantProvisioningModule\Models\Tenant::class,
+        ]);
     }
 
     /**
