@@ -120,3 +120,4 @@ Estado base usado para este documento:
 3. Subir observabilidad: health dashboard y logs globales consolidados.
 4. Cerrar huecos tenant: notifications, maintenance/error isolation y export/import con jobs tenant-aware.
 5. Endurecer reglas duras con tests de aislamiento (auth, cache, queue, storage) en CI.
+plantea una solucion a lo siguiente: "como puedo implementar un metodo para que, un tenant admin pueda autenticarse desde el central y luego ser redirigido a su tenant sin perder el contexto de autenticación? pero que a la vez pueda autenticarse directamente desde su tenant sin pasar por el central?"
