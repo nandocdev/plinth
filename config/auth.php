@@ -79,7 +79,7 @@ return [
 
         'tenant_users' => [
             'driver' => 'eloquent',
-            'model' => App\Tenant\AuthenticationModule\Models\User::class,
+            'model' => App\Tenant\IdentityContext\AuthenticationModule\Models\User::class,
         ],
     ],
 

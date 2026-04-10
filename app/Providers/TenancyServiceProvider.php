@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Tenant\ErrorHandlingModule\Http\Middleware\EnsureTenantNotInMaintenance;
+use App\Tenant\PlatformContext\ErrorHandlingModule\Http\Middleware\EnsureTenantNotInMaintenance;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;

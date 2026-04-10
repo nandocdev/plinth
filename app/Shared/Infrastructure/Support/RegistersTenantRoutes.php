@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Shared\Infrastructure\Support;
 
 use App\Shared\Infrastructure\Http\Middleware\ApplyTenantRuntimePreferences;
-use App\Tenant\ErrorHandlingModule\Http\Middleware\EnsureTenantNotInMaintenance;
+use App\Tenant\PlatformContext\ErrorHandlingModule\Http\Middleware\EnsureTenantNotInMaintenance;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;

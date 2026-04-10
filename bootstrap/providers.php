@@ -15,22 +15,30 @@ return [
     App\Providers\HorizonServiceProvider::class,
     App\Providers\TenancyServiceProvider::class,
     App\Shared\Infrastructure\Providers\AppServiceProvider::class,
-    App\Tenant\AuthenticationModule\Providers\AuthenticationModuleServiceProvider::class,
-    App\Tenant\ActivityLogModule\Providers\TenantActivityLogModuleServiceProvider::class,
-    App\Tenant\AddonsModule\Providers\AddonsModuleServiceProvider::class,
-    App\Tenant\ApiAccessModule\Providers\ApiAccessModuleServiceProvider::class,
-    App\Tenant\CustomDomainModule\Providers\CustomDomainModuleServiceProvider::class,
-    App\Tenant\ErrorHandlingModule\Providers\ErrorHandlingModuleServiceProvider::class,
-    App\Tenant\ExportImportModule\Providers\ExportImportModuleServiceProvider::class,
-    App\Tenant\FileUploadModule\Providers\FileUploadModuleServiceProvider::class,
-    App\Tenant\FeatureFlagsModule\Providers\FeatureFlagsModuleServiceProvider::class,
-    App\Tenant\ImpersonationModule\Providers\ImpersonationModuleServiceProvider::class,
-    App\Tenant\NotificationModule\Providers\TenantNotificationModuleServiceProvider::class,
-    App\Tenant\QueueModule\Providers\QueueModuleServiceProvider::class,
-    App\Tenant\SettingsModule\Providers\SettingsModuleServiceProvider::class,
-    App\Tenant\SelfServiceBillingModule\Providers\SelfServiceBillingModuleServiceProvider::class,
-    App\Tenant\UserManagementModule\Providers\UserManagementModuleServiceProvider::class,
-    App\Tenant\ReportingModule\Providers\ReportingModuleServiceProvider::class,
-    App\Tenant\WebhookModule\Providers\WebhookModuleServiceProvider::class,
-    App\Tenant\WorkspaceModule\Providers\WorkspaceModuleServiceProvider::class,
+    
+    // Identity Context
+    App\Tenant\IdentityContext\AuthenticationModule\Providers\AuthenticationModuleServiceProvider::class,
+    App\Tenant\IdentityContext\ApiAccessModule\Providers\ApiAccessModuleServiceProvider::class,
+    App\Tenant\IdentityContext\ImpersonationModule\Providers\ImpersonationModuleServiceProvider::class,
+    App\Tenant\IdentityContext\UserManagementModule\Providers\UserManagementModuleServiceProvider::class,
+
+    // Operations Context
+    App\Tenant\OperationsContext\ActivityLogModule\Providers\TenantActivityLogModuleServiceProvider::class,
+    App\Tenant\OperationsContext\NotificationModule\Providers\TenantNotificationModuleServiceProvider::class,
+    App\Tenant\OperationsContext\QueueModule\Providers\QueueModuleServiceProvider::class,
+    App\Tenant\OperationsContext\ReportingModule\Providers\ReportingModuleServiceProvider::class,
+    App\Tenant\OperationsContext\WebhookModule\Providers\WebhookModuleServiceProvider::class,
+
+    // Governance Context
+    App\Tenant\GovernanceContext\AddonsModule\Providers\AddonsModuleServiceProvider::class,
+    App\Tenant\GovernanceContext\CustomDomainModule\Providers\CustomDomainModuleServiceProvider::class,
+    App\Tenant\GovernanceContext\FeatureFlagsModule\Providers\FeatureFlagsModuleServiceProvider::class,
+    App\Tenant\GovernanceContext\SettingsModule\Providers\SettingsModuleServiceProvider::class,
+    App\Tenant\GovernanceContext\SelfServiceBillingModule\Providers\SelfServiceBillingModuleServiceProvider::class,
+
+    // Platform Context
+    App\Tenant\PlatformContext\ErrorHandlingModule\Providers\ErrorHandlingModuleServiceProvider::class,
+    App\Tenant\PlatformContext\ExportImportModule\Providers\ExportImportModuleServiceProvider::class,
+    App\Tenant\PlatformContext\FileUploadModule\Providers\FileUploadModuleServiceProvider::class,
+    App\Tenant\PlatformContext\WorkspaceModule\Providers\WorkspaceModuleServiceProvider::class,
 ];
