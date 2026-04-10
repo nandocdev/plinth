@@ -95,6 +95,13 @@ class TenancyServiceProvider extends ServiceProvider {
     public function boot() {
         $this->bootEvents();
 
+        Event::listen(Events\TenancyInitialized::class, function (Events\TenancyInitialized $event) {
+            $domain = $event->tenancy->tenant->domains->first()?->domain;
+            if ($domain) {
+                \Illuminate\Support\Facades\URL::defaults(['tenantDomain' => $domain]);
+            }
+        });
+
         // Livewire ejecuta acciones en su endpoint /livewire-*/update.
         // Sin middleware persistente, las acciones tenant pueden correr en contexto central.
         Livewire::addPersistentMiddleware([
