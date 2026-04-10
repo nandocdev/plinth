@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 final class TenantImpersonationToken extends Model {
+   protected $connection = 'central';
+   
    protected $table = 'tenant_impersonation_tokens';
 
    protected $fillable = [

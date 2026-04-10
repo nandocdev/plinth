@@ -12,8 +12,9 @@ use RuntimeException;
 final class ConsumeTenantImpersonationAction {
    public function execute(string $tenantId, string $targetDomain, string $plainToken): TenantImpersonationSessionData {
       $tokenHash = hash('sha256', $plainToken);
+      $model = new TenantImpersonationToken();
 
-      $consumed = DB::connection('central')->transaction(function () use ($tenantId, $targetDomain, $tokenHash): TenantImpersonationToken {
+      $consumed = DB::connection($model->getConnectionName())->transaction(function () use ($tenantId, $targetDomain, $tokenHash): TenantImpersonationToken {
          /** @var TenantImpersonationToken|null $token */
          $token = TenantImpersonationToken::query()
             ->where('tenant_id', $tenantId)
