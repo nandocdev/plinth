@@ -17,7 +17,7 @@
 
         <flux:sidebar.nav>
             @auth('tenant')
-                @foreach (\App\Shared\Helpers\TenantSidebarMenuHelper::getMenu() as $section)
+                @foreach (\App\Shared\Support\Navigation\Menu::make(auth('tenant')->user()) as $section)
                     <flux:sidebar.group :heading="$section['heading']" class="grid">
                         @foreach ($section['items'] as $item)
                             @if (empty($item['children']))
