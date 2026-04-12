@@ -31,8 +31,8 @@
             <flux:input wire:model="form.logoUrl" label="Logo URL" placeholder="https://cdn.example.com/logo.svg" />
 
             <div class="grid gap-4 md:grid-cols-2">
-                <flux:input wire:model="form.primaryColor" label="Color primario" placeholder="#0f172a" />
-                <flux:input wire:model="form.secondaryColor" label="Color secundario" placeholder="#2563eb" />
+                <flux:input wire:model="form.primaryColor" type="color" label="Color primario" />
+                <flux:input wire:model="form.secondaryColor" type="color" label="Color secundario" />
             </div>
         </div>
 
