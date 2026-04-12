@@ -3,19 +3,36 @@
 ])
 
 @php
+    /** @var array<string, mixed>|null $tenantSettings */
+    $tenantSettings = $tenantSettings ?? null;
+
     /** @var \App\Central\TenantProvisioningModule\Models\Tenant|null $tenant */
     $tenant = null;
-    $brandName = config('app.name', 'Laravel Starter Kit');
+    $brandName = (string) config('app.name', 'Laravel Starter Kit');
     $logoUrl = null;
     $primaryColor = '#f53003';
+
+    if (is_array($tenantSettings)) {
+        $brandName = (string) ($tenantSettings['brandName'] ?? $brandName);
+
+        if ($brandName === '') {
+            $brandName = (string) ($tenantSettings['companyName'] ?? $brandName);
+        }
+
+        $logoUrl = (string) ($tenantSettings['logoUrl'] ?? '');
+        $logoUrl = $logoUrl !== '' ? $logoUrl : null;
+        $primaryColor = (string) ($tenantSettings['primaryColor'] ?? $primaryColor);
+    }
 
     if (function_exists('tenancy') && tenancy()->initialized) {
         $tenant = tenancy()->tenant;
 
         if ($tenant instanceof \App\Central\TenantProvisioningModule\Models\Tenant) {
-            $brandName = $tenant->brandName();
-            $logoUrl = $tenant->logoUrl();
-            $primaryColor = $tenant->primaryColor();
+            if (!is_array($tenantSettings)) {
+                $brandName = $tenant->brandName();
+                $logoUrl = $tenant->logoUrl();
+                $primaryColor = $tenant->primaryColor();
+            }
         }
     }
 @endphp

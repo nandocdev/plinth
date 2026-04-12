@@ -1,17 +1,33 @@
 @php
+    /** @var array<string, mixed>|null $tenantSettings */
+    $tenantSettings = $tenantSettings ?? null;
+
     /** @var \App\Central\TenantProvisioningModule\Models\Tenant|null $tenant */
     $tenant = null;
-    $tenantBrandName = config('app.name', 'Laravel');
-    $tenantPrimaryColor = '#f53003';
-    $tenantSecondaryColor = '#ff4433';
+    $tenantBrandName = (string) ($tenantBrandName ?? config('app.name', 'Laravel'));
+    $tenantPrimaryColor = (string) ($tenantPrimaryColor ?? '#f53003');
+    $tenantSecondaryColor = (string) ($tenantSecondaryColor ?? '#ff4433');
+
+    if (is_array($tenantSettings)) {
+        $tenantBrandName = (string) ($tenantSettings['brandName'] ?? $tenantBrandName);
+
+        if ($tenantBrandName === '') {
+            $tenantBrandName = (string) ($tenantSettings['companyName'] ?? $tenantBrandName);
+        }
+
+        $tenantPrimaryColor = (string) ($tenantSettings['primaryColor'] ?? $tenantPrimaryColor);
+        $tenantSecondaryColor = (string) ($tenantSettings['secondaryColor'] ?? $tenantSecondaryColor);
+    }
 
     if (function_exists('tenancy') && tenancy()->initialized) {
         $tenant = tenancy()->tenant;
 
         if ($tenant instanceof \App\Central\TenantProvisioningModule\Models\Tenant) {
-            $tenantBrandName = $tenant->brandName();
-            $tenantPrimaryColor = $tenant->primaryColor();
-            $tenantSecondaryColor = $tenant->secondaryColor();
+            if (!is_array($tenantSettings)) {
+                $tenantBrandName = $tenant->brandName();
+                $tenantPrimaryColor = $tenant->primaryColor();
+                $tenantSecondaryColor = $tenant->secondaryColor();
+            }
         }
     }
 @endphp
