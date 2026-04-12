@@ -102,7 +102,7 @@ Estado base usado para este documento:
 
 ### Funcionalidades implementadas no explicitadas
 
-- [Pendiente] Landing Builder visual del tenant con templates, preview y publicacion.
+- [Parcial] Landing Builder del tenant (MVP): editor de contenido principal, preview y publicacion; pendiente editor visual por bloques avanzados/templates.
 - [Implementado] Wizard de outboarding en /signup publico (multi-step en Flux con stepper custom).
 - [Parcial] Flujo de 2FA tenant opcional/sugerible: setup y desactivación desde perfil; challenge/enforcement pendiente.
   <!-- Pendiente: middleware de enforcement 2FA en rutas tenant protegidas, challenge page tras login si 2FA habilitado, opción de marcar 2FA como obligatorio por plan/admin. -->

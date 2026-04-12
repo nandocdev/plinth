@@ -34,6 +34,7 @@ return [
     App\Tenant\GovernanceContext\AddonsModule\Providers\AddonsModuleServiceProvider::class,
     App\Tenant\GovernanceContext\CustomDomainModule\Providers\CustomDomainModuleServiceProvider::class,
     App\Tenant\GovernanceContext\FeatureFlagsModule\Providers\FeatureFlagsModuleServiceProvider::class,
+    App\Tenant\GovernanceContext\LandingBuilderModule\Providers\LandingBuilderModuleServiceProvider::class,
     App\Tenant\GovernanceContext\SettingsModule\Providers\SettingsModuleServiceProvider::class,
     App\Tenant\GovernanceContext\SelfServiceBillingModule\Providers\SelfServiceBillingModuleServiceProvider::class,
 

@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Central\AuthenticationModule\Models\User;
+use App\Central\AdminAuthorizationModule\Enums\AdminRole;
+use Database\Seeders\Central\AdminAuthorizationModule\CentralRolesPermissionsSeeder;
 use Database\Seeders\Central\InitialPlansSeeder;
 use Database\Seeders\Tenant\TenantOwnerUsersSeeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -20,14 +22,19 @@ class DatabaseSeeder extends Seeder {
         //     return;
         // }
 
-        $this->call(InitialPlansSeeder::class);
+        $this->call([
+            InitialPlansSeeder::class,
+            CentralRolesPermissionsSeeder::class,
+        ]);
 
-        User::query()->firstOrCreate([
-            'email' => 'admin@tenant.local',
+        $admin = User::query()->firstOrCreate([
+            'email' => 'admin@central.local',
         ], [
             'name' => 'Admin User',
             'password' => Hash::make('password'),
             'email_verified_at' => now(),
         ]);
+
+        $admin->syncRoles([AdminRole::SuperAdmin->value]);
     }
 }

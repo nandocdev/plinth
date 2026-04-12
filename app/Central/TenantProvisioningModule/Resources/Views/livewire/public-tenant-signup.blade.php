@@ -46,19 +46,14 @@
                     <p class="text-xs font-semibold uppercase tracking-widest text-zinc-400">Paso 1 · Tu empresa</p>
 
                     <flux:input wire:model.live.debounce.250ms="form.companyName"
-                        wire:blur="syncSubdomainFromCompanyName" label="Nombre de la empresa"
-                        placeholder="Acme Inc." required />
+                        wire:blur="syncSubdomainFromCompanyName" label="Nombre de la empresa" placeholder="Acme Inc."
+                        required />
 
-                    <flux:input wire:model.live.debounce.250ms="form.subdomain" label="Subdominio"
-                        placeholder="acme" required>
-                        <x-slot name="description">
-                            <span class="text-xs text-zinc-500">
-                                URL de acceso:
-                                <strong
-                                    class="text-zinc-300">{{ $form->subdomain ?: 'tuempresa' }}.{{ $baseHost }}</strong>
-                            </span>
-                        </x-slot>
-                    </flux:input>
+                    <flux:input.group label="Subdominio">
+                        <flux:input wire:model.live.debounce.250ms="form.subdomain" placeholder="acme" required />
+                        <flux:input.group.suffix class="text-zinc-500 dark:text-zinc-400">.{{ $baseHost }}
+                        </flux:input.group.suffix>
+                    </flux:input.group>
                 </flux:card>
             </div>
 
@@ -103,10 +98,10 @@
                     <p class="text-xs font-semibold uppercase tracking-widest text-zinc-400">Paso 3 · Cuenta
                         administradora</p>
 
-                    <flux:input wire:model="form.adminName" label="Nombre completo" placeholder="Fernando Castillo"
+                    <flux:input wire:model="form.adminName" label="Nombre completo" placeholder="Admin Tenant"
                         required />
                     <flux:input wire:model="form.adminEmail" type="email" label="Correo electrónico"
-                        placeholder="tu@empresa.com" required />
+                        placeholder="user@mail.com" required />
                     <flux:input wire:model="form.adminPassword" type="password" label="Contraseña"
                         placeholder="Mínimo 8 caracteres" required />
                     <flux:input wire:model="form.adminPasswordConfirmation" type="password" label="Confirmar contraseña"
