@@ -17,6 +17,22 @@ enum TenantRole: string {
       };
    }
 
+   public function description(): string {
+      return match ($this) {
+         self::Admin   => 'Acceso total: gestión de usuarios, roles, configuración y todos los módulos del workspace.',
+         self::Manager => 'Acceso a operaciones y módulos funcionales. No puede gestionar usuarios ni configuración avanzada.',
+         self::Member  => 'Acceso de solo lectura a los módulos habilitados para el workspace.',
+      };
+   }
+
+   public function color(): string {
+      return match ($this) {
+         self::Admin   => 'red',
+         self::Manager => 'blue',
+         self::Member  => 'zinc',
+      };
+   }
+
    /** @return array<string, string> */
    public static function options(): array {
       return array_column(
