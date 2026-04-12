@@ -55,7 +55,8 @@
                             ? 'border-brand-500 bg-brand-50 text-zinc-900 dark:border-brand-400 dark:bg-zinc-800 dark:text-zinc-100'
                             : 'border-zinc-200 text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800' }}">
                         <div class="flex items-center justify-between gap-2">
-                            <span class="font-medium">{{ ucfirst($block['block_type']) }}</span>
+                            <span
+                                class="font-medium">{{ $blockLabels[$block['block_type']] ?? ucfirst($block['block_type']) }}</span>
                             <flux:badge color="{{ $block['is_active'] ? 'green' : 'zinc' }}" size="sm">
                                 {{ $block['is_active'] ? 'Activo' : 'Inactivo' }}
                             </flux:badge>

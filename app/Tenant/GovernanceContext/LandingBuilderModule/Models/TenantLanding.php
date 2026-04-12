@@ -34,6 +34,7 @@ final class TenantLanding extends Model {
    /** @return array<int, array<string, mixed>> */
    public static function availableTemplates(): array {
       return collect(config('landing_templates', []))
+         ->filter(fn(mixed $template): bool => is_array($template) && isset($template['blocks']))
          ->map(fn(array $template, string $key) => [
             'key' => $key,
             'name' => $template['name'] ?? ucfirst($key),

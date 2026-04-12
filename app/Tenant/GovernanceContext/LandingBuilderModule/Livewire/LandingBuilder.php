@@ -146,6 +146,7 @@ final class LandingBuilder extends Component {
          'previewUrl' => route('tenant.landing.preview', ['tenantDomain' => request()->route('tenantDomain')]),
          'selectedBlockType' => (string) ($selectedBlock['block_type'] ?? ''),
          'availableTemplates' => TenantLanding::availableTemplates(),
+         'blockLabels' => config('landing_templates.block_labels', []),
       ]);
    }
 
@@ -185,6 +186,46 @@ final class LandingBuilder extends Component {
             'title' => (string) ($settings['title'] ?? ''),
             'items' => is_array($settings['items'] ?? null) ? $settings['items'] : [],
          ],
+         'gallery' => [
+            'title' => (string) ($settings['title'] ?? ''),
+            'images' => is_array($settings['images'] ?? null) ? $settings['images'] : [],
+         ],
+         'pricing' => [
+            'title' => (string) ($settings['title'] ?? ''),
+            'currency' => (string) ($settings['currency'] ?? '$'),
+            'plans' => is_array($settings['plans'] ?? null) ? $settings['plans'] : [],
+         ],
+         'faq' => [
+            'title' => (string) ($settings['title'] ?? ''),
+            'items' => is_array($settings['items'] ?? null) ? $settings['items'] : [],
+         ],
+         'contact' => [
+            'title' => (string) ($settings['title'] ?? ''),
+            'email' => (string) ($settings['email'] ?? ''),
+            'phone' => (string) ($settings['phone'] ?? ''),
+            'address' => (string) ($settings['address'] ?? ''),
+         ],
+         'about' => [
+            'title' => (string) ($settings['title'] ?? ''),
+            'body' => (string) ($settings['body'] ?? ''),
+            'image_url' => (string) ($settings['image_url'] ?? ''),
+         ],
+         'story' => [
+            'title' => (string) ($settings['title'] ?? ''),
+            'milestones' => is_array($settings['milestones'] ?? null) ? $settings['milestones'] : [],
+         ],
+         'achievements' => [
+            'title' => (string) ($settings['title'] ?? ''),
+            'items' => is_array($settings['items'] ?? null) ? $settings['items'] : [],
+         ],
+         'catalog' => [
+            'title' => (string) ($settings['title'] ?? ''),
+            'items' => is_array($settings['items'] ?? null) ? $settings['items'] : [],
+         ],
+         'trust' => [
+            'title' => (string) ($settings['title'] ?? ''),
+            'items' => is_array($settings['items'] ?? null) ? $settings['items'] : [],
+         ],
          'cta' => [
             'title' => (string) ($settings['title'] ?? ''),
             'subtitle' => (string) ($settings['subtitle'] ?? ''),
@@ -216,6 +257,62 @@ final class LandingBuilder extends Component {
             'settings.items.*.quote' => ['required', 'string', 'max:300'],
             'settings.items.*.author' => ['required', 'string', 'max:120'],
             'settings.items.*.role' => ['nullable', 'string', 'max:120'],
+         ],
+         'gallery' => [
+            'settings.title' => ['required', 'string', 'max:180'],
+            'settings.images' => ['required', 'array', 'min:1'],
+            'settings.images.*.url' => ['required', 'string', 'max:500'],
+            'settings.images.*.alt' => ['nullable', 'string', 'max:140'],
+         ],
+         'pricing' => [
+            'settings.title' => ['required', 'string', 'max:180'],
+            'settings.currency' => ['required', 'string', 'max:8'],
+            'settings.plans' => ['required', 'array', 'min:1'],
+            'settings.plans.*.name' => ['required', 'string', 'max:120'],
+            'settings.plans.*.price' => ['required', 'string', 'max:40'],
+            'settings.plans.*.period' => ['nullable', 'string', 'max:40'],
+            'settings.plans.*.cta' => ['nullable', 'string', 'max:80'],
+         ],
+         'faq' => [
+            'settings.title' => ['required', 'string', 'max:180'],
+            'settings.items' => ['required', 'array', 'min:1'],
+            'settings.items.*.question' => ['required', 'string', 'max:220'],
+            'settings.items.*.answer' => ['required', 'string', 'max:600'],
+         ],
+         'contact' => [
+            'settings.title' => ['required', 'string', 'max:180'],
+            'settings.email' => ['nullable', 'email', 'max:180'],
+            'settings.phone' => ['nullable', 'string', 'max:60'],
+            'settings.address' => ['nullable', 'string', 'max:220'],
+         ],
+         'about' => [
+            'settings.title' => ['required', 'string', 'max:180'],
+            'settings.body' => ['required', 'string', 'max:2000'],
+            'settings.image_url' => ['nullable', 'string', 'max:500'],
+         ],
+         'story' => [
+            'settings.title' => ['required', 'string', 'max:180'],
+            'settings.milestones' => ['required', 'array', 'min:1'],
+            'settings.milestones.*.year' => ['required', 'string', 'max:40'],
+            'settings.milestones.*.event' => ['required', 'string', 'max:260'],
+         ],
+         'achievements' => [
+            'settings.title' => ['required', 'string', 'max:180'],
+            'settings.items' => ['required', 'array', 'min:1'],
+            'settings.items.*.title' => ['required', 'string', 'max:120'],
+            'settings.items.*.value' => ['required', 'string', 'max:80'],
+         ],
+         'catalog' => [
+            'settings.title' => ['required', 'string', 'max:180'],
+            'settings.items' => ['required', 'array', 'min:1'],
+            'settings.items.*.name' => ['required', 'string', 'max:120'],
+            'settings.items.*.price' => ['required', 'string', 'max:80'],
+            'settings.items.*.description' => ['nullable', 'string', 'max:260'],
+         ],
+         'trust' => [
+            'settings.title' => ['required', 'string', 'max:180'],
+            'settings.items' => ['required', 'array', 'min:1'],
+            'settings.items.*.title' => ['required', 'string', 'max:120'],
          ],
          'cta' => [
             'settings.title' => ['required', 'string', 'max:180'],
