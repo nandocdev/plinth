@@ -10,7 +10,7 @@
     @endif
 </head>
 
-<body
+<body id="top"
     style="margin:0;font-family:{{ $theme['font_stack'] ?? 'Instrument Sans,system-ui,-apple-system,sans-serif' }};background:{{ $theme['bg_page'] ?? '#f8fafc' }};color:{{ $theme['text_primary'] ?? '#0f172a' }};">
     @if (!$isPublished)
         <div style="background:#f59e0b;color:#111827;padding:10px 16px;font-weight:600;text-align:center;">
@@ -18,12 +18,27 @@
         </div>
     @endif
 
+    @includeIf('landing-builder::blocks.navbar', [
+        'settings' => $navbarSettings,
+        'theme' => $theme,
+        'siteName' => $siteName,
+        'menuSections' => $menuSections,
+    ])
+
     @foreach ($blocks as $block)
-        @includeIf('landing-builder::blocks.' . $block->block_type, [
-            'settings' => is_array($block->settings) ? $block->settings : [],
-            'theme' => $theme,
-            'siteName' => $siteName,
-        ])
+        @continue($block->block_type === 'navbar')
+
+        @php
+            $sectionId = 'section-' . $block->block_type . '-' . $block->id;
+        @endphp
+
+        <section id="{{ $sectionId }}">
+            @includeIf('landing-builder::blocks.' . $block->block_type, [
+                'settings' => is_array($block->settings) ? $block->settings : [],
+                'theme' => $theme,
+                'siteName' => $siteName,
+            ])
+        </section>
     @endforeach
 
     @if (count($blocks) === 0)

@@ -1,9 +1,19 @@
 <section class="space-y-6">
-    <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
-        <h1 class="text-xl font-semibold text-zinc-900 dark:text-zinc-100">Landing Builder</h1>
-        <p class="mt-1 text-sm text-zinc-600 dark:text-zinc-300">
-            Editor modular por bloques con previsualización y publicación controlada.
-        </p>
+    <div
+        class="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900 lg:flex-row lg:items-start lg:justify-between">
+        <div>
+            <h1 class="text-xl font-semibold text-zinc-900 dark:text-zinc-100">Landing Builder</h1>
+            <p class="mt-1 text-sm text-zinc-600 dark:text-zinc-300">
+                Editor modular por bloques con previsualización y publicación controlada.
+            </p>
+        </div>
+
+        <div class="flex flex-wrap gap-2 lg:justify-end">
+            <flux:button type="button" variant="subtle" wire:click="unpublish">Guardar como borrador
+            </flux:button>
+            <flux:button type="button" variant="primary" wire:click="publish">Publicar</flux:button>
+            <flux:button type="submit" variant="filled" form="landing-global-form">Guardar global</flux:button>
+        </div>
     </div>
 
     @if ($message)
@@ -22,7 +32,6 @@
 
             <div class="space-y-2">
                 <flux:heading size="sm">Plantillas</flux:heading>
-                <p class="text-xs text-zinc-500">Elige una base y luego personalízala bloque por bloque.</p>
             </div>
 
             <div class="rounded-lg border border-zinc-200 p-3 dark:border-zinc-700">
@@ -36,7 +45,7 @@
                     <span class="mt-1 inline-block size-4 rounded-full border border-white/40"
                         style="background: {{ $selectedTemplate['primary_color'] ?? '#2563eb' }}"></span>
                 </div>
-                <flux:button type="button" variant="ghost" size="sm" class="mt-3 w-full"
+                <flux:button type="button" variant="filled" size="sm" class="mt-3 w-full"
                     @click="showTemplateModal = true">
                     Cambiar plantilla
                 </flux:button>
@@ -52,10 +61,8 @@
                         <div>
                             <h3 class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Selecciona una plantilla
                             </h3>
-                            <p class="text-xs text-zinc-500">Se aplicará la base completa y luego podrás personalizar.
-                            </p>
                         </div>
-                        <flux:button type="button" variant="ghost" size="sm" @click="showTemplateModal = false">
+                        <flux:button type="button" variant="filled" size="sm" @click="showTemplateModal = false">
                             Cerrar</flux:button>
                     </div>
 
@@ -87,7 +94,6 @@
 
             <div class="space-y-2">
                 <flux:heading size="sm">Bloques</flux:heading>
-                <p class="text-xs text-zinc-500">Activa, desactiva y edita cada sección de tu landing.</p>
             </div>
 
             <flux:button type="button" variant="subtle" size="sm" class="w-full"
@@ -105,9 +111,13 @@
                         <div class="flex items-center justify-between gap-2">
                             <span
                                 class="font-medium">{{ $blockLabels[$block['block_type']] ?? ucfirst($block['block_type']) }}</span>
-                            <flux:badge color="{{ $block['is_active'] ? 'green' : 'zinc' }}" size="sm">
-                                {{ $block['is_active'] ? 'Activo' : 'Inactivo' }}
-                            </flux:badge>
+                            @if ($block['block_type'] === 'navbar')
+                                <flux:badge color="blue" size="sm">Fijo</flux:badge>
+                            @else
+                                <flux:badge color="{{ $block['is_active'] ? 'green' : 'zinc' }}" size="sm">
+                                    {{ $block['is_active'] ? 'Activo' : 'Inactivo' }}
+                                </flux:badge>
+                            @endif
                         </div>
                     </button>
                 @endforeach
@@ -124,7 +134,7 @@
                             <h3 class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Agregar bloque</h3>
                             <p class="text-xs text-zinc-500">Selecciona el tipo de bloque que deseas incorporar.</p>
                         </div>
-                        <flux:button type="button" variant="ghost" size="sm" @click="showAddBlockModal = false">
+                        <flux:button type="button" variant="filled" size="sm" @click="showAddBlockModal = false">
                             Cerrar</flux:button>
                     </div>
 
@@ -146,28 +156,16 @@
         </aside>
 
         <div class="space-y-6">
-            <form wire:submit="save"
-                class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900 space-y-4">
-                <flux:heading size="sm">Configuración global</flux:heading>
-                <div class="grid gap-4 md:grid-cols-2">
-                    <flux:input wire:model="form.siteName" label="Nombre del sitio" placeholder="Mi Empresa" />
-                    <flux:input wire:model="form.primaryColor" type="color" label="Color primario" />
-                </div>
-                <div class="grid gap-4 md:grid-cols-2">
-                    <flux:select wire:model="form.status" label="Estado">
-                        <flux:select.option value="draft">Borrador</flux:select.option>
-                        <flux:select.option value="published">Publicado</flux:select.option>
-                    </flux:select>
-                    <flux:input wire:model="form.cta" label="CTA por defecto" placeholder="Comenzar" />
-                </div>
-
-                <div class="flex flex-wrap justify-end gap-2">
-                    <flux:button type="button" variant="subtle" wire:click="unpublish">Guardar como borrador
-                    </flux:button>
-                    <flux:button type="button" variant="primary" wire:click="publish">Publicar</flux:button>
-                    <flux:button type="submit" variant="ghost">Guardar global</flux:button>
-                </div>
-            </form>
+            @if ($selectedBlockType !== 'navbar')
+                <form id="landing-global-form" wire:submit="save"
+                    class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900 space-y-4">
+                    <flux:heading size="sm">Configuración global</flux:heading>
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <flux:input wire:model="form.siteName" label="Nombre del sitio" placeholder="Mi Empresa" />
+                        <flux:input wire:model="form.primaryColor" type="color" label="Color primario" />
+                    </div>
+                </form>
+            @endif
 
             <div
                 class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
@@ -183,28 +181,36 @@
 
         <aside
             class="space-y-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
+            <flux:heading level="3">
+                Editor de bloque
+                <i class="mt-2 ">Tipo: {{ $selectedBlockType ?: 'N/A' }}.</i>
+            </flux:heading>
+
             <div class="flex items-center justify-between">
-                <div>
-                    <flux:heading size="sm">Editor de bloque</flux:heading>
-                    <p class="text-xs text-zinc-500">Tipo: {{ $selectedBlockType ?: 'N/A' }}</p>
-                </div>
+
+
                 @if ($selectedBlockType)
-                    <div class="flex items-center gap-2">
-                        <flux:button type="button" variant="ghost" size="sm" wire:click="moveSelectedBlockUp">
+                    <flux:button.group>
+                        <flux:button type="button" variant="filled" size="sm" wire:click="moveSelectedBlockUp"
+                            icon="arrow-up">
                             Subir
                         </flux:button>
-                        <flux:button type="button" variant="ghost" size="sm"
-                            wire:click="moveSelectedBlockDown">
+                        <flux:button type="button" variant="filled" size="sm"
+                            wire:click="moveSelectedBlockDown" icon="arrow-down">
                             Bajar
                         </flux:button>
-                        <flux:button type="button" variant="ghost" size="sm" wire:click="toggleBlock">
-                            {{ $editingBlockActive ? 'Desactivar' : 'Activar' }}
-                        </flux:button>
-                        <flux:button type="button" variant="danger" size="sm" wire:click="removeSelectedBlock"
-                            wire:confirm="¿Eliminar este bloque?">
-                            Quitar
-                        </flux:button>
-                    </div>
+                        @if ($selectedBlockType !== 'navbar')
+                            <flux:button type="button" variant="filled" size="sm" wire:click="toggleBlock"
+                                icon="{{ $editingBlockActive ? 'eye-slash' : 'eye' }}">
+                                {{ $editingBlockActive ? 'Desactivar' : 'Activar' }}
+                            </flux:button>
+                            <flux:button type="button" variant="danger" size="sm"
+                                wire:click="removeSelectedBlock" wire:confirm="¿Eliminar este bloque?"
+                                icon="trash">
+                                Quitar
+                            </flux:button>
+                        @endif
+                    </flux:button.group>
                 @endif
             </div>
 
