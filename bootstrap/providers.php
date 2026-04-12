@@ -19,6 +19,7 @@ return [
     // Identity Context
     App\Tenant\IdentityContext\AuthenticationModule\Providers\AuthenticationModuleServiceProvider::class,
     App\Tenant\IdentityContext\ApiAccessModule\Providers\ApiAccessModuleServiceProvider::class,
+    App\Tenant\IdentityContext\AuthorizationModule\Providers\AuthorizationModuleServiceProvider::class,
     App\Tenant\IdentityContext\ImpersonationModule\Providers\ImpersonationModuleServiceProvider::class,
     App\Tenant\IdentityContext\UserManagementModule\Providers\UserManagementModuleServiceProvider::class,
 
