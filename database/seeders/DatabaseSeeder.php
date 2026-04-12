@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder {
         $this->call(InitialPlansSeeder::class);
 
         User::query()->firstOrCreate([
-            'email' => 'admin@tenant.local',
+            'email' => 'admin@central.local',
         ], [
             'name' => 'Admin User',
             'password' => Hash::make('password'),
