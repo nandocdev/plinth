@@ -65,7 +65,7 @@
     </flux:header>
 
     <flux:main>
-        <div class="mx-auto max-w-6xl">
+        <div class="mx-auto">
             <div
                 class="rounded-2xl border border-zinc-200/80 bg-white/85 p-5 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/55 sm:p-6">
                 {{ $slot }}
