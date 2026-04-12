@@ -6,7 +6,8 @@ use App\Tenant\GovernanceContext\LandingBuilderModule\Http\Controllers\PublicLan
 use App\Tenant\GovernanceContext\LandingBuilderModule\Livewire\LandingBuilder;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/landing', PublicLandingController::class)->name('tenant.landing.public');
+Route::get('/', PublicLandingController::class)->name('tenant.landing.public');
+Route::redirect('/landing', '/')->name('tenant.landing.legacy');
 
 Route::middleware(['auth:tenant'])->group(function (): void {
    Route::get('/settings/landing-builder', LandingBuilder::class)->name('tenant.landing.builder');
