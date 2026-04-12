@@ -71,13 +71,67 @@ final class TenantLanding extends Model {
 
       $this->blocks()->delete();
 
+      $this->blocks()->create([
+         'block_type' => 'navbar',
+         'order' => 1,
+         'is_active' => true,
+         'settings' => [
+            'brand_label' => (string) ($globalSettings['site_name'] ?? 'Mi Empresa'),
+            'logo_url' => '',
+            'navbar_bg_color' => '#ffffff',
+            'navbar_text_color' => '#0f172a',
+            'navbar_link_color' => (string) ($this->primary_color ?? '#2563eb'),
+            'layout_style' => 'normal',
+         ],
+      ]);
+
       foreach (($template['blocks'] ?? []) as $index => $block) {
+         if (($block['type'] ?? null) === 'navbar') {
+            continue;
+         }
+
          $this->blocks()->create([
             'block_type' => $block['type'],
-            'order' => $index + 1,
+            'order' => $index + 2,
             'is_active' => true,
             'settings' => is_array($block['defaults'] ?? null) ? $block['defaults'] : [],
          ]);
+      }
+   }
+
+   public function ensureNavbarBlockExists(): void {
+      $existing = $this->blocks()->where('block_type', 'navbar')->first();
+
+      if ($existing instanceof LandingBlock) {
+         if ((int) $existing->order !== 1) {
+            $existing->update(['order' => 1, 'is_active' => true]);
+         }
+
+         return;
+      }
+
+      $this->blocks()->create([
+         'block_type' => 'navbar',
+         'order' => 1,
+         'is_active' => true,
+         'settings' => [
+            'brand_label' => (string) (($this->global_settings['site_name'] ?? null) ?: 'Mi Empresa'),
+            'logo_url' => '',
+            'navbar_bg_color' => '#ffffff',
+            'navbar_text_color' => '#0f172a',
+            'navbar_link_color' => (string) ($this->primary_color ?? '#2563eb'),
+            'layout_style' => 'normal',
+         ],
+      ]);
+
+      $blocks = $this->blocks()
+         ->where('block_type', '!=', 'navbar')
+         ->orderBy('order')
+         ->orderBy('id')
+         ->get();
+
+      foreach ($blocks as $index => $block) {
+         $block->update(['order' => $index + 2]);
       }
    }
 }

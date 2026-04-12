@@ -125,6 +125,10 @@ final class LandingBuilder extends Component {
    }
 
    public function toggleBlock(): void {
+      if ($this->selectedBlockType() === 'navbar') {
+         return;
+      }
+
       $this->editingBlockActive = ! $this->editingBlockActive;
    }
 
@@ -159,6 +163,16 @@ final class LandingBuilder extends Component {
       $this->authorize('update', TenantLanding::class);
 
       if ($this->selectedBlockId <= 0) {
+         return;
+      }
+
+      $selectedBlock = LandingBlock::query()
+         ->where('tenant_landing_id', $this->landingId)
+         ->find($this->selectedBlockId);
+
+      if ($selectedBlock instanceof LandingBlock && $selectedBlock->block_type === 'navbar') {
+         $this->message = 'El bloque Header / Navbar es fijo y no puede eliminarse.';
+
          return;
       }
 
@@ -197,7 +211,7 @@ final class LandingBuilder extends Component {
          $this->rulesForBlock($block->block_type),
       )->validate();
 
-      $action->execute($block, $validated['settings'], $this->editingBlockActive);
+      $action->execute($block, $validated['settings'], $block->block_type === 'navbar' ? true : $this->editingBlockActive);
 
       $this->message = 'Bloque actualizado correctamente.';
       $this->refreshBlocks();
@@ -252,6 +266,12 @@ final class LandingBuilder extends Component {
          ->orderBy('id')
          ->get();
 
+      $selected = $orderedBlocks->firstWhere('id', $this->selectedBlockId);
+
+      if ($selected instanceof LandingBlock && $selected->block_type === 'navbar') {
+         return;
+      }
+
       $currentIndex = $orderedBlocks->search(
          fn(LandingBlock $block): bool => $block->id === $this->selectedBlockId,
       );
@@ -263,6 +283,12 @@ final class LandingBuilder extends Component {
       $targetIndex = $currentIndex + $direction;
 
       if ($targetIndex < 0 || $targetIndex >= $orderedBlocks->count()) {
+         return;
+      }
+
+      $targetBlock = $orderedBlocks->values()->get($targetIndex);
+
+      if ($targetBlock instanceof LandingBlock && $targetBlock->block_type === 'navbar') {
          return;
       }
 
@@ -291,8 +317,18 @@ final class LandingBuilder extends Component {
          ->get();
 
       DB::transaction(function () use ($blocks): void {
-         foreach ($blocks as $index => $block) {
-            LandingBlock::query()->whereKey($block->id)->update(['order' => $index + 1]);
+         $order = 1;
+
+         foreach ($blocks as $block) {
+            if ($block->block_type === 'navbar') {
+               LandingBlock::query()->whereKey($block->id)->update(['order' => 1, 'is_active' => true]);
+
+               continue;
+            }
+
+            $order = max($order, 2);
+            LandingBlock::query()->whereKey($block->id)->update(['order' => $order]);
+            $order++;
          }
       });
    }
@@ -300,6 +336,14 @@ final class LandingBuilder extends Component {
    /** @return array<string, mixed> */
    private function defaultSettingsForBlock(string $blockType): array {
       return match ($blockType) {
+         'navbar' => [
+            'brand_label' => $this->form->siteName ?: 'Mi Empresa',
+            'logo_url' => '',
+            'navbar_bg_color' => '#ffffff',
+            'navbar_text_color' => '#0f172a',
+            'navbar_link_color' => '#2563eb',
+            'layout_style' => 'normal',
+         ],
          'hero' => ['headline' => 'Tu propuesta principal', 'subheadline' => 'Explica rápidamente el valor de tu solución.', 'cta_text' => 'Comenzar', 'cta_url' => '/register'],
          'services' => ['title' => 'Servicios', 'items' => [['title' => 'Servicio 1', 'description' => 'Descripción breve.']]],
          'gallery' => ['title' => 'Galería', 'images' => [['url' => 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80', 'alt' => 'Imagen 1']]],
@@ -322,6 +366,14 @@ final class LandingBuilder extends Component {
       $settings = is_array($block->settings) ? $block->settings : [];
 
       return match ($block->block_type) {
+         'navbar' => [
+            'brand_label' => (string) ($settings['brand_label'] ?? ($this->form->siteName ?: 'Mi Empresa')),
+            'logo_url' => (string) ($settings['logo_url'] ?? ''),
+            'navbar_bg_color' => (string) ($settings['navbar_bg_color'] ?? '#ffffff'),
+            'navbar_text_color' => (string) ($settings['navbar_text_color'] ?? '#0f172a'),
+            'navbar_link_color' => (string) ($settings['navbar_link_color'] ?? '#2563eb'),
+            'layout_style' => (string) ($settings['layout_style'] ?? 'normal'),
+         ],
          'hero' => [
             'headline' => (string) ($settings['headline'] ?? ''),
             'subheadline' => (string) ($settings['subheadline'] ?? ''),
@@ -389,6 +441,14 @@ final class LandingBuilder extends Component {
    /** @return array<string, string|array<int, string>> */
    private function rulesForBlock(string $blockType): array {
       return match ($blockType) {
+         'navbar' => [
+            'settings.brand_label' => ['nullable', 'string', 'max:120'],
+            'settings.logo_url' => ['nullable', 'url', 'max:500'],
+            'settings.navbar_bg_color' => ['nullable', 'string', 'max:7'],
+            'settings.navbar_text_color' => ['nullable', 'string', 'max:7'],
+            'settings.navbar_link_color' => ['nullable', 'string', 'max:7'],
+            'settings.layout_style' => ['nullable', 'in:compact,normal,wide'],
+         ],
          'hero' => [
             'settings.headline' => ['required', 'string', 'max:255'],
             'settings.subheadline' => ['required', 'string', 'max:1000'],
@@ -472,5 +532,11 @@ final class LandingBuilder extends Component {
          ],
          default => ['settings' => ['array']],
       };
+   }
+
+   private function selectedBlockType(): string {
+      $selectedBlock = collect($this->blocks)->firstWhere('id', $this->selectedBlockId);
+
+      return (string) ($selectedBlock['block_type'] ?? '');
    }
 }

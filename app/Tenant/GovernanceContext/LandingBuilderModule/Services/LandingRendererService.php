@@ -21,13 +21,28 @@ final class LandingRendererService {
 
       $hero = $activeBlocks->firstWhere('block_type', 'hero');
       $heroSettings = is_array($hero?->settings) ? $hero->settings : [];
+      $navbar = $activeBlocks->firstWhere('block_type', 'navbar');
+      $navbarSettings = is_array($navbar?->settings) ? $navbar->settings : [];
 
       $globalSettings = is_array($landing->global_settings) ? $landing->global_settings : [];
       $bgMode = (string) ($globalSettings['bg_mode'] ?? 'light');
       $fontFamily = (string) ($landing->font_family ?? 'instrument');
+      $menuSections = $activeBlocks
+         ->filter(fn(LandingBlock $block): bool => $block->block_type !== 'navbar')
+         ->map(fn(LandingBlock $block): array => [
+            'id' => 'section-' . $block->block_type . '-' . $block->id,
+            'label' => (string) config('landing_templates.block_labels.' . $block->block_type, ucfirst($block->block_type)),
+            'href' => '#section-' . $block->block_type . '-' . $block->id,
+         ])
+         ->values()
+         ->all();
 
       return [
          'siteName' => (string) ($globalSettings['site_name'] ?? 'Mi Empresa'),
+         'navbarSettings' => [
+            'brand_label' => (string) ($navbarSettings['brand_label'] ?? ($globalSettings['site_name'] ?? 'Mi Empresa')),
+         ],
+         'menuSections' => $menuSections,
          'meta' => [
             'title' => (string) ($globalSettings['site_name'] ?? 'Mi Empresa'),
             'description' => (string) ($heroSettings['subheadline'] ?? ''),

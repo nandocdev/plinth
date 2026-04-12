@@ -29,6 +29,8 @@ final class GetOrCreateTenantLandingAction {
             $landing->applyTemplate((string) $landing->template_key);
          }
 
+         $landing->ensureNavbarBlockExists();
+
          return $landing->refresh()->load(['blocks' => fn($q) => $q->orderBy('order')]);
       });
    }

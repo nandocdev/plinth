@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 return [
    'block_labels' => [
+      'navbar' => 'Header / Navbar',
       'hero' => 'Hero',
       'services' => 'Servicios',
       'gallery' => 'Galería',
