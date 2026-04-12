@@ -18,13 +18,17 @@
 
     <div x-show="open" x-collapse class="ml-7 mt-1 space-y-0.5 border-l border-zinc-200 pl-3 dark:border-zinc-700">
         @foreach ($item['children'] as $child)
-            <a href="{{ route($child['route']) }}" wire:navigate
-                class="block rounded-md px-3 py-1.5 text-xs font-medium transition
-                       {{ $child['active'] ?? false
-                           ? 'text-zinc-900 dark:text-white'
-                           : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white' }}">
-                {{ $child['label'] }}
-            </a>
+            @if (empty($child['children']))
+                <a href="{{ route($child['route']) }}" wire:navigate
+                    class="block rounded-md px-3 py-1.5 text-xs font-medium transition
+                           {{ $child['active'] ?? false
+                               ? 'text-zinc-900 dark:text-white'
+                               : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white' }}">
+                    {{ $child['label'] }}
+                </a>
+            @else
+                <x-tenant-nav-group :item="$child" />
+            @endif
         @endforeach
     </div>
 </div>

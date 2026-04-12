@@ -17,13 +17,7 @@ final class Menu {
          return collect();
       }
 
-      return collect($menu)
-         ->map(fn($section) => [
-            'heading' => $section['heading'] ?? '',
-            'items'   => self::filter(is_array($section['items'] ?? null) ? $section['items'] : [], $user),
-         ])
-         ->filter(fn($section) => !empty($section['items']))
-         ->values();
+      return collect(self::filter($menu, $user))->values();
    }
 
    private static function filter(array $items, ?Authenticatable $user): array {

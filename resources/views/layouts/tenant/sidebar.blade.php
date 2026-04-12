@@ -17,19 +17,15 @@
 
         <flux:sidebar.nav>
             @auth('tenant')
-                @foreach (\App\Shared\Support\Navigation\Menu::make(auth('tenant')->user()) as $section)
-                    <flux:sidebar.group :heading="$section['heading']" class="grid">
-                        @foreach ($section['items'] as $item)
-                            @if (empty($item['children']))
-                                <flux:sidebar.item :icon="$item['icon']" :href="route($item['route'])"
-                                    :current="$item['active']" wire:navigate>
-                                    {{ $item['label'] }}
-                                </flux:sidebar.item>
-                            @else
-                                <x-tenant-nav-group :item="$item" />
-                            @endif
-                        @endforeach
-                    </flux:sidebar.group>
+                @foreach (\App\Shared\Support\Navigation\Menu::make(auth('tenant')->user()) as $item)
+                    @if (empty($item['children']))
+                        <flux:sidebar.item :icon="$item['icon']" :href="route($item['route'])" :current="$item['active']"
+                            wire:navigate>
+                            {{ $item['label'] }}
+                        </flux:sidebar.item>
+                    @else
+                        <x-tenant-nav-group :item="$item" />
+                    @endif
                 @endforeach
             @endauth
         </flux:sidebar.nav>
