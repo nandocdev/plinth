@@ -15,7 +15,7 @@ return [
     App\Providers\HorizonServiceProvider::class,
     App\Providers\TenancyServiceProvider::class,
     App\Shared\Infrastructure\Providers\AppServiceProvider::class,
-    
+
     // Identity Context
     App\Tenant\IdentityContext\AuthenticationModule\Providers\AuthenticationModuleServiceProvider::class,
     App\Tenant\IdentityContext\ApiAccessModule\Providers\ApiAccessModuleServiceProvider::class,
