@@ -13,6 +13,7 @@ use App\Tenant\GovernanceContext\LandingBuilderModule\Models\LandingBlock;
 use App\Tenant\GovernanceContext\LandingBuilderModule\Models\TenantLanding;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -38,6 +39,8 @@ final class LandingBuilder extends Component {
 
    /** @var array<int, array<string, mixed>> */
    public array $blocks = [];
+
+   public int $previewVersion = 1;
 
    public function mount(GetOrCreateTenantLandingAction $action): void {
       $this->authorize('viewAny', TenantLanding::class);
@@ -73,6 +76,7 @@ final class LandingBuilder extends Component {
       $this->message = 'Landing actualizada correctamente.';
 
       $this->refreshBlocks();
+      $this->refreshPreview();
    }
 
    public function publish(UpdateTenantLandingContentAction $action): void {
@@ -109,6 +113,7 @@ final class LandingBuilder extends Component {
       }
 
       $this->message = 'Plantilla aplicada correctamente.';
+      $this->refreshPreview();
    }
 
    public function selectBlock(int $blockId): void {
@@ -121,6 +126,67 @@ final class LandingBuilder extends Component {
 
    public function toggleBlock(): void {
       $this->editingBlockActive = ! $this->editingBlockActive;
+   }
+
+   public function addBlock(string $blockType): void {
+      $this->authorize('update', TenantLanding::class);
+
+      $allowed = collect(config('landing_templates.available_blocks', []));
+
+      if (! $allowed->contains($blockType)) {
+         return;
+      }
+
+      $maxOrder = (int) LandingBlock::query()
+         ->where('tenant_landing_id', $this->landingId)
+         ->max('order');
+
+      $block = LandingBlock::query()->create([
+         'tenant_landing_id' => $this->landingId,
+         'block_type' => $blockType,
+         'order' => $maxOrder + 1,
+         'is_active' => true,
+         'settings' => $this->defaultSettingsForBlock($blockType),
+      ]);
+
+      $this->refreshBlocks();
+      $this->selectBlock($block->id);
+      $this->refreshPreview();
+      $this->message = 'Bloque agregado correctamente.';
+   }
+
+   public function removeSelectedBlock(): void {
+      $this->authorize('update', TenantLanding::class);
+
+      if ($this->selectedBlockId <= 0) {
+         return;
+      }
+
+      LandingBlock::query()
+         ->where('tenant_landing_id', $this->landingId)
+         ->whereKey($this->selectedBlockId)
+         ->delete();
+
+      $this->resequenceBlocks();
+      $this->refreshBlocks();
+
+      $this->selectedBlockId = 0;
+      $this->editingSettings = [];
+
+      if (!empty($this->blocks)) {
+         $this->selectBlock((int) $this->blocks[0]['id']);
+      }
+
+      $this->refreshPreview();
+      $this->message = 'Bloque eliminado correctamente.';
+   }
+
+   public function moveSelectedBlockUp(): void {
+      $this->moveSelectedBlock(-1);
+   }
+
+   public function moveSelectedBlockDown(): void {
+      $this->moveSelectedBlock(1);
    }
 
    public function saveBlock(UpdateLandingBlockSettingsAction $action): void {
@@ -136,6 +202,7 @@ final class LandingBuilder extends Component {
       $this->message = 'Bloque actualizado correctamente.';
       $this->refreshBlocks();
       $this->selectBlock($block->id);
+      $this->refreshPreview();
    }
 
    public function render(): View {
@@ -143,11 +210,16 @@ final class LandingBuilder extends Component {
 
       return view('landing-builder::livewire.landing-builder', [
          'publicUrl' => route('tenant.landing.public', ['tenantDomain' => request()->route('tenantDomain')]),
-         'previewUrl' => route('tenant.landing.preview', ['tenantDomain' => request()->route('tenantDomain')]),
+         'previewUrl' => route('tenant.landing.preview', ['tenantDomain' => request()->route('tenantDomain'), 'v' => $this->previewVersion]),
          'selectedBlockType' => (string) ($selectedBlock['block_type'] ?? ''),
          'availableTemplates' => TenantLanding::availableTemplates(),
+         'availableBlocks' => config('landing_templates.available_blocks', []),
          'blockLabels' => config('landing_templates.block_labels', []),
       ]);
+   }
+
+   private function refreshPreview(): void {
+      $this->previewVersion++;
    }
 
    private function refreshBlocks(): void {
@@ -165,6 +237,84 @@ final class LandingBuilder extends Component {
             'order' => (int) $b->order,
          ])
          ->all();
+   }
+
+   private function moveSelectedBlock(int $direction): void {
+      $this->authorize('update', TenantLanding::class);
+
+      if ($this->selectedBlockId <= 0 || !in_array($direction, [-1, 1], true)) {
+         return;
+      }
+
+      $orderedBlocks = LandingBlock::query()
+         ->where('tenant_landing_id', $this->landingId)
+         ->orderBy('order')
+         ->orderBy('id')
+         ->get();
+
+      $currentIndex = $orderedBlocks->search(
+         fn(LandingBlock $block): bool => $block->id === $this->selectedBlockId,
+      );
+
+      if (!is_int($currentIndex)) {
+         return;
+      }
+
+      $targetIndex = $currentIndex + $direction;
+
+      if ($targetIndex < 0 || $targetIndex >= $orderedBlocks->count()) {
+         return;
+      }
+
+      $items = $orderedBlocks->values()->all();
+      $tmp = $items[$currentIndex];
+      $items[$currentIndex] = $items[$targetIndex];
+      $items[$targetIndex] = $tmp;
+
+      DB::transaction(function () use ($items): void {
+         foreach ($items as $index => $block) {
+            LandingBlock::query()->whereKey($block->id)->update(['order' => $index + 1]);
+         }
+      });
+
+      $this->refreshBlocks();
+      $this->selectBlock($this->selectedBlockId);
+      $this->refreshPreview();
+      $this->message = 'Orden de bloques actualizado.';
+   }
+
+   private function resequenceBlocks(): void {
+      $blocks = LandingBlock::query()
+         ->where('tenant_landing_id', $this->landingId)
+         ->orderBy('order')
+         ->orderBy('id')
+         ->get();
+
+      DB::transaction(function () use ($blocks): void {
+         foreach ($blocks as $index => $block) {
+            LandingBlock::query()->whereKey($block->id)->update(['order' => $index + 1]);
+         }
+      });
+   }
+
+   /** @return array<string, mixed> */
+   private function defaultSettingsForBlock(string $blockType): array {
+      return match ($blockType) {
+         'hero' => ['headline' => 'Tu propuesta principal', 'subheadline' => 'Explica rápidamente el valor de tu solución.', 'cta_text' => 'Comenzar', 'cta_url' => '/register'],
+         'services' => ['title' => 'Servicios', 'items' => [['title' => 'Servicio 1', 'description' => 'Descripción breve.']]],
+         'gallery' => ['title' => 'Galería', 'images' => [['url' => 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80', 'alt' => 'Imagen 1']]],
+         'testimonials' => ['title' => 'Testimonios', 'items' => [['quote' => 'Excelente servicio y resultados.', 'author' => 'Cliente', 'role' => 'CEO']]],
+         'pricing' => ['title' => 'Planes', 'currency' => '$', 'plans' => [['name' => 'Starter', 'price' => '29', 'period' => 'mes', 'cta' => 'Elegir plan']]],
+         'faq' => ['title' => 'Preguntas frecuentes', 'items' => [['question' => '¿Cómo funciona?', 'answer' => 'Puedes empezar en minutos.']]],
+         'contact' => ['title' => 'Contacto', 'email' => '', 'phone' => '', 'address' => ''],
+         'about' => ['title' => 'Sobre nosotros', 'body' => 'Cuenta tu historia en este bloque.', 'image_url' => ''],
+         'story' => ['title' => 'Historia', 'milestones' => [['year' => '2026', 'event' => 'Inicio del proyecto']]],
+         'achievements' => ['title' => 'Logros', 'items' => [['title' => 'Clientes', 'value' => '+100']]],
+         'catalog' => ['title' => 'Catálogo', 'items' => [['name' => 'Producto base', 'price' => '$99', 'description' => 'Descripción breve.']]],
+         'trust' => ['title' => 'Confían en nosotros', 'items' => [['title' => 'Empresa ejemplo']]],
+         'cta' => ['title' => '¿Listo para empezar?', 'subtitle' => 'Comienza hoy con tu workspace.', 'button_text' => 'Crear cuenta', 'button_url' => '/register'],
+         default => [],
+      };
    }
 
    /** @return array<string, mixed> */

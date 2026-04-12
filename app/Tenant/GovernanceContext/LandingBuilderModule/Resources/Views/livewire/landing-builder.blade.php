@@ -14,30 +14,73 @@
     @endif
 
     <div class="grid gap-6 xl:grid-cols-[280px_1fr_420px]">
-        <aside
+        <aside x-data="{ showTemplateModal: false, showAddBlockModal: false }"
             class="space-y-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
+            @php
+                $selectedTemplate = collect($availableTemplates)->firstWhere('key', $templateKey);
+            @endphp
+
             <div class="space-y-2">
                 <flux:heading size="sm">Plantillas</flux:heading>
                 <p class="text-xs text-zinc-500">Elige una base y luego personalízala bloque por bloque.</p>
             </div>
 
-            <div class="grid gap-2">
-                @foreach ($availableTemplates as $template)
-                    <button type="button" wire:click="selectTemplate('{{ $template['key'] }}')"
-                        class="w-full rounded-lg border p-3 text-left transition {{ $templateKey === $template['key']
-                            ? 'border-zinc-900 bg-zinc-50 dark:border-zinc-200 dark:bg-zinc-800'
-                            : 'border-zinc-200 hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800' }}">
-                        <div class="flex items-start justify-between gap-3">
-                            <div>
-                                <div class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-                                    {{ $template['name'] }}</div>
-                                <div class="mt-0.5 text-xs text-zinc-500">{{ $template['vibe'] }}</div>
-                            </div>
-                            <span class="mt-1 inline-block size-4 rounded-full border border-white/40"
-                                style="background: {{ $template['primary_color'] }}"></span>
+            <div class="rounded-lg border border-zinc-200 p-3 dark:border-zinc-700">
+                <div class="flex items-start justify-between gap-3">
+                    <div>
+                        <p class="text-xs text-zinc-500">Plantilla seleccionada</p>
+                        <div class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                            {{ $selectedTemplate['name'] ?? ucfirst($templateKey) }}</div>
+                        <div class="mt-0.5 text-xs text-zinc-500">{{ $selectedTemplate['vibe'] ?? '' }}</div>
+                    </div>
+                    <span class="mt-1 inline-block size-4 rounded-full border border-white/40"
+                        style="background: {{ $selectedTemplate['primary_color'] ?? '#2563eb' }}"></span>
+                </div>
+                <flux:button type="button" variant="ghost" size="sm" class="mt-3 w-full"
+                    @click="showTemplateModal = true">
+                    Cambiar plantilla
+                </flux:button>
+            </div>
+
+            <div x-cloak x-show="showTemplateModal" x-transition.opacity
+                class="fixed inset-0 z-50 flex items-center justify-center bg-zinc-900/50 p-4"
+                @keydown.escape.window="showTemplateModal = false">
+                <div @click.away="showTemplateModal = false"
+                    class="max-h-[80vh] w-full max-w-xl overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-xl dark:border-zinc-700 dark:bg-zinc-900">
+                    <div
+                        class="flex items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-700">
+                        <div>
+                            <h3 class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Selecciona una plantilla
+                            </h3>
+                            <p class="text-xs text-zinc-500">Se aplicará la base completa y luego podrás personalizar.
+                            </p>
                         </div>
-                    </button>
-                @endforeach
+                        <flux:button type="button" variant="ghost" size="sm" @click="showTemplateModal = false">
+                            Cerrar</flux:button>
+                    </div>
+
+                    <div class="max-h-[65vh] overflow-y-auto p-4">
+                        <div class="grid gap-2">
+                            @foreach ($availableTemplates as $template)
+                                <button type="button" wire:click="selectTemplate('{{ $template['key'] }}')"
+                                    @click="showTemplateModal = false"
+                                    class="w-full rounded-lg border p-3 text-left transition {{ $templateKey === $template['key']
+                                        ? 'border-zinc-900 bg-zinc-50 dark:border-zinc-200 dark:bg-zinc-800'
+                                        : 'border-zinc-200 hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800' }}">
+                                    <div class="flex items-start justify-between gap-3">
+                                        <div>
+                                            <div class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                                                {{ $template['name'] }}</div>
+                                            <div class="mt-0.5 text-xs text-zinc-500">{{ $template['vibe'] }}</div>
+                                        </div>
+                                        <span class="mt-1 inline-block size-4 rounded-full border border-white/40"
+                                            style="background: {{ $template['primary_color'] }}"></span>
+                                    </div>
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="h-px bg-zinc-200 dark:bg-zinc-700"></div>
@@ -46,6 +89,11 @@
                 <flux:heading size="sm">Bloques</flux:heading>
                 <p class="text-xs text-zinc-500">Activa, desactiva y edita cada sección de tu landing.</p>
             </div>
+
+            <flux:button type="button" variant="subtle" size="sm" class="w-full"
+                @click="showAddBlockModal = true">
+                Agregar bloque
+            </flux:button>
 
             <div class="space-y-2">
                 @foreach ($blocks as $block)
@@ -63,6 +111,37 @@
                         </div>
                     </button>
                 @endforeach
+            </div>
+
+            <div x-cloak x-show="showAddBlockModal" x-transition.opacity
+                class="fixed inset-0 z-50 flex items-center justify-center bg-zinc-900/50 p-4"
+                @keydown.escape.window="showAddBlockModal = false">
+                <div @click.away="showAddBlockModal = false"
+                    class="max-h-[80vh] w-full max-w-xl overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-xl dark:border-zinc-700 dark:bg-zinc-900">
+                    <div
+                        class="flex items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-700">
+                        <div>
+                            <h3 class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Agregar bloque</h3>
+                            <p class="text-xs text-zinc-500">Selecciona el tipo de bloque que deseas incorporar.</p>
+                        </div>
+                        <flux:button type="button" variant="ghost" size="sm" @click="showAddBlockModal = false">
+                            Cerrar</flux:button>
+                    </div>
+
+                    <div class="max-h-[65vh] overflow-y-auto p-4">
+                        <div class="grid gap-2">
+                            @foreach ($availableBlocks as $blockType)
+                                <button type="button" wire:click="addBlock('{{ $blockType }}')"
+                                    @click="showAddBlockModal = false"
+                                    class="w-full rounded-lg border border-zinc-200 p-3 text-left transition hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800">
+                                    <span class="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                                        {{ $blockLabels[$blockType] ?? ucfirst($blockType) }}
+                                    </span>
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
             </div>
         </aside>
 
@@ -90,13 +169,14 @@
                 </div>
             </form>
 
-            <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
+            <div
+                class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
                 <div class="mb-3 flex items-center justify-between">
                     <flux:heading size="sm">Vista previa</flux:heading>
                     <a class="text-xs underline" target="_blank" href="{{ $previewUrl }}">Abrir preview</a>
                 </div>
 
-                <iframe src="{{ $previewUrl }}"
+                <iframe wire:key="landing-preview-{{ $previewUrl }}" src="{{ $previewUrl }}"
                     class="h-135 w-full rounded-lg border border-zinc-200 dark:border-zinc-700"></iframe>
             </div>
         </div>
@@ -109,9 +189,22 @@
                     <p class="text-xs text-zinc-500">Tipo: {{ $selectedBlockType ?: 'N/A' }}</p>
                 </div>
                 @if ($selectedBlockType)
-                    <flux:button type="button" variant="ghost" size="sm" wire:click="toggleBlock">
-                        {{ $editingBlockActive ? 'Desactivar' : 'Activar' }}
-                    </flux:button>
+                    <div class="flex items-center gap-2">
+                        <flux:button type="button" variant="ghost" size="sm" wire:click="moveSelectedBlockUp">
+                            Subir
+                        </flux:button>
+                        <flux:button type="button" variant="ghost" size="sm"
+                            wire:click="moveSelectedBlockDown">
+                            Bajar
+                        </flux:button>
+                        <flux:button type="button" variant="ghost" size="sm" wire:click="toggleBlock">
+                            {{ $editingBlockActive ? 'Desactivar' : 'Activar' }}
+                        </flux:button>
+                        <flux:button type="button" variant="danger" size="sm" wire:click="removeSelectedBlock"
+                            wire:confirm="¿Eliminar este bloque?">
+                            Quitar
+                        </flux:button>
+                    </div>
                 @endif
             </div>
 
