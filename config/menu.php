@@ -171,6 +171,16 @@ return [
             ],
          ],
          [
+            'label'  => 'Landing Builder',
+            'icon'   => 'paint-brush',
+            'route'  => 'tenant.landing.builder',
+            'active' => 'tenant.landing.*',
+            'can'    => [
+               'ability' => 'viewAny',
+               'model'   => \App\Tenant\GovernanceContext\LandingBuilderModule\Models\TenantLanding::class,
+            ],
+         ],
+         [
             'label'  => 'Facturación',
             'icon'   => 'credit-card',
             'route'  => 'tenant.billing.portal',
