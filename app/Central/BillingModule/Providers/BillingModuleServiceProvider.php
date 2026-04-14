@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Central\BillingModule\Providers;
 
 use App\Central\BillingModule\Models\Plan;
+use App\Central\BillingModule\Models\TenantInvoice;
 use App\Central\BillingModule\Models\TenantSubscription;
 use App\Central\BillingModule\Policies\PlanPolicy;
+use App\Central\BillingModule\Policies\TenantInvoicePolicy;
 use App\Central\BillingModule\Policies\TenantSubscriptionPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +22,7 @@ final class BillingModuleServiceProvider extends ServiceProvider {
    public function boot(): void {
       Gate::policy(Plan::class, PlanPolicy::class);
       Gate::policy(TenantSubscription::class, TenantSubscriptionPolicy::class);
+      Gate::policy(TenantInvoice::class, TenantInvoicePolicy::class);
 
       $this->loadRoutes();
       $this->loadViews();
