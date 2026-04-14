@@ -1,152 +1,95 @@
 <div align="center">
 
-# SaaS-Kit-2026
+# Plinth - Multi-tenant SaaS Engine
 
-Boilerplate SaaS multi-tenant para Laravel con aislamiento fuerte por tenant y arquitectura modular por contextos.
+Framework SaaS multi-tenant profesional para Laravel con aislamiento de datos de grado industrial y arquitectura modular orientada a operaciones.
 
-<img src="public/img/banner.png" alt="SaaS-Kit-2026 Banner" width="100%" />
+<img src="public/img/banner.png" alt="Plinth SaaS Banner" width="100%" />
 
 [![PHP](https://img.shields.io/badge/PHP-8.3+-777BB4?style=flat-square&logo=php&logoColor=white)](https://www.php.net)
-[![Laravel](https://img.shields.io/badge/Laravel-13-FF2D20?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com)
-[![Livewire](https://img.shields.io/badge/Livewire-4-FB70A9?style=flat-square&logo=livewire&logoColor=white)](https://livewire.laravel.com)
-[![Stancl Tenancy](https://img.shields.io/badge/Stancl%20Tenancy-v3-0F172A?style=flat-square)](https://tenancyforlaravel.com)
-[![Pest](https://img.shields.io/badge/Tests-Pest-10B981?style=flat-square)](https://pestphp.com)
+[![Laravel](https://img.shields.io/badge/Laravel-11+-FF2D20?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com)
+[![Livewire](https://img.shields.io/badge/Livewire-3+-FB70A9?style=flat-square&logo=livewire&logoColor=white)](https://livewire.laravel.com)
+[![Flux](https://img.shields.io/badge/UI-Flux-orange?style=flat-square)](https://fluxui.dev)
+[![Stancl Tenancy](https://img.shields.io/badge/Tenancy-v3-0F172A?style=flat-square)](https://tenancyforlaravel.com)
 
 </div>
 
-## Resumen
-Este repositorio implementa un monolito modular con separación estricta entre:
+## Filosofía Operativa
+Plinth no es solo un boilerplate; es un motor diseñado para ser gestionado a las 3:00 AM. Se prioriza la **visibilidad operativa** y la **segmentación funcional** sobre la simplicidad superficial.
 
-- Central (landlord): administración SaaS global.
-- Tenant: aplicación aislada por cliente.
-- Shared: infraestructura y contratos compartidos.
+- **Central (Landlord):** Panel de control operativo con señales críticas (tenants en riesgo, fallos de jobs, auditoría global).
+- **Tenant (Instancias):** Aplicaciones totalmente aisladas con base de datos, storage y cache independientes.
+- **Shared:** Núcleo de DTOs, contratos e infraestructura compartida para mantener la integridad del sistema.
 
-El objetivo es evitar fugas de datos por diseño: base de datos, cache, storage y jobs aislados por tenant desde el inicio.
+## Estado de Implementación
 
-## Estado actual
-### Central
-- Implementado: autenticación admin, CRUD de tenants/domains, planes y suscripciones.
-- Implementado: onboarding, lifecycle de suscripción, límites de uso, health dashboard.
-- Implementado: impersonation, backup/restore por tenant, data export, webhooks, auditoría.
+### Central Administration (Operativo)
+- **Dashboard Operativo:** Basado en señales (Alertas 24h, Inquilinos en riesgo, Feed de actividad real).
+- **Tenant Provisioning:** Onboarding guiado, gestión de dominios personalizados, backups/snapshots y sistema de impersonación.
+- **Billing Segmentado:** 
+  - *Subscriptions:* Gestión del ciclo de vida y planes activos.
+  - *Plans:* Configuración de límites soft/hard (usuarios, storage) y features.
+  - *Invoices:* Historial financiero con visualización de proformas.
+- **Affiliate Engine:** Gestión de socios comerciales y rastreo automático de conversiones.
+- **Webhook System:** Configuración de endpoints y auditoría de entregas con capacidad de reintento.
+- **Security:** Auditoría centralizada (Audit Trail) y obligatoriedad de 2FA para administradores.
 
-### Tenant (MVP)
-- Implementado: auth tenant (guard separado).
-- Implementado: dashboard y perfil (update de datos + contraseña).
-- Implementado: rutas tenant modulares por provider.
-- Implementado: modelos tenant sin connection hardcodeada.
-- Implementado: storage tenant-aware en storage/app/tenants/{uuid}/.
-- Implementado: cache tenant-aware con CacheTenancyBootstrapper.
-- Implementado: jobs tenant-aware con restore de contexto y guardrail de middleware.
+### Tenant Context (MVP)
+- **Aislamiento Total:** Conexiones de BD dinámicas, storage por UUID y cache segmentada por tags.
+- **Auth:** Guard separado para el entorno tenant.
+- **Self-Service:** Gestión de perfil y configuración básica del espacio de trabajo.
+- **Job Tenancy:** Middleware automático para restaurar el contexto del inquilino en colas de trabajo.
 
-Estado fuente: [docs/technical/features.md](docs/technical/features.md).
+## Stack Tecnológico
+- **Core:** Laravel 11/12+ & PHP 8.3/8.4.
+- **Frontend:** Livewire + Flux UI (Componentes reactivos profesionales).
+- **Tenancy:** Stancl Tenancy v3 (Database-per-tenant architecture).
+- **Database:** PostgreSQL (Optimizado para esquemas dinámicos).
+- **Observabilidad:** Laravel Horizon (Queues), Laravel Pulse (Salud) y Audit Logs nativos.
+- **Testing:** Pest (Tests de integración y aislamiento de datos).
 
-## Stack real del proyecto
-- PHP 8.3+
-- Laravel 13
-- Livewire 4 + Flux
-- Stancl Tenancy 3.x
-- PostgreSQL 16 (target)
-- Redis (target para cache/colas en producción)
-- Horizon, Pulse, Pennant
-- Pest + Larastan + Pint
-
-Dependencias: [composer.json](composer.json).
-
-## Arquitectura de carpetas
+## Estructura de Módulos (DDD-ish)
 ```text
 app/
-  Central/
-    <Modulo>/
-  Tenant/
-    <Modulo>/
-  Shared/
-    DTOs/
-    Contracts/
-    Infrastructure/
-    Support/
+  ├── Central/                # Lógica del Landlord
+  │   ├── BillingModule/      # (Plans, Subscriptions, Invoices)
+  │   ├── AffiliateModule/    # (Partners, Conversions)
+  │   ├── PartnerWebhookModule/
+  │   └── ...
+  ├── Tenant/                 # Lógica de las instancias
+  │   ├── IdentityContext/
+  │   ├── OperationsContext/
+  │   └── ...
+  └── Shared/                 # Contratos y DTOs comunes
 ```
 
-Módulos tenant actuales:
-- AuthenticationModule
-- WorkspaceModule
-- SelfServiceBillingModule
-- FeatureFlagsModule
-- ImpersonationModule
+## Guía de Inicio Rápido
 
-Módulos central actuales:
-- AuthenticationModule
-- TenantProvisioningModule
-- BillingModule
-- ActivityLogModule
-- AdminAuthorizationModule
-- SystemHealthModule
-- NotificationModule
-- PartnerWebhookModule
-- DataExportModule
-- AffiliateModule
-
-## Puesta en marcha rápida
 ### Requisitos
-- PHP 8.3+
-- Composer 2+
-- Node 18+
-- PostgreSQL
+- PHP 8.3+ | Composer 2+ | Node 20+ | PostgreSQL 16+
 
-### Instalación
+### Instalación Automática
 ```bash
 composer setup
 ```
+*Este comando gestiona dependencias, variables de entorno, migraciones centrales y builds de frontend.*
 
-El script realiza:
-- instalación de dependencias PHP y JS,
-- creación de .env si no existe,
-- key generate,
-- migrate,
-- build frontend.
-
-### Desarrollo local
+### Entorno de Desarrollo
 ```bash
 composer dev
 ```
+*Inicia el servidor, Vite, Horizon para colas y Pail para logs en una sola terminal.*
 
-Levanta en paralelo:
-- servidor Laravel,
-- listener de queue,
-- logs con pail,
-- Vite en modo dev.
-
-### Tests y calidad
+### Calidad de Código
 ```bash
-composer test
-composer lint
-composer lint:check
+composer test      # Pest Suite
+composer lint      # Pint Format
 ```
 
-## Multi-tenancy en práctica
-### Ruteo
-- Central: rutas fuera de tenancy middleware.
-- Tenant: resolución por dominio con InitializeTenancyByDomain + PreventAccessFromCentralDomains.
+## Seguridad y Aislamiento
+- **Data Leaks:** Prevención por diseño mediante `InitializeTenancyByDomain` y middlewares de restricción.
+- **Storage:** Los archivos de inquilinos se almacenan en `storage/app/tenants/{uuid}/`, inaccesibles desde el dominio central.
+- **Jobs:** El `tenant_id` se inyecta en el payload del job para garantizar que el worker siempre opere en la base de datos correcta.
 
-### Aislamiento aplicado
-- Database: conexión tenant dinámica sin hardcode en modelos tenant.
-- Storage: root por tenant en storage/app/tenants/{uuid}/.
-- Cache: tags por tenant mediante CacheTenancyBootstrapper.
-- Queue jobs: payload con tenant_id y restore automático de contexto en worker.
-
-## Documentación del proyecto
-- [docs/project/00_Plan.md](docs/project/00_Plan.md)
-- [docs/project/01_Dependencias_Requeridas.md](docs/project/01_Dependencias_Requeridas.md)
-- [docs/project/02_Caracteristicas_SaaS_Starter_Kit.md](docs/project/02_Caracteristicas_SaaS_Starter_Kit.md)
-- [docs/project/03_VISION.md](docs/project/03_VISION.md)
-- [docs/project/04_ARCHITECTURE.md](docs/project/04_ARCHITECTURE.md)
-- [docs/project/05_TENANCY.md](docs/project/05_TENANCY.md)
-- [docs/project/06_PROVISIONING.md](docs/project/06_PROVISIONING.md)
-- [docs/project/07_BILLING.md](docs/project/07_BILLING.md)
-- [docs/project/08_PERMISSIONS.md](docs/project/08_PERMISSIONS.md)
-- [docs/project/09_INVITATIONS.md](docs/project/09_INVITATIONS.md)
-- [docs/project/09_ROADMAP.md](docs/project/09_ROADMAP.md)
-
-## Notas importantes
-- La cola database está configurada sobre conexión central y usa tenant_id en payload para jobs tenant-aware.
-- En producción se recomienda Redis para cache y colas.
-- Los tests de aislamiento tenant son parte del criterio de calidad del template.
+---
+*Plinth es un producto de ingeniería diseñado para escalar. Simple, modular y predecible.*
