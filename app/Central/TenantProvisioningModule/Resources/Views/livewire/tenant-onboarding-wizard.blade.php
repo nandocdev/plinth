@@ -1,93 +1,98 @@
-<x-layouts::app :title="__('Tenant Onboarding Wizard')">
-    <div class="mx-auto max-w-3xl space-y-6">
-        <div class="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-900">
-            <flux:heading size="xl">{{ __('Tenant onboarding wizard') }}</flux:heading>
-            <flux:subheading>
-                {{ __('Create tenant, default domain and assign a billing plan in one flow.') }}
-            </flux:subheading>
+<div class="flex flex-col gap-6 mx-auto max-w-4xl py-8">
+    {{-- Header del Wizard --}}
+    <header class="flex flex-col gap-2">
+        <flux:heading size="xl" level="1">Onboarding de Tenant</flux:heading>
+        <flux:subheading>Configura el espacio de trabajo, el dominio y el plan de facturación en un solo paso.</flux:subheading>
+    </header>
 
-            @if (session('status'))
-                <flux:text class="mt-4 text-green-600 dark:text-green-400">{{ session('status') }}</flux:text>
-            @endif
+    @if (session('status'))
+        <flux:card class="bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-900/50 py-3 px-4">
+            <div class="flex items-center gap-2 text-green-700 dark:text-green-400">
+                <flux:icon name="check-circle" variant="micro" />
+                <p class="text-sm font-medium">{{ session('status') }}</p>
+            </div>
+        </flux:card>
+    @endif
 
-            <form wire:submit="onboardTenant" class="mt-6 grid gap-4 md:grid-cols-2">
-                <flux:input wire:model="form.name" :label="__('Tenant name')" :placeholder="__('Acme Inc')" required />
-
-                <flux:input wire:model="form.primaryDomain" :label="__('Default domain')"
-                    :placeholder="__('acme.localhost')" required />
-
-                <flux:input wire:model="form.brandName" :label="__('Brand name (optional)')"
-                    :placeholder="__('Acme Workspace')" />
-
-                <flux:input wire:model="form.logoUrl" :label="__('Logo URL (optional)')"
-                    :placeholder="__('https://cdn.example.com/logo.svg')" />
-
-                <div>
-                    <label for="onboarding-region" class="mb-1 block text-sm text-zinc-700 dark:text-zinc-300">
-                        {{ __('Region') }}
-                    </label>
-                    <select id="onboarding-region" wire:model="form.region"
-                        class="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-                        required>
-                        @foreach ($regionOptions as $region)
-                            <option value="{{ $region->code }}">{{ $region->label }} ({{ $region->code }})</option>
-                        @endforeach
-                    </select>
-                    @error('form.region')
-                        <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                    @enderror
+    <flux:card>
+        <form wire:submit="onboardTenant" class="space-y-8">
+            {{-- Sección 1: Identidad --}}
+            <section class="grid gap-6 md:grid-cols-2">
+                <div class="md:col-span-2">
+                    <flux:heading size="lg">Identidad del Espacio</flux:heading>
+                    <flux:subheading>Nombre comercial y dirección técnica del nuevo tenant.</flux:subheading>
                 </div>
 
-                <div>
-                    <label for="onboarding-plan" class="mb-1 block text-sm text-zinc-700 dark:text-zinc-300">
-                        {{ __('Plan') }}
-                    </label>
-                    <select id="onboarding-plan" wire:model="form.planId"
-                        class="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-                        required>
-                        <option value="">{{ __('Select a plan') }}</option>
+                <flux:input wire:model="form.name" label="Nombre de la Organización" placeholder="Ej: Acme Corp" required />
+                <flux:input wire:model="form.primaryDomain" label="Subdominio Principal" placeholder="acme" required />
+                
+                <div class="md:col-span-2 grid gap-6 md:grid-cols-2">
+                    <flux:input wire:model="form.brandName" label="Nombre de Marca (Visual)" placeholder="Acme Workspace" />
+                    
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Región de Despliegue</label>
+                        <select wire:model="form.region" class="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-orange-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100" required>
+                            @foreach ($regionOptions as $region)
+                                <option value="{{ $region->code }}">{{ $region->label }} ({{ $region->code }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <flux:separator />
+
+            {{-- Sección 2: Facturación --}}
+            <section class="grid gap-6 md:grid-cols-2">
+                <div class="md:col-span-2">
+                    <flux:heading size="lg">Suscripción y Facturación</flux:heading>
+                    <flux:subheading>Define el nivel de servicio y el ciclo de cobro inicial.</flux:subheading>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Plan Seleccionado</label>
+                    <select wire:model="form.planId" class="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-orange-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100" required>
+                        <option value="">-- Seleccionar un plan --</option>
                         @foreach ($planOptions as $plan)
                             <option value="{{ $plan['id'] }}">{{ $plan['name'] }}</option>
                         @endforeach
                     </select>
-                    @error('form.planId')
-                        <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                    @enderror
                 </div>
 
-                <div>
-                    <label for="onboarding-period" class="mb-1 block text-sm text-zinc-700 dark:text-zinc-300">
-                        {{ __('Billing period') }}
-                    </label>
-                    <select id="onboarding-period" wire:model="form.billingPeriod"
-                        class="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-                        required>
-                        <option value="monthly">{{ __('Monthly') }}</option>
-                        <option value="yearly">{{ __('Yearly') }}</option>
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Ciclo de Facturación</label>
+                    <select wire:model="form.billingPeriod" class="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-orange-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100" required>
+                        <option value="monthly">Mensual</option>
+                        <option value="yearly">Anual</option>
                     </select>
-                    @error('form.billingPeriod')
-                        <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                    @enderror
                 </div>
 
-                <flux:input wire:model="form.primaryColor" :label="__('Primary color')" :placeholder="__('#f53003')" />
+                <flux:input wire:model="form.referralCode" label="Código de Referido / Partner" placeholder="PARTNER2026" />
+            </section>
 
-                <flux:input wire:model="form.secondaryColor" :label="__('Secondary color')"
-                    :placeholder="__('#ff4433')" />
+            <flux:separator />
 
-                <flux:input wire:model="form.referralCode" :label="__('Referral code (optional)')"
-                    :placeholder="__('PARTNER10')" class="md:col-span-2" />
-
-                <div class="md:col-span-2 flex items-center gap-3">
-                    <flux:button type="submit" variant="primary">
-                        {{ __('Complete onboarding') }}
-                    </flux:button>
-
-                    <flux:button :href="route('central.tenants.index')" wire:navigate variant="filled">
-                        {{ __('Back to tenants') }}
-                    </flux:button>
+            {{-- Sección 3: Apariencia --}}
+            <section class="grid gap-6 md:grid-cols-2">
+                <div class="md:col-span-2">
+                    <flux:heading size="lg">Apariencia Visual</flux:heading>
+                    <flux:subheading>Configura el branding inicial para una experiencia personalizada.</flux:subheading>
                 </div>
-            </form>
-        </div>
-    </div>
-</x-layouts::app>
+
+                <flux:input wire:model="form.logoUrl" label="URL del Logotipo" placeholder="https://..." class="md:col-span-2" />
+                
+                <flux:input wire:model="form.primaryColor" label="Color Primario" type="color" />
+                <flux:input wire:model="form.secondaryColor" label="Color Secundario" type="color" />
+            </section>
+
+            <footer class="flex items-center justify-end gap-3 pt-6 border-t border-zinc-100 dark:border-zinc-800">
+                <flux:button href="{{ route('central.tenants.index') }}" wire:navigate variant="ghost">
+                    Cancelar
+                </flux:button>
+                <flux:button type="submit" variant="primary" color="orange" icon="sparkles">
+                    Finalizar y Crear Tenant
+                </flux:button>
+            </footer>
+        </form>
+    </flux:card>
+</div>

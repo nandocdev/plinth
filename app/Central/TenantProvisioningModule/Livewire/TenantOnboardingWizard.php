@@ -13,8 +13,12 @@ use App\Central\TenantProvisioningModule\Livewire\Forms\CompleteTenantOnboarding
 use App\Central\TenantProvisioningModule\Models\Tenant;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Layout('layouts.app')]
+#[Title('Tenant Onboarding')]
 final class TenantOnboardingWizard extends Component {
    use AuthorizesRequests;
 

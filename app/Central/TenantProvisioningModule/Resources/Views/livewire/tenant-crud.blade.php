@@ -1,267 +1,231 @@
-<div class="space-y-6">
-    <div class="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-900">
-        <div class="flex items-center justify-between gap-3">
-            <flux:heading size="xl">{{ __('Tenants') }}</flux:heading>
-
-            <flux:button :href="route('central.tenants.onboarding')" wire:navigate variant="primary">
-                {{ __('Open onboarding wizard') }}
+<div class="flex flex-col gap-6">
+    {{-- Header de la Página --}}
+    <header class="flex items-center justify-between">
+        <div>
+            <flux:heading size="xl" level="1">Gestión de Tenants</flux:heading>
+            <flux:subheading>Administra los espacios de trabajo, dominios y estado operativo de tus clientes.
+            </flux:subheading>
+        </div>
+        <div class="flex gap-2">
+            <flux:button href="{{ route('central.tenants.onboarding') }}" wire:navigate variant="primary" icon="plus"
+                color="orange">
+                Nuevo Tenant
             </flux:button>
         </div>
-        <flux:subheading>{{ __('Create, suspend and remove tenant workspaces from central context.') }}
-        </flux:subheading>
+    </header>
 
-        @if (session('status'))
-            <flux:text class="mt-4 text-green-600 dark:text-green-400">{{ session('status') }}</flux:text>
-        @endif
+    @if (session('status'))
+        <flux:card class="bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-900/50 py-3 px-4">
+            <div class="flex items-center gap-2 text-green-700 dark:text-green-400">
+                <flux:icon name="check-circle" variant="micro" />
+                <p class="text-sm font-medium">{{ session('status') }}</p>
+            </div>
+        </flux:card>
+    @endif
 
-        <form wire:submit="createTenant" class="mt-6 grid gap-4 md:grid-cols-4">
-            <flux:input wire:model="form.name" :label="__('Tenant name')" :placeholder="__('Acme Inc')" required />
+    {{-- Tabla de Tenants --}}
+    <flux:card class=" overflow-hidden">
+        <div
+            class="p-6 border-b border-zinc-100 dark:border-zinc-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <flux:input wire:model.live.debounce.400ms="search" placeholder="Buscar por nombre, ID o dominio..."
+                icon="magnifying-glass" class="max-w-md" />
 
-            <flux:input wire:model="form.primaryDomain" :label="__('Primary domain')" :placeholder="__('acme.localhost')"
-                required />
+            <div class="flex items-center gap-4">
+                <flux:text size="sm" class="text-zinc-500">Total: <b>{{ $tenants->total() }}</b></flux:text>
+                <flux:separator vertical class="h-4" />
+                <div class="flex gap-2">
+                    <flux:modal.trigger name="add-domain-modal">
+                        <flux:button variant="ghost" size="sm" icon="globe-alt">Agregar Dominio</flux:button>
+                    </flux:modal.trigger>
+                    <flux:modal.trigger name="branding-modal">
+                        <flux:button variant="ghost" size="sm" icon="paint-brush">Personalizar Branding
+                        </flux:button>
+                    </flux:modal.trigger>
+                </div>
+            </div>
+        </div>
 
+        <flux:table>
+            <flux:table.columns>
+                <flux:table.column>Cliente / ID</flux:table.column>
+                <flux:table.column>Plan & Región</flux:table.column>
+                <flux:table.column>Infraestructura</flux:table.column>
+                <flux:table.column>Estado</flux:table.column>
+                <flux:table.column></flux:table.column>
+            </flux:table.columns>
+
+            <flux:table.rows>
+                @forelse ($tenants as $tenant)
+                    <flux:table.row :key="$tenant->id">
+                        <flux:table.cell>
+                            <div class="flex flex-col">
+                                <span
+                                    class="font-bold text-zinc-900 dark:text-zinc-100">{{ $tenant->displayName() }}</span>
+                                <span class="text-xs font-mono text-zinc-500">{{ $tenant->id }}</span>
+                                <div class="mt-1 flex flex-wrap gap-1">
+                                    @foreach ($tenant->domains as $domain)
+                                        <flux:badge size="sm" variant="outline"
+                                            color="{{ $domain->verified_at ? 'zinc' : 'amber' }}"
+                                            class="text-[10px] py-0">
+                                            {{ $domain->domain }}
+                                        </flux:badge>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </flux:table.cell>
+
+                        <flux:table.cell>
+                            <div class="flex flex-col gap-1">
+                                <flux:badge size="sm" color="blue" variant="subtle">
+                                    {{ $tenant->subscription?->plan?->name ?? 'Sin Plan' }}</flux:badge>
+                                <div class="flex items-center gap-1 text-xs text-zinc-500">
+                                    <flux:icon name="map-pin" variant="micro" class="size-3" />
+                                    {{ $tenant->region() }}
+                                </div>
+                            </div>
+                        </flux:table.cell>
+
+                        <flux:table.cell>
+                            <div class="flex flex-col gap-1 text-xs text-zinc-600 dark:text-zinc-400">
+                                <div class="flex items-center gap-2">
+                                    <flux:icon name="circle-stack" variant="micro" class="size-3" />
+                                    <span>{{ $tenant->completed_backups_count ?? 0 }} Backups</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <flux:icon name="clock" variant="micro" class="size-3" />
+                                    <span>{{ $tenant->latest_backup_completed_at ? \Illuminate\Support\Carbon::parse($tenant->latest_backup_completed_at)->diffForHumans() : 'Nunca' }}</span>
+                                </div>
+                            </div>
+                        </flux:table.cell>
+
+                        <flux:table.cell>
+                            <flux:badge size="sm"
+                                color="{{ $tenant->status() === 'suspended' ? 'red' : 'green' }}" inset="top">
+                                {{ strtoupper($tenant->status()) }}
+                            </flux:badge>
+                        </flux:table.cell>
+
+                        <flux:table.cell>
+                            <div class="flex justify-end gap-2">
+                                <flux:button wire:click="impersonateTenant('{{ $tenant->id }}')" variant="ghost"
+                                    size="sm" icon="finger-print" tooltip="Impersonar">
+                                    Acceder
+                                </flux:button>
+
+                                <flux:dropdown>
+                                    <flux:button variant="ghost" size="sm" icon="ellipsis-vertical" />
+
+                                    <flux:menu>
+                                        <flux:menu.item wire:click="suspendTenant('{{ $tenant->id }}')"
+                                            icon="{{ $tenant->status() === 'suspended' ? 'play' : 'pause' }}">
+                                            {{ $tenant->status() === 'suspended' ? 'Reactivar' : 'Suspender' }}
+                                        </flux:menu.item>
+
+                                        <flux:menu.separator />
+
+                                        <flux:menu.item wire:click="queueBackup('{{ $tenant->id }}')"
+                                            icon="arrow-path">
+                                            Crear Backup Ahora
+                                        </flux:menu.item>
+
+                                        <flux:menu.item
+                                            wire:click="restoreTenant('{{ $tenant->id }}', {{ (int) ($tenant->latest_backup_snapshot_id ?? 0) }})"
+                                            icon="arrow-uturn-left"
+                                            :disabled="empty($tenant->latest_backup_snapshot_id)">
+                                            Restaurar Último Backup
+                                        </flux:menu.item>
+
+                                        <flux:menu.separator />
+
+                                        <flux:menu.item wire:click="deleteTenant('{{ $tenant->id }}')"
+                                            variant="danger" icon="trash"
+                                            wire:confirm="¿Estás seguro de eliminar este tenant? Esta acción es irreversible.">
+                                            Eliminar Permanentemente
+                                        </flux:menu.item>
+                                    </flux:menu>
+                                </flux:dropdown>
+                            </div>
+                        </flux:table.cell>
+                    </flux:table.row>
+                @empty
+                    <flux:table.row>
+                        <flux:table.cell colspan="5" class="py-12 text-center text-zinc-500 italic">
+                            No se encontraron inquilinos con el criterio de búsqueda.
+                        </flux:table.cell>
+                    </flux:table.row>
+                @endforelse
+            </flux:table.rows>
+        </flux:table>
+
+        <div class="p-6 border-t border-zinc-100 dark:border-zinc-800">
+            {{ $tenants->links() }}
+        </div>
+    </flux:card>
+
+    {{-- Modal: Agregar Dominio --}}
+    <flux:modal name="add-domain-modal" class="md:w-96">
+        <div class="space-y-6">
             <div>
-                <label for="tenant-region" class="mb-1 block text-sm text-zinc-700 dark:text-zinc-300">
-                    {{ __('Region') }}
-                </label>
-                <select id="tenant-region" wire:model="form.region"
-                    class="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-                    required>
-                    @foreach ($regionOptions as $region)
-                        <option value="{{ $region->code }}">{{ $region->label }} ({{ $region->code }})</option>
-                    @endforeach
-                </select>
-                @error('form.region')
-                    <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                @enderror
+                <flux:heading size="lg">Agregar Dominio Personalizado</flux:heading>
+                <flux:subheading>Vincula un nuevo dominio a un espacio de trabajo existente.</flux:subheading>
             </div>
 
-            <div class="flex items-end">
-                <flux:button type="submit" variant="primary" class="w-full md:w-auto">
-                    {{ __('Create tenant') }}
-                </flux:button>
-            </div>
-
-            <flux:input wire:model="form.brandName" :label="__('Brand name (optional)')"
-                :placeholder="__('Acme Workspace')" />
-
-            <flux:input wire:model="form.logoUrl" :label="__('Logo URL (optional)')"
-                :placeholder="__('https://cdn.example.com/logo.svg')" />
-
-            <flux:input wire:model="form.primaryColor" :label="__('Primary color')" :placeholder="__('#f53003')" />
-
-            <flux:input wire:model="form.secondaryColor" :label="__('Secondary color')"
-                :placeholder="__('#ff4433')" />
-
-            <flux:input wire:model="form.referralCode" :label="__('Referral code (optional)')"
-                :placeholder="__('PARTNER10')" class="md:col-span-2" />
-        </form>
-
-        <form wire:submit="createDomain" class="mt-4 grid gap-4 md:grid-cols-3">
-            <div>
-                <label for="domain-tenant" class="mb-1 block text-sm text-zinc-700 dark:text-zinc-300">
-                    {{ __('Tenant') }}
-                </label>
-                <select id="domain-tenant" wire:model="domainForm.tenantId"
-                    class="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-                    required>
-                    <option value="">{{ __('Select tenant') }}</option>
+            <form wire:submit="createDomain" class="space-y-4">
+                <flux:select wire:model="domainForm.tenantId" label="Seleccionar Tenant" required>
+                    <option value="">-- Elegir Cliente --</option>
                     @foreach ($tenants as $tenant)
                         <option value="{{ $tenant->id }}">{{ $tenant->displayName() }}</option>
                     @endforeach
-                </select>
-                @error('domainForm.tenantId')
-                    <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                @enderror
-            </div>
+                </flux:select>
 
-            <flux:input wire:model="domainForm.domain" :label="__('Custom domain')"
-                :placeholder="__('workspace.example.com')" required />
+                <flux:input wire:model="domainForm.domain" label="Dominio (ej: app.empresa.com)" required />
 
-            <div class="flex items-end">
-                <flux:button type="submit" variant="primary" class="w-full md:w-auto">
-                    {{ __('Add domain') }}
-                </flux:button>
-            </div>
-        </form>
+                <div class="flex justify-end gap-2">
+                    <flux:modal.close>
+                        <flux:button variant="ghost">Cancelar</flux:button>
+                    </flux:modal.close>
+                    <flux:button type="submit" variant="primary">Guardar Dominio</flux:button>
+                </div>
+            </form>
+        </div>
+    </flux:modal>
 
-        <form wire:submit="updateBranding" class="mt-6 grid gap-4 md:grid-cols-3">
+    {{-- Modal: Branding --}}
+    <flux:modal name="branding-modal" class="md:w-[500px]">
+        <div class="space-y-6">
             <div>
-                <label for="branding-tenant" class="mb-1 block text-sm text-zinc-700 dark:text-zinc-300">
-                    {{ __('Tenant branding target') }}
-                </label>
-                <select id="branding-tenant" wire:model="brandingForm.tenantId"
-                    class="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-                    required>
-                    <option value="">{{ __('Select tenant') }}</option>
-                    @foreach ($tenantBrandingOptions as $tenantOption)
-                        <option value="{{ $tenantOption['id'] }}">{{ $tenantOption['name'] }}</option>
-                    @endforeach
-                </select>
+                <flux:heading size="lg">Identidad Visual (Branding)</flux:heading>
+                <flux:subheading>Personaliza colores y logotipos para la instancia del cliente.</flux:subheading>
             </div>
 
-            <div class="flex items-end">
-                <flux:button type="button" wire:click="loadBranding" variant="filled">
-                    {{ __('Load branding') }}
-                </flux:button>
-            </div>
+            <form wire:submit="updateBranding" class="space-y-4">
+                <div class="flex items-end gap-2">
+                    <flux:select wire:model="brandingForm.tenantId" label="Seleccionar Tenant" class="flex-1">
+                        <option value="">-- Elegir Cliente --</option>
+                        @foreach ($tenantBrandingOptions as $tenantOption)
+                            <option value="{{ $tenantOption['id'] }}">{{ $tenantOption['name'] }}</option>
+                        @endforeach
+                    </flux:select>
+                    <flux:button type="button" wire:click="loadBranding" variant="filled">Cargar</flux:button>
+                </div>
 
-            <div class="hidden md:block"></div>
+                <flux:separator />
 
-            <flux:input wire:model="brandingForm.brandName" :label="__('Brand name')"
-                :placeholder="__('Acme Workspace')" />
+                <flux:input wire:model="brandingForm.brandName" label="Nombre Comercial" />
+                <flux:input wire:model="brandingForm.logoUrl" label="URL del Logotipo" />
 
-            <flux:input wire:model="brandingForm.logoUrl" :label="__('Logo URL')"
-                :placeholder="__('https://cdn.example.com/logo.svg')" />
+                <div class="grid grid-cols-2 gap-4">
+                    <flux:input wire:model="brandingForm.primaryColor" label="Color Primario" type="color" />
+                    <flux:input wire:model="brandingForm.secondaryColor" label="Color Secundario" type="color" />
+                </div>
 
-            <flux:input wire:model="brandingForm.primaryColor" :label="__('Primary color')"
-                :placeholder="__('#f53003')" />
-
-            <flux:input wire:model="brandingForm.secondaryColor" :label="__('Secondary color')"
-                :placeholder="__('#ff4433')" />
-
-            <div class="md:col-span-3 flex justify-end">
-                <flux:button type="submit" variant="primary">
-                    {{ __('Save tenant branding') }}
-                </flux:button>
-            </div>
-        </form>
-    </div>
-
-    <div class="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-900">
-        <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-            <flux:input wire:model.live.debounce.400ms="search" :label="__('Search tenants')"
-                :placeholder="__('Search by id or name')" class="md:max-w-sm" />
-
-            <flux:text>{{ __('Total: :count', ['count' => $tenants->total()]) }}</flux:text>
+                <div class="flex justify-end gap-2">
+                    <flux:modal.close>
+                        <flux:button variant="ghost">Cerrar</flux:button>
+                    </flux:modal.close>
+                    <flux:button type="submit" variant="primary">Actualizar Branding</flux:button>
+                </div>
+            </form>
         </div>
-
-        <div class="mt-4 overflow-x-auto">
-            <table class="w-full text-left text-sm">
-                <thead>
-                    <tr class="border-b border-zinc-200 dark:border-zinc-700">
-                        <th class="py-3 pr-3">{{ __('Name') }}</th>
-                        <th class="py-3 pr-3">{{ __('Tenant ID') }}</th>
-                        <th class="py-3 pr-3">{{ __('Usage') }}</th>
-                        <th class="py-3 pr-3">{{ __('Domains') }}</th>
-                        <th class="py-3 pr-3">{{ __('Status') }}</th>
-                        <th class="py-3 text-right">{{ __('Actions') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($tenants as $tenant)
-                        <tr wire:key="tenant-{{ $tenant->id }}"
-                            class="border-b border-zinc-100 dark:border-zinc-800">
-                            <td class="py-3 pr-3">{{ $tenant->displayName() }}</td>
-                            <td class="py-3 pr-3 font-mono text-xs">{{ $tenant->id }}</td>
-                            <td class="py-3 pr-3">
-                                <div class="space-y-1 text-xs">
-                                    <div class="text-zinc-700 dark:text-zinc-300">
-                                        {{ __('Plan: :plan', ['plan' => $tenant->subscription?->plan?->name ?? 'N/A']) }}
-                                    </div>
-                                    <div class="text-zinc-700 dark:text-zinc-300">
-                                        {{ __('Subscription: :status', ['status' => $tenant->subscription?->status ?? 'none']) }}
-                                    </div>
-                                    <div class="text-zinc-700 dark:text-zinc-300">
-                                        {{ __('Domains: :count', ['count' => $tenant->domains_count]) }}
-                                    </div>
-                                    <div class="text-zinc-700 dark:text-zinc-300">
-                                        {{ __('Region: :region', ['region' => $tenant->region()]) }}
-                                    </div>
-                                    <div class="text-zinc-700 dark:text-zinc-300">
-                                        {{ __('Backups: :count', ['count' => $tenant->completed_backups_count ?? 0]) }}
-                                    </div>
-                                    <div class="text-zinc-700 dark:text-zinc-300">
-                                        {{ __('Last backup: :date', ['date' => $tenant->latest_backup_completed_at ? \Illuminate\Support\Carbon::parse($tenant->latest_backup_completed_at)->toDateTimeString() : 'never']) }}
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="py-3 pr-3">
-                                <div class="space-y-2">
-                                    @forelse ($tenant->domains as $domain)
-                                        <div class="rounded-lg border border-zinc-200 px-2 py-1 dark:border-zinc-700">
-                                            <div class="flex items-center justify-between gap-2">
-                                                <span class="font-mono text-xs">{{ $domain->domain }}</span>
-
-                                                <div class="flex items-center gap-2">
-                                                    <span
-                                                        class="rounded-full px-2 py-1 text-xs {{ $domain->verified_at ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300' }}">
-                                                        {{ $domain->verified_at ? __('Verified') : __('Pending') }}
-                                                    </span>
-
-                                                    <flux:button
-                                                        wire:click="verifyDomain('{{ $tenant->id }}', {{ $domain->id }})"
-                                                        variant="ghost" size="sm">
-                                                        {{ $domain->verified_at ? __('Unverify') : __('Verify') }}
-                                                    </flux:button>
-
-                                                    <flux:button
-                                                        wire:click="deleteDomain('{{ $tenant->id }}', {{ $domain->id }})"
-                                                        wire:confirm="{{ __('This will remove the selected domain. Continue?') }}"
-                                                        variant="danger" size="sm">
-                                                        {{ __('Delete') }}
-                                                    </flux:button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @empty
-                                        <span class="text-xs text-zinc-500">{{ __('No domains assigned.') }}</span>
-                                    @endforelse
-                                </div>
-                            </td>
-                            <td class="py-3 pr-3">
-                                <span
-                                    class="rounded-full px-2 py-1 text-xs {{ $tenant->status() === 'suspended' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' }}">
-                                    {{ $tenant->status() }}
-                                </span>
-                            </td>
-                            <td class="py-3 text-right">
-                                <div class="flex justify-end gap-2">
-                                    <flux:button wire:click="impersonateTenant('{{ $tenant->id }}')"
-                                        variant="ghost" size="sm">
-                                        {{ __('Impersonate') }}
-                                    </flux:button>
-
-                                    <flux:button wire:click="suspendTenant('{{ $tenant->id }}')" variant="filled"
-                                        size="sm">
-                                        {{ $tenant->status() === 'suspended' ? __('Unsuspend') : __('Suspend') }}
-                                    </flux:button>
-
-                                    <flux:button wire:click="queueBackup('{{ $tenant->id }}')"
-                                        wire:confirm="{{ __('Queue a DB + storage snapshot backup for this tenant?') }}"
-                                        variant="primary" size="sm">
-                                        {{ __('Backup') }}
-                                    </flux:button>
-
-                                    <flux:button
-                                        wire:click="restoreTenant('{{ $tenant->id }}', {{ (int) ($tenant->latest_backup_snapshot_id ?? 0) }})"
-                                        wire:confirm="{{ __('Restore this tenant using the latest completed backup snapshot?') }}"
-                                        variant="ghost" size="sm"
-                                        :disabled="empty($tenant->latest_backup_snapshot_id)">
-                                        {{ __('Restore latest') }}
-                                    </flux:button>
-
-                                    <flux:button wire:click="deleteTenant('{{ $tenant->id }}')"
-                                        wire:confirm="{{ __('This will delete tenant database resources. Continue?') }}"
-                                        variant="danger" size="sm">
-                                        {{ __('Delete') }}
-                                    </flux:button>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="py-6 text-center text-zinc-500">{{ __('No tenants found.') }}
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-
-        <div class="mt-4">
-            {{ $tenants->links() }}
-        </div>
-    </div>
-</div>
+    </flux:modal>
 </div>
