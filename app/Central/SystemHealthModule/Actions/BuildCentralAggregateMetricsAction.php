@@ -18,6 +18,26 @@ final class BuildCentralAggregateMetricsAction {
          ->whereRaw("COALESCE(data->>'status', 'active') = ?", ['active'])
          ->count();
 
+      $newTenantsLast7Days = (int) DB::connection('central')
+         ->table('tenants')
+         ->where('created_at', '>=', now()->subDays(7))
+         ->count();
+
+      // Un tenant está en "riesgo" si no ha tenido uso (data->'last_usage_at') en los últimos 7 días pero tiene suscripción activa.
+      $atRiskTenants = (int) DB::connection('central')
+         ->table('tenants')
+         ->whereRaw("COALESCE(data->>'status', 'active') = ?", ['active'])
+         ->whereRaw("(data->>'last_usage_at')::timestamp < ?", [now()->subDays(7)->toDateTimeString()])
+         ->count();
+
+      $criticalErrorsLast24h = (int) DB::connection('central')
+         ->table('activity_log')
+         ->whereIn('log_name', ['error', 'critical', 'failed_job'])
+         ->where('created_at', '>=', now()->subDay())
+         ->count();
+
+      $failedJobsCount = (int) DB::connection('central')->table('failed_jobs')->count();
+
       $activeSubscriptions = $this->countSubscriptionsByStatus(TenantSubscription::STATUS_ACTIVE);
       $trialingSubscriptions = $this->countSubscriptionsByStatus(TenantSubscription::STATUS_TRIALING);
       $pastDueSubscriptions = $this->countSubscriptionsByStatus(TenantSubscription::STATUS_PAST_DUE);
@@ -43,11 +63,15 @@ final class BuildCentralAggregateMetricsAction {
       return new CentralAggregateMetricsData(
          totalTenants: $totalTenants,
          activeTenants: $activeTenants,
+         newTenantsLast7Days: $newTenantsLast7Days,
+         atRiskTenants: $atRiskTenants,
+         criticalErrorsLast24h: $criticalErrorsLast24h,
+         failedJobsCount: $failedJobsCount,
          activeSubscriptions: $activeSubscriptions,
          trialingSubscriptions: $trialingSubscriptions,
          pastDueSubscriptions: $pastDueSubscriptions,
          monthlyPaidInvoices: $monthlyPaidInvoices,
-         monthlyRevenueUsdCents: $monthlyRevenueUsdCents,
+         monthlyRevenueUsdCents: (int) $monthlyRevenueUsdCents,
          monthlyRecurringRevenueUsdCents: $monthlyRecurringRevenueUsdCents,
       );
    }
