@@ -23,20 +23,42 @@
                     :current="request()->routeIs('central.tenants.*')" wire:navigate>
                     {{ __('Tenants') }}
                 </flux:sidebar.item>
-                <flux:sidebar.item icon="credit-card" :href="route('central.billing.index')"
-                    :current="request()->routeIs('central.billing.*')" wire:navigate>
-                    {{ __('Billing') }}
-                </flux:sidebar.item>
-                <flux:sidebar.item icon="megaphone" :href="route('central.affiliates.index')"
-                    :current="request()->routeIs('central.affiliates.*')" wire:navigate>
-                    {{ __('Affiliates') }}
-                </flux:sidebar.item>
-                @can('viewAny', \App\Central\PartnerWebhookModule\Models\PartnerWebhookEndpoint::class)
-                    <flux:sidebar.item icon="signal" :href="route('central.partners.webhooks.index')"
-                        :current="request()->routeIs('central.partners.webhooks.*')" wire:navigate>
-                        {{ __('Partner Webhooks') }}
+
+                <flux:sidebar.group heading="Billing" class="grid -ml-3">
+                    <flux:sidebar.item icon="credit-card" :href="route('central.billing.subscriptions')"
+                        :current="request()->routeIs('central.billing.subscriptions')" wire:navigate>
+                        {{ __('Subscriptions') }}
                     </flux:sidebar.item>
-                @endcan
+                    <flux:sidebar.item icon="ticket" :href="route('central.billing.plans')"
+                        :current="request()->routeIs('central.billing.plans')" wire:navigate>
+                        {{ __('Plans') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="receipt-refund" :href="route('central.billing.invoices')"
+                        :current="request()->routeIs('central.billing.invoices')" wire:navigate>
+                        {{ __('Invoices') }}
+                    </flux:sidebar.item>
+                </flux:sidebar.group>
+
+                <flux:sidebar.group heading="Afiliados" class="grid -ml-3">
+                    <flux:sidebar.item icon="megaphone" :href="route('central.affiliates.partners')"
+                        :current="request()->routeIs('central.affiliates.partners')" wire:navigate>
+                        {{ __('Partners') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="currency-dollar" :href="route('central.affiliates.conversions')"
+                        :current="request()->routeIs('central.affiliates.conversions')" wire:navigate>
+                        {{ __('Conversions') }}
+                    </flux:sidebar.item>
+                </flux:sidebar.group>
+                <flux:sidebar.group heading="Webhooks" class="grid -ml-3">
+                    <flux:sidebar.item icon="signal" :href="route('central.partners.webhooks.endpoints')"
+                        :current="request()->routeIs('central.partners.webhooks.endpoints')" wire:navigate>
+                        {{ __('Endpoints') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="bars-arrow-up" :href="route('central.partners.webhooks.deliveries')"
+                        :current="request()->routeIs('central.partners.webhooks.deliveries')" wire:navigate>
+                        {{ __('Deliveries') }}
+                    </flux:sidebar.item>
+                </flux:sidebar.group>
                 @can('admin-roles.viewAny')
                     <flux:sidebar.item icon="shield-check" :href="route('central.admins.roles.index')"
                         :current="request()->routeIs('central.admins.roles.*')" wire:navigate>
