@@ -106,7 +106,8 @@ Estado base usado para este documento:
 - [Implementado] Wizard de outboarding en /signup publico (multi-step en Flux con stepper custom).
 - [Parcial] Flujo de 2FA tenant opcional/sugerible: setup y desactivación desde perfil; challenge/enforcement pendiente.
   <!-- Pendiente: middleware de enforcement 2FA en rutas tenant protegidas, challenge page tras login si 2FA habilitado, opción de marcar 2FA como obligatorio por plan/admin. -->
-- [Pendiente] Gestion de facturacion desde tenant: plan actual, cambio de plan, checkout y customer portal.
+- [Parcial] Gestion de facturacion desde tenant: plan actual, cambio de plan, checkout y customer portal.
+  <!-- Avance: checkout contextual implementado con matriz por region/pais, orden configurable por conversion observada, validacion backend del metodo y mensajes claros para pagos manuales/pendientes. -->
 - [Pendiente] Gestion UI de API Keys por tenant (ademas de la API basica).
 - [Implementado] Gestion UI de webhooks tenant con historial de entregas y retry.
 - [Pendiente] Impersonacion bidireccional: inicio desde central y salida segura en tenant.
