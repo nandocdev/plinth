@@ -12,6 +12,8 @@ final class PlanUpgradeForm extends Form {
 
    public string $billingPeriod = 'monthly';
 
+   public string $methodType = 'card';
+
    /**
     * @return array<string, list<string|object>>
     */
@@ -24,6 +26,7 @@ final class PlanUpgradeForm extends Form {
       return [
          'planId' => ['required', 'integer', 'in:' . implode(',', $validPlanIds)],
          'billingPeriod' => ['required', 'string', 'in:monthly,yearly'],
+         'methodType' => ['required', 'string'],
       ];
    }
 
@@ -35,6 +38,7 @@ final class PlanUpgradeForm extends Form {
          'planId.required' => 'Selecciona un plan.',
          'planId.in' => 'El plan seleccionado no es válido.',
          'billingPeriod.in' => 'El período de facturación debe ser mensual o anual.',
+         'methodType.required' => 'Selecciona un método de pago.',
       ];
    }
 }

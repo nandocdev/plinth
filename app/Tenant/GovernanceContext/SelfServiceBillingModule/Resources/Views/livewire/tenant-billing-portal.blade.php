@@ -49,12 +49,12 @@
                             </div>
                             <flux:badge
                                 :color="match($overview->status) {
-                                                                                                                                                                                                            'active' => 'green',
-                                                                                                                                                                                                            'trialing' => 'blue',
-                                                                                                                                                                                                            'past_due' => 'yellow',
-                                                                                                                                                                                                            'canceled' => 'red',
-                                                                                                                                                                                                            default => 'zinc',
-                                                                                                                                                                                                        }">
+                                                                                                                                                                                                                                            'active' => 'green',
+                                                                                                                                                                                                                                            'trialing' => 'blue',
+                                                                                                                                                                                                                                            'past_due' => 'yellow',
+                                                                                                                                                                                                                                            'canceled' => 'red',
+                                                                                                                                                                                                                                            default => 'zinc',
+                                                                                                                                                                                                                                        }">
                                 {{ match ($overview->status) {
                                     'active' => 'Activo',
                                     'trialing' => 'Prueba',
@@ -146,16 +146,70 @@
                         <flux:label class="mb-3">Período de facturación</flux:label>
                         <div class="flex gap-3">
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <flux:radio wire:model="upgradeForm.billingPeriod" value="monthly" />
+                                <flux:radio wire:model.live="upgradeForm.billingPeriod" value="monthly" />
                                 <span class="text-sm">Mensual</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <flux:radio wire:model="upgradeForm.billingPeriod" value="yearly" />
+                                <flux:radio wire:model.live="upgradeForm.billingPeriod" value="yearly" />
                                 <span class="text-sm">Anual <flux:badge color="green" size="sm">Ahorra ~17%
                                     </flux:badge></span>
                             </label>
                         </div>
                         <flux:error name="upgradeForm.billingPeriod" />
+                    </div>
+
+                    {{-- Métodos de pago disponibles por contexto --}}
+                    <div>
+                        <flux:label class="mb-3">Método de pago disponible para tu contexto</flux:label>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            @foreach ($checkoutMethods as $method)
+                                @php
+                                    $isSelectedMethod = $upgradeForm->methodType === $method['method_type'];
+                                @endphp
+
+                                <label
+                                    wire:key="method-{{ $method['method_type'] }}"
+                                    class="relative flex cursor-pointer flex-col rounded-xl border p-4 transition
+                                        {{ $isSelectedMethod
+                                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/30'
+                                            : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600' }}">
+                                    <input type="radio" class="sr-only" name="methodType"
+                                        value="{{ $method['method_type'] }}" wire:model.live="upgradeForm.methodType" />
+
+                                    <div class="flex items-center justify-between gap-2">
+                                        <p class="text-sm font-semibold text-zinc-900 dark:text-white">
+                                            {{ $method['label'] }}</p>
+                                        <flux:badge color="zinc" size="sm">{{ strtoupper($method['provider']) }}
+                                        </flux:badge>
+                                    </div>
+
+                                    <p class="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
+                                        {{ $method['description'] }}</p>
+
+                                    @if ($method['manual_confirmation_required'])
+                                        <p class="mt-2 text-xs text-amber-700 dark:text-amber-300">
+                                            Puede requerir confirmación manual.
+                                        </p>
+                                    @endif
+                                </label>
+                            @endforeach
+                        </div>
+
+                        <flux:error name="upgradeForm.methodType" />
+
+                        @php
+                            $selectedMethod = collect($checkoutMethods)->firstWhere(
+                                'method_type',
+                                $upgradeForm->methodType,
+                            );
+                        @endphp
+
+                        @if (is_array($selectedMethod) && (bool) ($selectedMethod['manual_confirmation_required'] ?? false))
+                            <flux:callout variant="warning" icon="clock" class="mt-3">
+                                {{ $selectedMethod['status_message'] ?? 'Tu pago puede quedar pendiente hasta validación del proveedor.' }}
+                            </flux:callout>
+                        @endif
                     </div>
 
                     {{-- Grid de planes --}}
@@ -169,13 +223,13 @@
                                 $isCurrent = $plan->id === $overview->currentPlanId;
                             @endphp
                             <label
+                                wire:key="plan-{{ $plan->id }}"
                                 class="relative flex flex-col cursor-pointer rounded-xl border-2 p-5 transition
                                         {{ $upgradeForm->planId == $plan->id
                                             ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/30'
-                                            : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600' }}"
-                                wire:click="$set('upgradeForm.planId', {{ $plan->id }})">
+                                            : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600' }}">
                                 <input type="radio" name="planId" value="{{ $plan->id }}" class="sr-only"
-                                    wire:model="upgradeForm.planId" />
+                                    wire:model.live="upgradeForm.planId" />
 
                                 @if ($isCurrent)
                                     <flux:badge color="zinc" size="sm" class="absolute top-3 right-3">Actual
@@ -230,7 +284,8 @@
                                 <th class="px-4 py-3 text-left font-medium text-zinc-600 dark:text-zinc-300">Fecha</th>
                                 <th class="px-4 py-3 text-left font-medium text-zinc-600 dark:text-zinc-300">Nº Factura
                                 </th>
-                                <th class="px-4 py-3 text-left font-medium text-zinc-600 dark:text-zinc-300">Descripción
+                                <th class="px-4 py-3 text-left font-medium text-zinc-600 dark:text-zinc-300">
+                                    Descripción
                                 </th>
                                 <th class="px-4 py-3 text-left font-medium text-zinc-600 dark:text-zinc-300">Período
                                 </th>
@@ -242,7 +297,7 @@
                         </thead>
                         <tbody class="divide-y divide-zinc-100 bg-white dark:divide-zinc-800 dark:bg-zinc-900">
                             @foreach ($invoices as $invoice)
-                                <tr>
+                                <tr wire:key="invoice-{{ $invoice->id }}">
                                     <td class="px-4 py-3 text-zinc-600 dark:text-zinc-400">
                                         {{ $invoice->created_at->translatedFormat('d M Y') }}
                                     </td>
@@ -261,11 +316,11 @@
                                     <td class="px-4 py-3">
                                         <flux:badge
                                             :color="match($invoice->status) {
-                                                                                                                                                                                        'paid' => 'green',
-                                                                                                                                                                                        'open' => 'yellow',
-                                                                                                                                                                                        'void' => 'zinc',
-                                                                                                                                                                                        default => 'zinc',
-                                                                                                                                                                                    }"
+                                                                                                                                                                                                                                    'paid' => 'green',
+                                                                                                                                                                                                                                    'open' => 'yellow',
+                                                                                                                                                                                                                                    'void' => 'zinc',
+                                                                                                                                                                                                                                    default => 'zinc',
+                                                                                                                                                                                                                                }"
                                             size="sm">
                                             {{ match ($invoice->status) {
                                                 'paid' => 'Pagada',
