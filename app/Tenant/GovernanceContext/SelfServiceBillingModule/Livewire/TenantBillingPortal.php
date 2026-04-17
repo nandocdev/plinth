@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tenant\GovernanceContext\SelfServiceBillingModule\Livewire;
 
 use App\Tenant\GovernanceContext\SelfServiceBillingModule\Actions\GetAvailableUpgradePlansAction;
+use App\Tenant\GovernanceContext\SelfServiceBillingModule\Actions\GetCheckoutMethodsForTenantContextAction;
 use App\Tenant\GovernanceContext\SelfServiceBillingModule\Actions\GetTenantBillingOverviewAction;
 use App\Tenant\GovernanceContext\SelfServiceBillingModule\Actions\ListTenantInvoicesAction;
 use App\Tenant\GovernanceContext\SelfServiceBillingModule\Actions\RequestPlanUpgradeAction;
@@ -46,6 +47,11 @@ final class TenantBillingPortal extends Component {
       $this->redirect('/login', navigate: true);
    }
 
+   public function updatedUpgradeFormBillingPeriod(): void {
+      // Forzar renderizado y limpiar errores al cambiar periodo
+      $this->resetErrorBag('upgradeForm.planId');
+   }
+
    public function requestUpgrade(RequestPlanUpgradeAction $action): void {
       $this->upgradeSuccess = null;
       $this->upgradeError = null;
@@ -60,9 +66,16 @@ final class TenantBillingPortal extends Component {
             tenantId: $tenantId,
             planId: (int) $this->upgradeForm->planId,
             billingPeriod: $this->upgradeForm->billingPeriod,
+            methodType: $this->upgradeForm->methodType,
          ));
 
          $this->upgradeSuccess = "Plan actualizado correctamente a {$subscription->plan?->name}.";
+
+         $checkoutStatusMessage = $subscription->getAttribute('_checkout_status_message');
+         if (is_string($checkoutStatusMessage) && $checkoutStatusMessage !== '') {
+            $this->upgradeSuccess .= ' ' . $checkoutStatusMessage;
+         }
+
          $this->activeTab = 'overview';
          $this->upgradeForm->reset();
       } catch (RuntimeException $e) {
@@ -74,13 +87,24 @@ final class TenantBillingPortal extends Component {
       GetTenantBillingOverviewAction $overviewAction,
       GetAvailableUpgradePlansAction $plansAction,
       ListTenantInvoicesAction $invoicesAction,
+      GetCheckoutMethodsForTenantContextAction $checkoutMethodsAction,
    ): View {
       $tenantId = (string) tenant('id');
+
+      $checkoutMethods = $checkoutMethodsAction->execute($tenantId);
+
+      if ($this->upgradeForm->methodType === '' && $checkoutMethods !== []) {
+         $firstMethod = $checkoutMethods[0]['method_type'] ?? null;
+         if (is_string($firstMethod) && $firstMethod !== '') {
+            $this->upgradeForm->methodType = $firstMethod;
+         }
+      }
 
       return view('self-service::livewire.tenant-billing-portal', [
          'overview' => $overviewAction->execute($tenantId),
          'plans' => $plansAction->execute(),
          'invoices' => $invoicesAction->execute($tenantId),
+         'checkoutMethods' => $checkoutMethods,
       ]);
    }
 }

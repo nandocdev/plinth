@@ -9,6 +9,7 @@ final readonly class RequestPlanUpgradeData {
       public string $tenantId,
       public int $planId,
       public string $billingPeriod,
+      public string $methodType = 'card',
    ) {
    }
 }
