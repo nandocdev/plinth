@@ -47,6 +47,11 @@ final class TenantBillingPortal extends Component {
       $this->redirect('/login', navigate: true);
    }
 
+   public function updatedUpgradeFormBillingPeriod(): void {
+      // Forzar renderizado y limpiar errores al cambiar periodo
+      $this->resetErrorBag('upgradeForm.planId');
+   }
+
    public function requestUpgrade(RequestPlanUpgradeAction $action): void {
       $this->upgradeSuccess = null;
       $this->upgradeError = null;

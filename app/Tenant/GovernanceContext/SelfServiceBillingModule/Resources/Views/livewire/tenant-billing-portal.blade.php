@@ -49,12 +49,12 @@
                             </div>
                             <flux:badge
                                 :color="match($overview->status) {
-                                                                                                                                                                                                                                            'active' => 'green',
-                                                                                                                                                                                                                                            'trialing' => 'blue',
-                                                                                                                                                                                                                                            'past_due' => 'yellow',
-                                                                                                                                                                                                                                            'canceled' => 'red',
-                                                                                                                                                                                                                                            default => 'zinc',
-                                                                                                                                                                                                                                        }">
+                                                                                                                                                                                                                                                                            'active' => 'green',
+                                                                                                                                                                                                                                                                            'trialing' => 'blue',
+                                                                                                                                                                                                                                                                            'past_due' => 'yellow',
+                                                                                                                                                                                                                                                                            'canceled' => 'red',
+                                                                                                                                                                                                                                                                            default => 'zinc',
+                                                                                                                                                                                                                                                                        }">
                                 {{ match ($overview->status) {
                                     'active' => 'Activo',
                                     'trialing' => 'Prueba',
@@ -168,18 +168,29 @@
                                     $isSelectedMethod = $upgradeForm->methodType === $method['method_type'];
                                 @endphp
 
-                                <label
-                                    wire:key="method-{{ $method['method_type'] }}"
-                                    class="relative flex cursor-pointer flex-col rounded-xl border p-4 transition
+                                <label wire:key="method-{{ $method['method_type'] }}"
+                                    wire:click="$set('upgradeForm.methodType', '{{ $method['method_type'] }}')"
+                                    class="relative flex cursor-pointer flex-col rounded-xl border-2 p-4 transition outline-none
                                         {{ $isSelectedMethod
-                                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/30'
+                                            ? 'border-blue-500 bg-blue-50/50 ring-1 ring-blue-500 dark:bg-blue-950/30'
                                             : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600' }}">
                                     <input type="radio" class="sr-only" name="methodType"
-                                        value="{{ $method['method_type'] }}" wire:model.live="upgradeForm.methodType" />
+                                        value="{{ $method['method_type'] }}"
+                                        wire:model.change="upgradeForm.methodType" />
 
                                     <div class="flex items-center justify-between gap-2">
-                                        <p class="text-sm font-semibold text-zinc-900 dark:text-white">
-                                            {{ $method['label'] }}</p>
+                                        <div class="flex items-center gap-2">
+                                            @if ($isSelectedMethod)
+                                                <flux:icon name="check-circle" variant="solid"
+                                                    class="size-4 text-blue-600 dark:text-blue-400" />
+                                            @else
+                                                <div
+                                                    class="size-4 rounded-full border border-zinc-300 dark:border-zinc-600">
+                                                </div>
+                                            @endif
+                                            <p class="text-sm font-semibold text-zinc-900 dark:text-white">
+                                                {{ $method['label'] }}</p>
+                                        </div>
                                         <flux:badge color="zinc" size="sm">{{ strtoupper($method['provider']) }}
                                         </flux:badge>
                                     </div>
@@ -221,23 +232,36 @@
                                         ? $plan->price_yearly_cents
                                         : $plan->price_monthly_cents;
                                 $isCurrent = $plan->id === $overview->currentPlanId;
+                                $isSelected = (int) $upgradeForm->planId === (int) $plan->id;
                             @endphp
-                            <label
-                                wire:key="plan-{{ $plan->id }}"
-                                class="relative flex flex-col cursor-pointer rounded-xl border-2 p-5 transition
-                                        {{ $upgradeForm->planId == $plan->id
-                                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/30'
+                            <label wire:key="plan-{{ $plan->id }}"
+                                wire:click="$set('upgradeForm.planId', {{ $plan->id }})"
+                                class="relative flex flex-col cursor-pointer rounded-xl border-2 p-5 transition outline-none
+                                        {{ $isSelected
+                                            ? 'border-blue-500 bg-blue-50/50 ring-1 ring-blue-500 dark:bg-blue-950/30'
                                             : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600' }}">
                                 <input type="radio" name="planId" value="{{ $plan->id }}" class="sr-only"
-                                    wire:model.live="upgradeForm.planId" />
+                                    wire:model.change="upgradeForm.planId" />
 
-                                @if ($isCurrent)
-                                    <flux:badge color="zinc" size="sm" class="absolute top-3 right-3">Actual
-                                    </flux:badge>
-                                @endif
+                                <div class="flex items-start justify-between mb-1">
+                                    <div class="flex items-center gap-2">
+                                        @if ($isSelected)
+                                            <flux:icon name="check-circle" variant="solid"
+                                                class="size-5 text-blue-600 dark:text-blue-400" />
+                                        @else
+                                            <div
+                                                class="size-5 rounded-full border border-zinc-300 dark:border-zinc-600">
+                                            </div>
+                                        @endif
+                                        <p class="font-semibold text-zinc-900 dark:text-white text-base">
+                                            {{ $plan->name }}</p>
+                                    </div>
 
-                                <p class="font-semibold text-zinc-900 dark:text-white text-base mb-1">
-                                    {{ $plan->name }}</p>
+                                    @if ($isCurrent)
+                                        <flux:badge color="zinc" size="sm">Actual
+                                        </flux:badge>
+                                    @endif
+                                </div>
                                 <p class="text-2xl font-bold text-zinc-900 dark:text-white">
                                     {{ $tenantCurrency }} {{ number_format($price / 100, 2) }}
                                     <span class="text-sm font-normal text-zinc-500">/
@@ -316,11 +340,11 @@
                                     <td class="px-4 py-3">
                                         <flux:badge
                                             :color="match($invoice->status) {
-                                                                                                                                                                                                                                    'paid' => 'green',
-                                                                                                                                                                                                                                    'open' => 'yellow',
-                                                                                                                                                                                                                                    'void' => 'zinc',
-                                                                                                                                                                                                                                    default => 'zinc',
-                                                                                                                                                                                                                                }"
+                                                                                                                                                                                                                                                                                'paid' => 'green',
+                                                                                                                                                                                                                                                                                'open' => 'yellow',
+                                                                                                                                                                                                                                                                                'void' => 'zinc',
+                                                                                                                                                                                                                                                                                default => 'zinc',
+                                                                                                                                                                                                                                                                            }"
                                             size="sm">
                                             {{ match ($invoice->status) {
                                                 'paid' => 'Pagada',
