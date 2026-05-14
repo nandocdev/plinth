@@ -42,7 +42,7 @@
     </style>
 </head>
 
-<body class="antialiased bg-zinc-950 text-zinc-400 font-sans selection:bg-indigo-500/30 selection:text-indigo-200">
+<body class="antialiased bg-zinc-950 text-slate-400 font-sans selection:bg-indigo-500/30 selection:text-indigo-200">
 
     <!-- Background Decoration -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10 hero-gradient"></div>
@@ -54,7 +54,7 @@
             <div class="container mx-auto px-6 h-20 flex items-center justify-between">
                 <div class="flex items-center gap-8">
                     <a href="/" class="flex items-center gap-2 group">
-                        <x-app-logo-icon class="w-8 h-8 text-orange-600 transition-transform group-hover:scale-110" />
+                        <x-app-logo-icon class="w-8 h-8 text-indigo-600 transition-transform group-hover:scale-110" />
                         <span class="text-white font-bold text-xl tracking-tight italic">Plinth</span>
                     </a>
 
@@ -94,21 +94,21 @@
             <section class="relative pt-24 pb-20 md:pt-32 md:pb-32 overflow-hidden">
                 <div class="container mx-auto px-6 relative z-10 text-center">
                     <div
-                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-orange-500/20 bg-orange-500/5 text-orange-400 text-xs font-semibold mb-8 animate-fade-in">
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-500/20 bg-indigo-500/5 text-indigo-400 text-xs font-semibold mb-8 animate-fade-in">
                         <span class="relative flex h-2 w-2">
                             <span
-                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
                         </span>
                         Nueva Versión 1.0 disponible
                     </div>
 
                     <h1
                         class="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white mb-8 max-w-5xl mx-auto leading-[1.1]">
-                        Construye tu próximo <span class="text-orange-600">SaaS</span> en tiempo récord.
+                        Construye tu próximo <span class="text-indigo-600">SaaS</span> en tiempo récord.
                     </h1>
 
-                    <p class="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto mb-12 leading-relaxed">
+                    <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-12 leading-relaxed">
                         El Starter Kit modular definitivo para Laravel 11. Multi-Tenancy nativo, Billing con Stripe y
                         arquitectura profesional basada en Bounded Contexts.
                     </p>
@@ -134,7 +134,7 @@
                     <!-- Hero Preview -->
                     <div class="relative max-w-6xl mx-auto">
                         <div
-                            class="absolute -inset-1 bg-gradient-to-r from-orange-600/20 to-violet-600/20 rounded-2xl blur-2xl opacity-50">
+                            class="absolute -inset-1 bg-gradient-to-r from-indigo-600/20 to-violet-600/20 rounded-2xl blur-2xl opacity-50">
                         </div>
                         <div
                             class="relative rounded-xl border border-white/10 overflow-hidden shadow-2xl glass aspect-video md:aspect-[21/9] flex items-center justify-center">
@@ -153,11 +153,11 @@
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 flex-grow">
                                     <div class="p-6 rounded-lg border border-white/5 bg-white/5 flex flex-col gap-4">
                                         <div
-                                            class="w-10 h-10 rounded bg-orange-600/20 flex items-center justify-center">
+                                            class="w-10 h-10 rounded bg-indigo-600/20 flex items-center justify-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                class="text-orange-500 lucide lucide-layout-grid">
+                                                class="text-indigo-500 lucide lucide-layout-grid">
                                                 <rect width="7" height="7" x="3" y="3" rx="1" />
                                                 <rect width="7" height="7" x="14" y="3" rx="1" />
                                                 <rect width="7" height="7" x="14" y="14" rx="1" />
@@ -171,10 +171,10 @@
                                         </div>
                                     </div>
                                     <div
-                                        class="p-6 rounded-lg border border-orange-500/20 bg-orange-500/5 flex flex-col gap-4 relative">
-                                        <div class="absolute top-4 right-4 text-[10px] text-orange-500 font-bold">
+                                        class="p-6 rounded-lg border border-indigo-500/20 bg-indigo-500/5 flex flex-col gap-4 relative">
+                                        <div class="absolute top-4 right-4 text-[10px] text-indigo-500 font-bold">
                                             ACTIVE</div>
-                                        <div class="w-10 h-10 rounded bg-orange-600 flex items-center justify-center">
+                                        <div class="w-10 h-10 rounded bg-indigo-600 flex items-center justify-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -210,7 +210,7 @@
                                     </div>
                                 </div>
                                 <div
-                                    class="mt-8 pt-8 border-t border-white/5 flex items-center justify-between text-xs font-mono text-zinc-500">
+                                    class="mt-8 pt-8 border-t border-white/5 flex items-center justify-between text-xs font-mono text-slate-500">
                                     <div>tenant.active_domain: acme.plinth.test</div>
                                     <div class="flex items-center gap-4">
                                         <span class="flex items-center gap-1 text-green-500/80"><span
@@ -229,20 +229,20 @@
             <section id="features" class="py-24 bg-zinc-950/50 relative">
                 <div class="container mx-auto px-6">
                     <div class="text-center mb-20">
-                        <h2 class="text-orange-500 font-bold tracking-widest text-xs uppercase mb-4">Potencia sin
+                        <h2 class="text-indigo-500 font-bold tracking-widest text-xs uppercase mb-4">Potencia sin
                             límites</h2>
                         <h3 class="text-3xl md:text-5xl font-bold text-white mb-6">Todo lo que necesitas para escalar
                         </h3>
-                        <p class="text-zinc-400 max-w-2xl mx-auto">Hemos empaquetado años de experiencia en
+                        <p class="text-slate-400 max-w-2xl mx-auto">Hemos empaquetado años de experiencia en
                             arquitectura SaaS en una base de código limpia y modular.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         <!-- Feature 1 -->
                         <div
-                            class="p-8 rounded-2xl border border-white/5 bg-white/5 hover:border-orange-500/20 transition-all group">
+                            class="p-8 rounded-2xl border border-white/5 bg-white/5 hover:border-indigo-500/20 transition-all group">
                             <div
-                                class="w-12 h-12 rounded-xl bg-orange-600/10 border border-orange-600/20 flex items-center justify-center mb-6 group-hover:bg-orange-600 group-hover:text-white transition-all text-orange-500">
+                                class="w-12 h-12 rounded-xl bg-indigo-600/10 border border-indigo-600/20 flex items-center justify-center mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-all text-indigo-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-database">
@@ -252,13 +252,13 @@
                                 </svg>
                             </div>
                             <h4 class="text-xl font-semibold text-white mb-4">Multi-Tenancy Real</h4>
-                            <p class="text-zinc-400 text-sm leading-relaxed">Aislamiento total por base de datos
+                            <p class="text-slate-400 text-sm leading-relaxed">Aislamiento total por base de datos
                                 PostgreSQL. Soporte nativo para subdominios y dominios personalizados.</p>
                         </div>
 
                         <!-- Feature 2 -->
                         <div
-                            class="p-8 rounded-2xl border border-white/5 bg-white/5 hover:border-orange-500/20 transition-all group">
+                            class="p-8 rounded-2xl border border-white/5 bg-white/5 hover:border-indigo-500/20 transition-all group">
                             <div
                                 class="w-12 h-12 rounded-xl bg-violet-600/10 border border-violet-600/20 flex items-center justify-center mb-6 group-hover:bg-violet-600 group-hover:text-white transition-all text-violet-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -271,13 +271,13 @@
                                 </svg>
                             </div>
                             <h4 class="text-xl font-semibold text-white mb-4">Arquitectura Modular</h4>
-                            <p class="text-zinc-400 text-sm leading-relaxed">Basado en Bounded Contexts. Separa la
+                            <p class="text-slate-400 text-sm leading-relaxed">Basado en Bounded Contexts. Separa la
                                 lógica Central de la del Tenant sin complicaciones.</p>
                         </div>
 
                         <!-- Feature 3 -->
                         <div
-                            class="p-8 rounded-2xl border border-white/5 bg-white/5 hover:border-orange-500/20 transition-all group">
+                            class="p-8 rounded-2xl border border-white/5 bg-white/5 hover:border-indigo-500/20 transition-all group">
                             <div
                                 class="w-12 h-12 rounded-xl bg-blue-600/10 border border-blue-600/20 flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all text-blue-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -288,13 +288,13 @@
                                 </svg>
                             </div>
                             <h4 class="text-xl font-semibold text-white mb-4">Billing Integrado</h4>
-                            <p class="text-zinc-400 text-sm leading-relaxed">Laravel Cashier + Stripe preconfigurados.
+                            <p class="text-slate-400 text-sm leading-relaxed">Laravel Cashier + Stripe preconfigurados.
                                 Gestión de planes, suscripciones y webhooks lista.</p>
                         </div>
 
                         <!-- Feature 4 -->
                         <div
-                            class="p-8 rounded-2xl border border-white/5 bg-white/5 hover:border-orange-500/20 transition-all group">
+                            class="p-8 rounded-2xl border border-white/5 bg-white/5 hover:border-indigo-500/20 transition-all group">
                             <div
                                 class="w-12 h-12 rounded-xl bg-emerald-600/10 border border-emerald-600/20 flex items-center justify-center mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-all text-emerald-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -307,13 +307,13 @@
                                 </svg>
                             </div>
                             <h4 class="text-xl font-semibold text-white mb-4">Seguridad y Roles</h4>
-                            <p class="text-zinc-400 text-sm leading-relaxed">Spatie Laravel Permission con soporte para
+                            <p class="text-slate-400 text-sm leading-relaxed">Spatie Laravel Permission con soporte para
                                 equipos. Control granular de acceso por tenant.</p>
                         </div>
 
                         <!-- Feature 5 -->
                         <div
-                            class="p-8 rounded-2xl border border-white/5 bg-white/5 hover:border-orange-500/20 transition-all group">
+                            class="p-8 rounded-2xl border border-white/5 bg-white/5 hover:border-indigo-500/20 transition-all group">
                             <div
                                 class="w-12 h-12 rounded-xl bg-rose-600/10 border border-rose-600/20 flex items-center justify-center mb-6 group-hover:bg-rose-600 group-hover:text-white transition-all text-rose-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -324,13 +324,13 @@
                                 </svg>
                             </div>
                             <h4 class="text-xl font-semibold text-white mb-4">Dev Experience</h4>
-                            <p class="text-zinc-400 text-sm leading-relaxed">Livewire, Flux UI y Tailwind CSS. Una
+                            <p class="text-slate-400 text-sm leading-relaxed">Livewire, Flux UI y Tailwind CSS. Una
                                 experiencia de desarrollo moderna y productiva.</p>
                         </div>
 
                         <!-- Feature 6 -->
                         <div
-                            class="p-8 rounded-2xl border border-white/5 bg-white/5 hover:border-orange-500/20 transition-all group">
+                            class="p-8 rounded-2xl border border-white/5 bg-white/5 hover:border-indigo-500/20 transition-all group">
                             <div
                                 class="w-12 h-12 rounded-xl bg-cyan-600/10 border border-cyan-600/20 flex items-center justify-center mb-6 group-hover:bg-cyan-600 group-hover:text-white transition-all text-cyan-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -349,7 +349,7 @@
                                 </svg>
                             </div>
                             <h4 class="text-xl font-semibold text-white mb-4">Feature Flags</h4>
-                            <p class="text-zinc-400 text-sm leading-relaxed">Controla el acceso a funcionalidades por
+                            <p class="text-slate-400 text-sm leading-relaxed">Controla el acceso a funcionalidades por
                                 plan o por cliente usando Laravel Pennant.</p>
                         </div>
                     </div>
@@ -361,11 +361,11 @@
                 <div class="container mx-auto px-6">
                     <div class="flex flex-col lg:flex-row items-center gap-16">
                         <div class="flex-1">
-                            <h2 class="text-orange-500 font-bold tracking-widest text-xs uppercase mb-4">Diseñado para
+                            <h2 class="text-indigo-500 font-bold tracking-widest text-xs uppercase mb-4">Diseñado para
                                 la mantenibilidad</h2>
                             <h3 class="text-4xl md:text-5xl font-bold text-white mb-8">Arquitectura Modular Profesional
                             </h3>
-                            <p class="text-lg text-zinc-400 mb-8 leading-relaxed">
+                            <p class="text-lg text-slate-400 mb-8 leading-relaxed">
                                 No más código espagueti. Separamos tu aplicación en tres contextos claros que garantizan
                                 la escalabilidad a largo plazo.
                             </p>
@@ -373,7 +373,7 @@
                             <div class="space-y-6">
                                 <div class="flex gap-4">
                                     <div
-                                        class="shrink-0 w-6 h-6 rounded-full bg-orange-600 flex items-center justify-center text-white text-xs font-bold">
+                                        class="shrink-0 w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xs font-bold">
                                         1</div>
                                     <div>
                                         <h5 class="text-white font-semibold mb-1">Central Context</h5>
@@ -383,7 +383,7 @@
                                 </div>
                                 <div class="flex gap-4">
                                     <div
-                                        class="shrink-0 w-6 h-6 rounded-full bg-orange-600 flex items-center justify-center text-white text-xs font-bold">
+                                        class="shrink-0 w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xs font-bold">
                                         2</div>
                                     <div>
                                         <h5 class="text-white font-semibold mb-1">Tenant Context</h5>
@@ -393,7 +393,7 @@
                                 </div>
                                 <div class="flex gap-4">
                                     <div
-                                        class="shrink-0 w-6 h-6 rounded-full bg-orange-600 flex items-center justify-center text-white text-xs font-bold">
+                                        class="shrink-0 w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xs font-bold">
                                         3</div>
                                     <div>
                                         <h5 class="text-white font-semibold mb-1">Shared Context</h5>
@@ -404,10 +404,10 @@
                             </div>
                         </div>
                         <div class="flex-1 relative">
-                            <div class="absolute -inset-4 bg-orange-600/10 blur-3xl rounded-full opacity-50"></div>
+                            <div class="absolute -inset-4 bg-indigo-600/10 blur-3xl rounded-full opacity-50"></div>
                             <div class="relative glass rounded-2xl border border-white/10 p-4 transform rotate-2">
-                                <pre class="text-[10px] md:text-xs font-mono leading-tight text-zinc-500">
-<span class="text-orange-500">app/</span>
+                                <pre class="text-[10px] md:text-xs font-mono leading-tight text-slate-500">
+<span class="text-indigo-500">app/</span>
 ├── <span class="text-white">Central/</span>
 │   ├── BillingModule/
 │   ├── TenantProvisioningModule/
@@ -424,7 +424,7 @@
                             </div>
                             <div
                                 class="absolute -bottom-8 -left-8 glass rounded-2xl border border-white/10 p-6 hidden md:block max-w-xs animate-bounce-slow">
-                                <p class="text-xs italic text-zinc-400 tracking-tight leading-relaxed">
+                                <p class="text-xs italic text-slate-400 tracking-tight leading-relaxed">
                                     "La mejor arquitectura para SaaS que he usado en Laravel. La separación de contextos
                                     es simplemente brillante."
                                 </p>
@@ -445,10 +445,10 @@
             <section id="pricing" class="py-24 bg-zinc-950/50">
                 <div class="container mx-auto px-6">
                     <div class="text-center mb-20">
-                        <h2 class="text-orange-500 font-bold tracking-widest text-xs uppercase mb-4">Planes flexibles
+                        <h2 class="text-indigo-500 font-bold tracking-widest text-xs uppercase mb-4">Planes flexibles
                         </h2>
                         <h3 class="text-3xl md:text-5xl font-bold text-white mb-6">Precios que crecen contigo</h3>
-                        <p class="text-zinc-400 max-w-2xl mx-auto">Sin sorpresas. Empieza gratis y escala a medida que
+                        <p class="text-slate-400 max-w-2xl mx-auto">Sin sorpresas. Empieza gratis y escala a medida que
                             tu negocio lo necesite.</p>
                     </div>
 
@@ -476,19 +476,19 @@
 
                             <div @class([
                                 'p-10 rounded-3xl flex flex-col',
-                                'border-2 border-orange-600 bg-orange-600/5 relative scale-105 shadow-2xl' => $isPopular,
+                                'border-2 border-indigo-600 bg-indigo-600/5 relative scale-105 shadow-2xl' => $isPopular,
                                 'border border-white/5 bg-white/5' => !$isPopular,
                             ])>
                                 @if ($isPopular)
                                     <div
-                                        class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-orange-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-full whitespace-nowrap">
+                                        class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-indigo-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-full whitespace-nowrap">
                                         Más Popular</div>
                                 @endif
 
                                 <h4 @class([
                                     'font-bold uppercase tracking-[0.2em] text-[10px] mb-4',
-                                    'text-orange-500' => $isPopular,
-                                    'text-zinc-400' => !$isPopular,
+                                    'text-indigo-500' => $isPopular,
+                                    'text-slate-400' => !$isPopular,
                                 ])>{{ $plan->name }}</h4>
 
                                 <div class="text-4xl font-bold text-white mb-1">
@@ -496,15 +496,15 @@
                                         Gratis
                                     @else
                                         ${{ number_format($plan->price_monthly_cents / 100, 0) }}<span
-                                            class="text-lg font-normal text-zinc-500">/mes</span>
+                                            class="text-lg font-normal text-slate-500">/mes</span>
                                     @endif
                                 </div>
 
                                 @if ($plan->trial_days > 0)
-                                    <p class="text-xs text-zinc-500 mb-8">{{ $plan->trial_days }} días de prueba gratis
+                                    <p class="text-xs text-slate-500 mb-8">{{ $plan->trial_days }} días de prueba gratis
                                     </p>
                                 @else
-                                    <p class="text-xs text-zinc-500 mb-8">Sin período de prueba</p>
+                                    <p class="text-xs text-slate-500 mb-8">Sin período de prueba</p>
                                 @endif
 
                                 <ul class="w-full space-y-4 mb-10 flex-1">
@@ -513,7 +513,7 @@
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                class="text-orange-500 shrink-0 lucide lucide-check">
+                                                class="text-indigo-500 shrink-0 lucide lucide-check">
                                                 <path d="M20 6 9 17l-5-5" />
                                             </svg>
                                             {{ $featureLabels[$feature] ?? $feature }}
@@ -540,7 +540,7 @@
             <section class="py-24 relative overflow-hidden">
                 <div class="container mx-auto px-6 text-center relative z-10">
                     <h2 class="text-4xl md:text-6xl font-bold text-white mb-8">¿Listo para lanzar tu SaaS?</h2>
-                    <p class="text-xl text-zinc-400 max-w-2xl mx-auto mb-12">Únete a cientos de desarrolladores que ya
+                    <p class="text-xl text-slate-400 max-w-2xl mx-auto mb-12">Únete a cientos de desarrolladores que ya
                         están construyendo con Plinth.</p>
                     <flux:button href="/signup" variant="primary" color="indigo"
                         class="!px-12 !py-6 !border-none !text-xl !font-bold">
@@ -554,7 +554,7 @@
         <footer class="border-t border-white/5 py-12 bg-black">
             <div class="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8">
                 <div class="flex items-center gap-2">
-                    <x-app-logo-icon class="w-6 h-6 text-orange-600" />
+                    <x-app-logo-icon class="w-6 h-6 text-indigo-600" />
                     <span class="text-white font-bold tracking-tight italic">Plinth</span>
                 </div>
 
@@ -564,7 +564,7 @@
                     <a href="#" class="hover:text-white transition-colors">Discord</a>
                 </div>
 
-                <div class="text-xs text-zinc-600">
+                <div class="text-xs text-slate-600">
                     © 2026 Plinth Tenant. Todos los derechos reservados.
                 </div>
             </div>
@@ -598,5 +598,7 @@
         });
     </script>
 </body>
+
+</html>
 
 </html>
