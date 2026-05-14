@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Central\TenantProvisioningModule\Models\Domain;
 use App\Central\TenantProvisioningModule\Models\Tenant;
-use App\Tenant\[Bundle]\FeatureFlagsModule\Http\Middleware\EnforcePlanUsageLimits;
+use App\Tenant\GovernanceContext\FeatureFlagsModule\Http\Middleware\EnforcePlanUsageLimits;
 use Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper;
 
 test('rutas tenant de los modulos se registran en dominio tenant', function (): void {

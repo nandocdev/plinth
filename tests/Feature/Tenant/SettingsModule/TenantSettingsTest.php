@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use App\Central\TenantProvisioningModule\Models\Tenant;
-use App\Tenant\[Bundle]\AuthenticationModule\Models\User as TenantUser;
-use App\Tenant\[Bundle]\FeatureFlagsModule\Http\Middleware\EnforcePlanUsageLimits;
-use App\Tenant\[Bundle]\SettingsModule\Actions\GetTenantSettingsAction;
-use App\Tenant\[Bundle]\SettingsModule\Livewire\TenantSettings;
-use App\Tenant\[Bundle]\UserManagementModule\Actions\SeedDefaultRolesAction;
+use App\Tenant\IdentityContext\AuthenticationModule\Models\User as TenantUser;
+use App\Tenant\GovernanceContext\FeatureFlagsModule\Http\Middleware\EnforcePlanUsageLimits;
+use App\Tenant\GovernanceContext\SettingsModule\Actions\GetTenantSettingsAction;
+use App\Tenant\GovernanceContext\SettingsModule\Livewire\TenantSettings;
+use App\Tenant\IdentityContext\UserManagementModule\Actions\SeedDefaultRolesAction;
 use Livewire\Livewire;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\PermissionRegistrar;

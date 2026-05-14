@@ -2,7 +2,7 @@
 
 use App\Central\TenantProvisioningModule\Models\Domain;
 use App\Central\TenantProvisioningModule\Models\Tenant;
-use App\Tenant\[Bundle]\FeatureFlagsModule\Http\Middleware\EnforcePlanUsageLimits;
+use App\Tenant\GovernanceContext\FeatureFlagsModule\Http\Middleware\EnforcePlanUsageLimits;
 
 test('home tenant refleja branding configurado desde contexto central', function () {
    config()->set('tenancy.bootstrappers', []);

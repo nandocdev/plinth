@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Tenant\[Bundle]\AuthenticationModule\Models\User;
-use App\Tenant\[Bundle]\UserManagementModule\Actions\SeedDefaultRolesAction;
+use App\Tenant\IdentityContext\AuthenticationModule\Models\User;
+use App\Tenant\IdentityContext\UserManagementModule\Actions\SeedDefaultRolesAction;
 use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\PermissionRegistrar;
 

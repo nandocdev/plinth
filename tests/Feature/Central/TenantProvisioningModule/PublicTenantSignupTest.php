@@ -9,7 +9,7 @@ use App\Central\TenantProvisioningModule\DTOs\PublicTenantRegistrationData;
 use App\Central\TenantProvisioningModule\Livewire\PublicTenantSignup;
 use App\Central\TenantProvisioningModule\Models\Domain;
 use App\Central\TenantProvisioningModule\Models\Tenant;
-use App\Tenant\[Bundle]\UserManagementModule\Enums\TenantRole;
+use App\Tenant\IdentityContext\UserManagementModule\Enums\TenantRole;
 use Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper;
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -111,7 +111,7 @@ test('RegisterPublicTenantAction crea tenant suscripcion y usuario owner', funct
    // Usuario owner creado en contexto tenant
    tenancy()->initialize($tenant);
    try {
-      $user = \App\Tenant\[Bundle]\AuthenticationModule\Models\User::query()
+      $user = \App\Tenant\IdentityContext\AuthenticationModule\Models\User::query()
          ->where('email', 'admin@acme-test.com')
          ->first();
       expect($user)->not->toBeNull();
@@ -153,7 +153,7 @@ test('RegisterPublicTenantAction reutiliza owner central existente por email', f
 
    tenancy()->initialize($tenant);
    try {
-      $tenantOwner = \App\Tenant\[Bundle]\AuthenticationModule\Models\User::query()
+      $tenantOwner = \App\Tenant\IdentityContext\AuthenticationModule\Models\User::query()
          ->where('email', 'owner@tenant-owner-test.com')
          ->first();
 

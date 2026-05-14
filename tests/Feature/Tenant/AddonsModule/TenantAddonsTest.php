@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use App\Tenant\[Bundle]\AddonsModule\Actions\InstallAddonAction;
-use App\Tenant\[Bundle]\AddonsModule\Actions\ListAvailableAddonsAction;
-use App\Tenant\[Bundle]\AddonsModule\Actions\ToggleAddonAction;
-use App\Tenant\[Bundle]\AddonsModule\Actions\UninstallAddonAction;
-use App\Tenant\[Bundle]\AddonsModule\Enums\AvailableAddon;
-use App\Tenant\[Bundle]\AddonsModule\Models\TenantAddon;
-use App\Tenant\[Bundle]\AuthenticationModule\Models\User;
-use App\Tenant\[Bundle]\UserManagementModule\Actions\SeedDefaultRolesAction;
+use App\Tenant\GovernanceContext\AddonsModule\Actions\InstallAddonAction;
+use App\Tenant\GovernanceContext\AddonsModule\Actions\ListAvailableAddonsAction;
+use App\Tenant\GovernanceContext\AddonsModule\Actions\ToggleAddonAction;
+use App\Tenant\GovernanceContext\AddonsModule\Actions\UninstallAddonAction;
+use App\Tenant\GovernanceContext\AddonsModule\Enums\AvailableAddon;
+use App\Tenant\GovernanceContext\AddonsModule\Models\TenantAddon;
+use App\Tenant\IdentityContext\AuthenticationModule\Models\User;
+use App\Tenant\IdentityContext\UserManagementModule\Actions\SeedDefaultRolesAction;
 use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\PermissionRegistrar;
 

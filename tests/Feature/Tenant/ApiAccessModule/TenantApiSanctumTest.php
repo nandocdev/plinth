@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 use App\Central\TenantProvisioningModule\Models\Domain;
 use App\Central\TenantProvisioningModule\Models\Tenant;
-use App\Tenant\[Bundle]\AuthenticationModule\Models\User as TenantUser;
-use App\Tenant\[Bundle]\FeatureFlagsModule\Http\Middleware\EnforcePlanUsageLimits;
-use App\Tenant\[Bundle]\UserManagementModule\Actions\SeedDefaultRolesAction;
+use App\Tenant\IdentityContext\AuthenticationModule\Models\User as TenantUser;
+use App\Tenant\GovernanceContext\FeatureFlagsModule\Http\Middleware\EnforcePlanUsageLimits;
+use App\Tenant\IdentityContext\UserManagementModule\Actions\SeedDefaultRolesAction;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;

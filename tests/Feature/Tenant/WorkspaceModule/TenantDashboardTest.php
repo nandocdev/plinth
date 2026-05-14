@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use App\Central\TenantProvisioningModule\Models\Domain;
 use App\Central\TenantProvisioningModule\Models\Tenant;
-use App\Tenant\[Bundle]\AuthenticationModule\Models\User as TenantUser;
-use App\Tenant\[Bundle]\FeatureFlagsModule\Http\Middleware\EnforcePlanUsageLimits;
+use App\Tenant\IdentityContext\AuthenticationModule\Models\User as TenantUser;
+use App\Tenant\GovernanceContext\FeatureFlagsModule\Http\Middleware\EnforcePlanUsageLimits;
 use Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper;
 
 test('guest es redirigido al login tenant al visitar dashboard', function (): void {

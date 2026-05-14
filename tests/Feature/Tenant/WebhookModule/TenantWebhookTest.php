@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-use App\Tenant\[Bundle]\AuthenticationModule\Models\User;
-use App\Tenant\[Bundle]\UserManagementModule\Actions\SeedDefaultRolesAction;
-use App\Tenant\[Bundle]\WebhookModule\Actions\CreateIncomingTokenAction;
-use App\Tenant\[Bundle]\WebhookModule\Actions\CreateWebhookEndpointAction;
-use App\Tenant\[Bundle]\WebhookModule\Actions\DispatchOutgoingWebhookAction;
-use App\Tenant\[Bundle]\WebhookModule\Actions\RevokeIncomingTokenAction;
-use App\Tenant\[Bundle]\WebhookModule\DTOs\CreateIncomingTokenData;
-use App\Tenant\[Bundle]\WebhookModule\DTOs\CreateWebhookEndpointData;
-use App\Tenant\[Bundle]\WebhookModule\Enums\TenantWebhookEvent;
-use App\Tenant\[Bundle]\WebhookModule\Events\IncomingWebhookReceived;
-use App\Tenant\[Bundle]\WebhookModule\Jobs\DeliverTenantWebhookJob;
-use App\Tenant\[Bundle]\WebhookModule\Models\IncomingWebhookToken;
-use App\Tenant\[Bundle]\WebhookModule\Models\WebhookDelivery;
-use App\Tenant\[Bundle]\WebhookModule\Models\WebhookEndpoint;
+use App\Tenant\IdentityContext\AuthenticationModule\Models\User;
+use App\Tenant\IdentityContext\UserManagementModule\Actions\SeedDefaultRolesAction;
+use App\Tenant\OperationsContext\WebhookModule\Actions\CreateIncomingTokenAction;
+use App\Tenant\OperationsContext\WebhookModule\Actions\CreateWebhookEndpointAction;
+use App\Tenant\OperationsContext\WebhookModule\Actions\DispatchOutgoingWebhookAction;
+use App\Tenant\OperationsContext\WebhookModule\Actions\RevokeIncomingTokenAction;
+use App\Tenant\OperationsContext\WebhookModule\DTOs\CreateIncomingTokenData;
+use App\Tenant\OperationsContext\WebhookModule\DTOs\CreateWebhookEndpointData;
+use App\Tenant\OperationsContext\WebhookModule\Enums\TenantWebhookEvent;
+use App\Tenant\OperationsContext\WebhookModule\Events\IncomingWebhookReceived;
+use App\Tenant\OperationsContext\WebhookModule\Jobs\DeliverTenantWebhookJob;
+use App\Tenant\OperationsContext\WebhookModule\Models\IncomingWebhookToken;
+use App\Tenant\OperationsContext\WebhookModule\Models\WebhookDelivery;
+use App\Tenant\OperationsContext\WebhookModule\Models\WebhookEndpoint;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;

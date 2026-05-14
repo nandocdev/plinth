@@ -3,8 +3,8 @@
 use App\Central\BillingModule\Models\Plan;
 use App\Central\BillingModule\Models\TenantSubscription;
 use App\Central\TenantProvisioningModule\Models\Tenant;
-use App\Tenant\[Bundle]\FeatureFlagsModule\Actions\EvaluateTenantUsageLimitsAction;
-use App\Tenant\[Bundle]\FeatureFlagsModule\Http\Middleware\EnforcePlanUsageLimits;
+use App\Tenant\GovernanceContext\FeatureFlagsModule\Actions\EvaluateTenantUsageLimitsAction;
+use App\Tenant\GovernanceContext\FeatureFlagsModule\Http\Middleware\EnforcePlanUsageLimits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper;

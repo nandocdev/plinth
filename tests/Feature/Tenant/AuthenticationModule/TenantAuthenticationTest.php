@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 use App\Central\TenantProvisioningModule\Models\Domain;
 use App\Central\TenantProvisioningModule\Models\Tenant;
-use App\Tenant\[Bundle]\AuthenticationModule\Livewire\TenantLogin;
-use App\Tenant\[Bundle]\AuthenticationModule\Livewire\TenantRegister;
-use App\Tenant\[Bundle]\AuthenticationModule\Models\User as TenantUser;
-use App\Tenant\[Bundle]\FeatureFlagsModule\Http\Middleware\EnforcePlanUsageLimits;
+use App\Tenant\IdentityContext\AuthenticationModule\Livewire\TenantLogin;
+use App\Tenant\IdentityContext\AuthenticationModule\Livewire\TenantRegister;
+use App\Tenant\IdentityContext\AuthenticationModule\Models\User as TenantUser;
+use App\Tenant\GovernanceContext\FeatureFlagsModule\Http\Middleware\EnforcePlanUsageLimits;
 use Livewire\Livewire;
 use Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper;
 

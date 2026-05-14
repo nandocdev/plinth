@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 use App\Central\TenantProvisioningModule\Models\Domain;
 use App\Central\TenantProvisioningModule\Models\Tenant;
-use App\Tenant\[Bundle]\ActivityLogModule\Livewire\TenantLogsViewer;
-use App\Tenant\[Bundle]\ActivityLogModule\Models\TenantActivityLogEntry;
-use App\Tenant\[Bundle]\AuthenticationModule\Models\User as TenantUser;
-use App\Tenant\[Bundle]\FeatureFlagsModule\Http\Middleware\EnforcePlanUsageLimits;
-use App\Tenant\[Bundle]\UserManagementModule\Actions\SeedDefaultRolesAction;
+use App\Tenant\OperationsContext\ActivityLogModule\Livewire\TenantLogsViewer;
+use App\Tenant\OperationsContext\ActivityLogModule\Models\TenantActivityLogEntry;
+use App\Tenant\IdentityContext\AuthenticationModule\Models\User as TenantUser;
+use App\Tenant\GovernanceContext\FeatureFlagsModule\Http\Middleware\EnforcePlanUsageLimits;
+use App\Tenant\IdentityContext\UserManagementModule\Actions\SeedDefaultRolesAction;
 use Livewire\Livewire;
 use Spatie\Permission\PermissionRegistrar;
 use Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper;
