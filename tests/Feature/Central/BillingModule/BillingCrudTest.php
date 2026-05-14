@@ -14,10 +14,17 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Livewire;
 
 test('usuarios autenticados pueden ver billing central', function () {
-   $user = User::factory()->withTwoFactor()->create();
+   $user = User::factory()->withTwoFactor()->create([
+      'email_verified_at' => now(),
+   ]);
+   
+   // Creamos el rol físicamente en la BD central
+   \Spatie\Permission\Models\Role::create(['name' => 'admin', 'guard_name' => 'central']);
+   $user->assignRole('admin'); 
+   
    $this->actingAs($user, 'central');
 
-   $this->get(route('central.billing.index'))
+   $this->get(route('central.billing.subscriptions'))
       ->assertOk();
 });
 
