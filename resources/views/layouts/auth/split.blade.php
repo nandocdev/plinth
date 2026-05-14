@@ -14,15 +14,42 @@
                     {{ config('app.name', 'Laravel') }}
                 </a>
 
-                @php
-                    [$message, $author] = str(Illuminate\Foundation\Inspiring::quotes()->random())->explode('-');
-                @endphp
-
                 <div class="relative z-20 mt-auto">
-                    <blockquote class="space-y-2">
-                        <flux:heading size="lg">&ldquo;{{ trim($message) }}&rdquo;</flux:heading>
-                        <footer><flux:heading>{{ trim($author) }}</flux:heading></footer>
-                    </blockquote>
+                    <div class="p-8 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl shadow-2xl overflow-hidden group">
+                        <!-- Decoración de Luz Indigo -->
+                        <div class="absolute -top-24 -right-24 w-48 h-48 bg-indigo-600/20 blur-3xl rounded-full group-hover:bg-indigo-600/30 transition-colors duration-700"></div>
+                        
+                        <div class="relative space-y-6">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-500/20 bg-indigo-500/10 text-indigo-400 text-[10px] font-bold uppercase tracking-widest">
+                                <span class="relative flex h-2 w-2">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                                </span>
+                                Central Management v1.0
+                            </div>
+
+                            <h2 class="text-3xl font-bold text-white leading-tight">
+                                Control Total de tu <br>
+                                <span class="text-indigo-500">Ecosistema SaaS</span>.
+                            </h2>
+
+                            <p class="text-zinc-400 text-sm leading-relaxed max-w-sm">
+                                Gestiona provisionamiento, suscripciones y salud del sistema desde una interfaz centralizada y segura.
+                            </p>
+
+                            <!-- Status Pills -->
+                            <div class="flex flex-wrap gap-3 pt-4 border-t border-white/5">
+                                <div class="flex items-center gap-2 text-[10px] text-zinc-500 font-mono">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                                    DB Cluster: Healthy
+                                </div>
+                                <div class="flex items-center gap-2 text-[10px] text-zinc-500 font-mono">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-indigo-500"></div>
+                                    Redis Cache: Active
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="w-full lg:p-8">
