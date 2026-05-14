@@ -11,7 +11,7 @@
             <flux:text class="text-zinc-400">Tu onboarding finalizó correctamente. Ya puedes entrar a tu workspace.
             </flux:text>
             <a href="{{ $successRedirectUrl }}" class="inline-block mt-2">
-                <flux:button variant="primary" color="orange" class="!w-full !border-none !hover:bg-orange-700">
+                <flux:button variant="primary" color="indigo" class="!w-full !border-none">
                     Ir a mi workspace
                 </flux:button>
             </a>
@@ -152,13 +152,13 @@
 
                 <div class="flex gap-2">
                     @if ($currentStep < $totalSteps)
-                        <flux:button type="button" wire:click="nextStep" variant="primary" color="orange"
+                        <flux:button type="button" wire:click="nextStep" variant="primary" color="indigo"
                             icon-trailing="arrow-right">
                             Siguiente
                         </flux:button>
                     @else
-                        <flux:button type="submit" variant="primary" color="orange"
-                            class="!border-none !hover:bg-orange-700" wire:loading.attr="disabled">
+                        <flux:button type="submit" variant="primary" color="indigo"
+                            class="!border-none" wire:loading.attr="disabled">
                             <span wire:loading.remove>Crear workspace</span>
                             <span wire:loading>Creando workspace…</span>
                         </flux:button>
@@ -171,5 +171,8 @@
                 <a href="{{ route('login') }}" class="text-orange-500 hover:underline">Inicia sesión</a>
             </p>
         </form>
+    @endif
+</div>
+m>
     @endif
 </div>

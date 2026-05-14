@@ -6,7 +6,7 @@
             </flux:subheading>
         </div>
         <flux:modal.trigger name="endpoint-modal">
-            <flux:button variant="primary" icon="plus" color="orange">Nuevo Endpoint</flux:button>
+            <flux:button variant="primary" icon="plus" color="indigo">Nuevo Endpoint</flux:button>
         </flux:modal.trigger>
     </header>
 

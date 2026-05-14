@@ -84,7 +84,7 @@
                             </td>
                             <td class="py-3 pr-3">
                                 @if ($endpoint->is_active)
-                                    <flux:badge color="lime" variant="solid" size="sm">{{ __('Activo') }}
+                                    <flux:badge color="emerald" variant="solid" size="sm">{{ __('Activo') }}
                                     </flux:badge>
                                 @else
                                     <flux:badge color="zinc" variant="solid" size="sm">{{ __('Inactivo') }}

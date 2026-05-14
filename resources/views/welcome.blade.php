@@ -20,8 +20,8 @@
 
     <style>
         :root {
-            --brand-primary: #f53003;
-            --brand-secondary: #FF4433;
+            --brand-primary: #6366f1;
+            --brand-secondary: #4f46e5;
         }
 
         .glass {
@@ -37,12 +37,12 @@
         }
 
         .hero-gradient {
-            background: radial-gradient(circle at 50% -20%, rgba(245, 48, 3, 0.15) 0%, rgba(10, 10, 10, 0) 50%);
+            background: radial-gradient(circle at 50% -20%, rgba(99, 102, 241, 0.15) 0%, rgba(10, 10, 10, 0) 50%);
         }
     </style>
 </head>
 
-<body class="antialiased bg-zinc-950 text-zinc-400 font-sans selection:bg-orange-500/30 selection:text-orange-200">
+<body class="antialiased bg-zinc-950 text-zinc-400 font-sans selection:bg-indigo-500/30 selection:text-indigo-200">
 
     <!-- Background Decoration -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10 hero-gradient"></div>
@@ -81,8 +81,8 @@
                         <flux:button href="{{ route('dashboard') }}" variant="subtle">Dashboard</flux:button>
                     @else
                         <flux:button href="{{ route('login') }}" variant="subtle">Iniciar sesión</flux:button>
-                        <flux:button href="/signup" variant="primary" color="orange"
-                            class="!hover:bg-orange-700 !border-none">Registrarse</flux:button>
+                        <flux:button href="/signup" variant="primary" color="indigo"
+                            class="!border-none">Registrarse</flux:button>
                     @endauth
                 </div>
             </div>
@@ -114,8 +114,8 @@
                     </p>
 
                     <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
-                        <flux:button href="/signup" variant="primary" color="orange"
-                            class="!px-8 !py-4 !hover:bg-orange-700 !border-none !text-lg !font-semibold">
+                        <flux:button href="/signup" variant="primary" color="indigo"
+                            class="!px-8 !py-4 !border-none !text-lg !font-semibold">
                             Comenzar ahora gratis
                         </flux:button>
                         <flux:button href="https://github.com" target="_blank" variant="subtle"
@@ -430,7 +430,7 @@
                                 </p>
                                 <div class="mt-4 flex items-center gap-2">
                                     <div
-                                        class="w-8 h-8 rounded-full bg-orange-600/20 border border-orange-600/20 flex items-center justify-center text-orange-500 font-bold text-[10px]">
+                                        class="w-8 h-8 rounded-full bg-indigo-600/20 border border-indigo-600/20 flex items-center justify-center text-indigo-500 font-bold text-[10px]">
                                         FC</div>
                                     <span class="text-[10px] text-white font-bold">Fernando Castillo - Lead
                                         Architect</span>
@@ -523,7 +523,7 @@
 
                                 @if ($isPopular)
                                     <flux:button href="/signup?plan={{ $plan->slug }}" variant="primary"
-                                        color="orange" class="w-full !hover:bg-orange-700 !border-none">Elegir
+                                        color="indigo" class="w-full !border-none">Elegir
                                         {{ $plan->name }}</flux:button>
                                 @else
                                     <flux:button href="/signup?plan={{ $plan->slug }}" variant="subtle"
@@ -542,8 +542,8 @@
                     <h2 class="text-4xl md:text-6xl font-bold text-white mb-8">¿Listo para lanzar tu SaaS?</h2>
                     <p class="text-xl text-zinc-400 max-w-2xl mx-auto mb-12">Únete a cientos de desarrolladores que ya
                         están construyendo con Plinth.</p>
-                    <flux:button href="/signup" variant="primary" color="orange"
-                        class="!px-12 !py-6 !hover:bg-orange-700 !border-none !text-xl !font-bold">
+                    <flux:button href="/signup" variant="primary" color="indigo"
+                        class="!px-12 !py-6 !border-none !text-xl !font-bold">
                         Empezar ahora mismo
                     </flux:button>
                 </div>

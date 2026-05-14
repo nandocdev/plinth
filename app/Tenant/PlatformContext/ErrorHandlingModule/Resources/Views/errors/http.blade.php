@@ -27,7 +27,7 @@
 
             <div class="mt-6 flex justify-center gap-2">
                 <a href="/dashboard">
-                    <flux:button variant="primary" color="orange">Volver al dashboard</flux:button>
+                    <flux:button variant="primary" color="indigo">Volver al dashboard</flux:button>
                 </a>
                 <a href="/">
                     <flux:button variant="ghost">Ir al inicio</flux:button>

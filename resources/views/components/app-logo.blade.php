@@ -39,8 +39,7 @@
 
 @if ($sidebar)
     <flux:sidebar.brand name="{{ $brandName }}" {{ $attributes }}>
-        <x-slot name="logo" class="flex aspect-square size-8 items-center justify-center rounded-md text-white"
-            style="background-color: {{ $primaryColor }};">
+        <x-slot name="logo" class="flex aspect-square size-8 items-center justify-center rounded-md text-white">
             @if ($logoUrl)
                 <img src="{{ $logoUrl }}" alt="{{ $brandName }}" class="size-5 object-contain" />
             @else
@@ -50,8 +49,7 @@
     </flux:sidebar.brand>
 @else
     <flux:brand name="{{ $brandName }}" {{ $attributes }}>
-        <x-slot name="logo" class="flex aspect-square size-8 items-center justify-center rounded-md text-white"
-            style="background-color: {{ $primaryColor }};">
+        <x-slot name="logo" class="flex aspect-square size-8 items-center justify-center rounded-md text-white">
             @if ($logoUrl)
                 <img src="{{ $logoUrl }}" alt="{{ $brandName }}" class="size-5 object-contain" />
             @else

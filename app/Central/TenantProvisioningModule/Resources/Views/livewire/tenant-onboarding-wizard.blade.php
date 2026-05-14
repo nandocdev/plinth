@@ -51,7 +51,7 @@
 
                 <div class="flex flex-col gap-2">
                     <label class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Plan Seleccionado</label>
-                    <select wire:model="form.planId" class="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-orange-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100" required>
+                    <select wire:model="form.planId" class="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100" required>
                         <option value="">-- Seleccionar un plan --</option>
                         @foreach ($planOptions as $plan)
                             <option value="{{ $plan['id'] }}">{{ $plan['name'] }}</option>
@@ -89,7 +89,7 @@
                 <flux:button href="{{ route('central.tenants.index') }}" wire:navigate variant="ghost">
                     Cancelar
                 </flux:button>
-                <flux:button type="submit" variant="primary" color="orange" icon="sparkles">
+                <flux:button type="submit" variant="primary" color="indigo" icon="sparkles">
                     Finalizar y Crear Tenant
                 </flux:button>
             </footer>

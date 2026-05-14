@@ -6,7 +6,7 @@
             </flux:subheading>
         </div>
         <flux:modal.trigger name="plan-modal">
-            <flux:button variant="primary" icon="plus" color="orange">Nuevo Plan</flux:button>
+            <flux:button variant="primary" icon="plus" color="indigo">Nuevo Plan</flux:button>
         </flux:modal.trigger>
     </header>
 

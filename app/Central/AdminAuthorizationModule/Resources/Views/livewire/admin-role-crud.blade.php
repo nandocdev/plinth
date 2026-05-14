@@ -43,7 +43,7 @@
                             </td>
                             <td class="py-3 pr-4">
                                 @if ($admin->email_verified_at)
-                                    <flux:badge variant="solid" color="lime" size="sm">{{ __('Verificado') }}
+                                    <flux:badge variant="solid" color="emerald" size="sm">{{ __('Verificado') }}
                                     </flux:badge>
                                 @else
                                     <flux:badge variant="solid" color="zinc" size="sm">{{ __('Sin verificar') }}

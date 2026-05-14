@@ -158,11 +158,11 @@
                     <flux:link href="{{ route('central.logs.index') }}" size="sm">{{ __('Ver todo') }}</flux:link>
                 </div>
 
-                <div class="rounded-2xl border border-zinc-100 dark:border-zinc-800 overflow-hidden bg-white dark:bg-zinc-900 shadow-sm">
-                    <div class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                <div class="rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm p-2">
+                    <div class="flex flex-col gap-1">
                         @forelse ($recentActivity as $entry)
-                            <div class="flex items-center gap-4 px-6 py-4 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors">
-                                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-zinc-50 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
+                            <div class="flex items-center gap-4 px-4 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors rounded-xl">
+                                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
                                     @if (str_contains($entry->description, 'Tenant'))
                                         <flux:icon name="building-office-2" variant="mini" />
                                     @elseif(str_contains($entry->description, 'User'))

@@ -8,7 +8,7 @@
             <flux:button wire:click="syncSubscriptionLifecycle" variant="ghost" icon="arrow-path">Sincronizar Lifecycle
             </flux:button>
             <flux:modal.trigger name="subscription-modal">
-                <flux:button variant="primary" icon="plus" color="orange">Nueva Suscripción</flux:button>
+                <flux:button variant="primary" icon="plus" color="indigo">Nueva Suscripción</flux:button>
             </flux:modal.trigger>
         </div>
     </header>

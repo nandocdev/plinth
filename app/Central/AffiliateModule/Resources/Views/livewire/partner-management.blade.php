@@ -5,7 +5,7 @@
             <flux:subheading>Gestiona los socios que refieren nuevos clientes a la plataforma.</flux:subheading>
         </div>
         <flux:modal.trigger name="partner-modal">
-            <flux:button variant="primary" icon="plus" color="orange">Nuevo Partner</flux:button>
+            <flux:button variant="primary" icon="plus" color="indigo">Nuevo Partner</flux:button>
         </flux:modal.trigger>
     </header>
 

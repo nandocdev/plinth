@@ -8,7 +8,7 @@
         </div>
         <div class="flex gap-2">
             <flux:button href="{{ route('central.tenants.onboarding') }}" wire:navigate variant="primary" icon="plus"
-                color="orange">
+                color="indigo">
                 Nuevo Tenant
             </flux:button>
         </div>
