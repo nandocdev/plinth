@@ -9,28 +9,18 @@ use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 function createRuntimePreferenceTenant(string $id): Tenant {
-   DB::connection('central')->table('tenants')->insert([
+   /** @var Tenant $tenant */
+   $tenant = Tenant::create([
       'id' => $id,
-      'data' => json_encode([
-         'name' => 'Tenant ' . $id,
-         'status' => 'active',
-         'region' => 'us-east-1',
-         'tenancy_db_name' => 'tenant_' . str_replace('-', '_', $id),
-      ], JSON_THROW_ON_ERROR),
-      'created_at' => now(),
-      'updated_at' => now(),
+      'name' => 'Tenant ' . $id,
+      'status' => 'active',
+      'region' => 'us-east-1',
    ]);
 
-   DB::connection('central')->table('domains')->insert([
-      'tenant_id' => $id,
+   $tenant->domains()->create([
       'domain' => $id . '.localhost',
       'verified_at' => now(),
-      'created_at' => now(),
-      'updated_at' => now(),
    ]);
-
-   /** @var Tenant $tenant */
-   $tenant = Tenant::query()->findOrFail($id);
 
    return $tenant;
 }
