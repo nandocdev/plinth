@@ -564,7 +564,7 @@
                     <a href="#" class="hover:text-white transition-colors">Discord</a>
                 </div>
 
-                <div class="text-xs text-slate-600">
+                <div class="text-xs text-slate-400">
                     © 2026 Plinth Tenant. Todos los derechos reservados.
                 </div>
             </div>
@@ -602,3 +602,4 @@
 </html>
 
 </html>
+l>
