@@ -81,5 +81,14 @@ Lógica transversal reutilizable por los contextos Central y Tenant.
 4. **Pruebas de Estrés:** Validar el comportamiento con grandes volúmenes de datos en una sola tabla.
 
 ---
-**Última actualización:** 17 de mayo de 2026
-**Estado:** Sprint 1 - Definición de Estructura y PRD.
+## 8. Documentación de Soporte para Desarrolladores
+Para la implementación técnica y construcción de módulos, consulte las siguientes guías maestras:
+
+- **[Guía de Implementación (The Plinth Way)](./Implementation_Guide.md):** Estándares de código, patrones Action/DTO y flujo de trabajo.
+- **[Diccionario de Datos](./Database_Dictionary.md):** Esquema de base de datos, convenciones de columnas y arquitectura Single-DB.
+- **[Directorio de Módulos Central](./Central/):** Documentación detallada de cada módulo del contexto administrativo.
+- **[Directorio de Módulos Tenant](./Tenant/):** Documentación detallada de cada módulo del contexto cliente.
+
+---
+**Última actualización:** 19 de mayo de 2026
+**Estado:** Sprint 1 - Documentación Técnica Completa.
